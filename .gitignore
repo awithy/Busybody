@@ -9,3 +9,4 @@ build
 bin/
 *.sln.cache
 logfile*
+TestResult.xml
