@@ -1,0 +1,9 @@
+﻿<NUnitProject>
+  <Settings activeconfig="Debug" />
+  <Config name="Debug" binpathtype="Auto">
+    <assembly path="src\BusybodyTests\bin\Debug\BusybodyTests.dll" />
+  </Config>
+  <Config name="Release" binpathtype="Auto">
+    <assembly path="src\BusybodyTests\bin\Release\BusybodyTests.dll" />
+  </Config>
+</NUnitProject>

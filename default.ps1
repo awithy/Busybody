@@ -10,6 +10,8 @@ properties {
     $majorVersion = "0"
     $minorVersion = "1"
     $buildNumber = "0"
+	$nunitTestsNUnitFile = Join-Path $rootDir "NUnitTests.nunit"
+	$nunit = Join-Path $rootDir "buildTools\NUnit.Runners.2.6.2\tools\nunit-console.exe"
 }
 
 task ? -description "Helper to display task info" {
@@ -17,19 +19,20 @@ task ? -description "Helper to display task info" {
 }
 
 task Clean {
-#TBC
 }
 
-task default -depends UnitTest
+task default -depends UnitTests
 
-task UnitTest -depends Compile {
-#TBC
+task UnitTests -depends NUnitUnitTests, Compile {
 }
 
-task AllTests -depends Compile {
-#TBC
+task AllTests -depends UnitTest, Compile {
 }
 
 task Compile -depends Clean {
 	exec { msbuild /v:m $solutionPath /p:"Configuration=$buildConfiguration;Platform=Any CPU;TrackFileAccess=false" }
+}
+
+task NUnitUnitTests -depends Compile -description "NUnit unit tests" {
+ exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow "/exclude=LongRunning" }
 }
