@@ -1,0 +1,12 @@
+*obj/
+*debug/
+*release/
+_ReSharper*
+*.suo
+*.user
+packages
+buildTools
+build
+bin/
+*.sln.cache
+logfile*
