@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Security;
-using System.Text;
 using System.Threading;
 using Busybody;
+using Busybody.Config;
 using FluentAssertions;
 using NUnit.Framework;
 
 namespace BusybodyTests
 {
     [TestFixture]
-    public class Given_an_alive_host_and_a_ping_test_configured_when_console_started
+    public class Given_an_alive_host_ping_test_when_console_started
     {
         TestEventLogReader _testEventLogReader;
 
@@ -32,20 +30,26 @@ namespace BusybodyTests
                 var configFilePath = testDirectory.FilePathFor(SharedConstants.BusybodyConfigFileName);
                 config.WriteToFile(configFilePath);
 
+                var debugLogPath = CommonPaths.LogFilePath("Debug");
+                if (File.Exists(debugLogPath))
+                    File.Delete(debugLogPath);
+
                 _testEventLogReader = new TestEventLogReader();
-                _testEventLogReader.ClearLog();
+                _testEventLogReader.ClearEventLog();
 
                 using (var busybodyConsoleRunner = new BusybodyConsoleRunner(testDirectory.RootPath))
                 {
-                    _testEventLogReader.WaitForText("Started successfully");
+                    _testEventLogReader.WaitForEvent("Startup complete");
                 }
             }
         }
 
         [Test]
-        public void It_should_start_successfully_with_no_errors()
+        public void The_log_file_should_not_contain_any_errors()
         {
-            _testEventLogReader.AnyErrors().Should().BeFalse();
+            var logFilePath = Path.Combine(CommonPaths.BusybodyTemp(), "Logs", "Debug.log");
+            var logFileContents = File.ReadAllText(logFilePath);
+            logFileContents.Should().NotContain("ERROR");
         }
 
         [Test]
@@ -53,6 +57,12 @@ namespace BusybodyTests
         {
             var logFilePath = Path.Combine(CommonPaths.BusybodyTemp(), "Logs", "Debug.log");
             Assert.That(File.Exists(logFilePath));
+        }
+
+        [Test]
+        public void An_event_should_be_published_with_the_host_status_up()
+        {
+            _testEventLogReader.WaitForEvent("Host: Local Machine, State: Up");
         }
 
         //Todo: How to clean up after every test
@@ -68,20 +78,22 @@ namespace BusybodyTests
             _eventLogFilePath = CommonPaths.EventLogFilePath();
         }
 
-        public void ClearLog()
+        public void ClearEventLog()
         {
             if(File.Exists(_eventLogFilePath))
                 File.Delete(_eventLogFilePath);
         }
 
-        public void WaitForText(string text)
+        //This crap is just tempoary until I do this properly
+        public void WaitForEvent(string text)
         {
             var startTime = DateTime.Now;
             while (true)
             {
                 if(File.Exists(_eventLogFilePath))
-                { 
-                    var containsText = File.ReadAllText(_eventLogFilePath).Contains(text);
+                {
+                    var allText = File.ReadAllText(_eventLogFilePath);
+                    var containsText = allText.Contains(text);
                     if (containsText)
                         return;
                 }
@@ -90,11 +102,6 @@ namespace BusybodyTests
                     Assert.Fail("Failed waiting for <<" + text + ">>");
                 Thread.Sleep(500);
             }
-        }
-
-        public bool AnyErrors()
-        {
-            return File.ReadAllLines(_eventLogFilePath).Contains("ERROR");
         }
     }
 
@@ -140,7 +147,8 @@ namespace BusybodyTests
         {
             try
             {
-                Directory.Delete(RootPath, true);
+                //For now I'd prefer to see what's up with the test directories in event of test failure.  Warning: Disk space could be an issue.
+                //Directory.Delete(RootPath, true);
             }
             catch // Intentional
             {
@@ -177,49 +185,17 @@ namespace BusybodyTests
         }
     }
 
-    public class BusybodyConfig
-    {
-        public List<HostConfig> Hosts = new List<HostConfig>();
-
-        public BusybodyConfig()
-        {
-            Hosts = new List<HostConfig>();
-        }
-
-        public void WriteToFile(string filename)
-        {
-            var configFileWriter = new ConfigFileWriter();
-            configFileWriter.Write(this, filename);
-        }
-    }
-
-    public class ConfigFileWriter
-    {
-        public void Write(BusybodyConfig busybodyConfig, string filename)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("#Busybody config");
-            sb.AppendLine("Hosts");
-            foreach (var host in busybodyConfig.Hosts)
-            {
-                sb.AppendLine("Host");
-                sb.AppendLine("\tNickname " + host.Nickname);
-                sb.AppendLine("\tHostname " + host.Hostname);
-            }
-        }
-    }
-
 
     public class HostConfigBuilder
     {
         readonly ConfigBuilder _configBuilder;
         readonly string _nickname;
         readonly string _hostname;
-        List<TestConfig> Tests { get; set; }
+        List<HostTestConfig> Tests { get; set; }
 
         public HostConfigBuilder(ConfigBuilder configBuilder, string nickname, string hostname)
         {
-            Tests = new List<TestConfig>();
+            Tests = new List<HostTestConfig>();
             _configBuilder = configBuilder;
             _nickname = nickname;
             _hostname = hostname;
@@ -231,29 +207,17 @@ namespace BusybodyTests
             {
                 Nickname = _nickname,
                 Hostname = _hostname,
+                Tests = Tests,
             };
             _configBuilder.Hosts.Add(hostConfig);
             return _configBuilder;
         }
 
-        public HostConfigBuilder WithTest(TestConfig testConfig)
+        public HostConfigBuilder WithTest(HostTestConfig hostTestConfig)
         {
-            Tests.Add(testConfig);
+            hostTestConfig.HostNickname = _nickname;
+            Tests.Add(hostTestConfig);
             return this;
         }
-    }
-
-    public class HostConfig
-    {
-        public string Hostname { get; set; }
-        public string Nickname { get; set; }
-    }
-
-    public class TestConfig
-    {
-    }
-
-    public class PingTestConfig : TestConfig
-    {
     }
 }

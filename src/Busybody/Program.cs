@@ -9,17 +9,17 @@ namespace Busybody
         {
             var busybodyTempPath = CommonPaths.BusybodyTemp();
             Directory.CreateDirectory(busybodyTempPath);
-            _SetupLogging(busybodyTempPath);
+            _SetupLogging();
 
             var log = new Logger(typeof (Program));
             try
             {
                 log.Debug("Starting");
 
-                var eventLogger = new EventLogger();
-                eventLogger.Publish("Started successfully");
+                var busybodyDaemon = new BusybodyDaemon();
+                busybodyDaemon.Start();
 
-                log.Info("Started successfully");
+                log.Info("Startup complete");
                 return 0;
             }
             catch (Exception ex)
@@ -29,11 +29,11 @@ namespace Busybody
             }
         }
 
-        static void _SetupLogging(string busybodyTempPath)
+        static void _SetupLogging()
         {
-            var logsDirectory = Path.Combine(busybodyTempPath, "Logs");
+            var logsDirectory = CommonPaths.LogsPath();
             Directory.CreateDirectory(logsDirectory);
-            var logFilePath = Path.Combine(busybodyTempPath, "Logs", "Debug.log");
+            var logFilePath = CommonPaths.LogFilePath("Debug");
             LogSetup.Setup(logFilePath);
         }
     }

@@ -5,16 +5,20 @@ namespace Busybody
 {
     public class EventLogger
     {
+        static readonly Logger _log = new Logger(typeof (Program));
         static readonly object _syncLock = new object();
 
         public void Publish(string eventText)
         {
             var eventLogFilePath = CommonPaths.EventLogFilePath();
+            var dateTimeString = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            var formattedEvent = "[" + dateTimeString + "] " + eventText;
+            _log.Debug("Publishing event: " + formattedEvent);
+
             lock(_syncLock)
                 using (var streamWriter = File.AppendText(eventLogFilePath))
                 {
-                    var dateTimeString = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                    streamWriter.WriteLine("[" + dateTimeString + "] " + eventText);
+                    streamWriter.WriteLine(formattedEvent);
                     streamWriter.Flush();
                     streamWriter.Close();
                 }
