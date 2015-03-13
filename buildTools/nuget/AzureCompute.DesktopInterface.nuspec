@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>AzureCompute.DesktopInterface</id>
+    <version>3.3.0.0</version>
+    <authors>MG-ALFA</authors>
+    <owners>MG-ALFA</owners>
+    <projectUrl>https://github.com/mg-alfa-dev/AzureCompute</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>AzureCompute Desktop Interface</description>
+    <tags></tags>
+  </metadata>
+  <files>
+	  <file src="..\src\DesktopIntegration\bin\Release\Milliman.MGAlfa.AzureCompute.DesktopIntegration.dll" target="\lib\net35" />
+  </files>
+</package>

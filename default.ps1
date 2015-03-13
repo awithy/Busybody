@@ -10,8 +10,10 @@ properties {
     $majorVersion = "0"
     $minorVersion = "1"
     $buildNumber = "0"
+	$buildTools = Join-Path $rootDir "buildTools"
 	$nunitTestsNUnitFile = Join-Path $rootDir "NUnitTests.nunit"
-	$nunit = Join-Path $rootDir "buildTools\NUnit.Runners.2.6.2\tools\nunit-console.exe"
+	$nunit = Join-Path $buildTools "NUnit.Runners.2.6.2\tools\nunit-console.exe"
+	$nuget = Join-Path $buildTools "nuget\nuget.exe"
 }
 
 task ? -description "Helper to display task info" {
@@ -29,8 +31,12 @@ task UnitTests -depends NUnitUnitTests, Compile {
 task AllTests -depends UnitTest, Compile {
 }
 
-task Compile -depends Clean {
+task Compile -depends Restore, Clean {
 	exec { msbuild /v:m $solutionPath /p:"Configuration=$buildConfiguration;Platform=Any CPU;TrackFileAccess=false" }
+}
+
+task Restore -depends Clean {
+	exec { & $nuget restore $solutionPath }
 }
 
 task NUnitUnitTests -depends Compile -description "NUnit unit tests" {
