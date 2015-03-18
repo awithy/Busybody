@@ -47,6 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppContext.cs" />
     <Compile Include="BusybodyDaemon.cs" />
     <Compile Include="CommonPaths.cs" />
     <Compile Include="Config\BusybodyConfig.cs" />

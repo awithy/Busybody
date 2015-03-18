@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Busybody.Config;
 
 namespace Busybody
 {
@@ -16,6 +17,9 @@ namespace Busybody
             {
                 log.Debug("Starting");
 
+                AppContext.Instance = new AppContext();
+                var configFilePath = CommonPaths.CurrentConfigFilePath();
+                AppContext.Instance.Config = new ConfigFileReader().ReadFromFile(configFilePath);
                 var busybodyDaemon = new BusybodyDaemon();
                 busybodyDaemon.Start();
 

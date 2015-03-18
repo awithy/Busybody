@@ -3,7 +3,12 @@ using System.IO;
 
 namespace Busybody
 {
-    public class EventLogger
+    public interface IEventLogger
+    {
+        void Publish(string eventText);
+    }
+
+    public class EventLogger : IEventLogger
     {
         static readonly Logger _log = new Logger(typeof (Program));
         static readonly object _syncLock = new object();

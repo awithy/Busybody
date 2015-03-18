@@ -10,26 +10,18 @@ namespace Busybody
 
         public void Start()
         {
-            var configFilePath = CommonPaths.CurrentConfigFilePath();
-            var config = BusybodyConfig.ReadFromFile(configFilePath);
+            var config = AppContext.Instance.Config;
             var eventLogger = new EventLogger();
 
             foreach (var host in config.Hosts)
             {
                 _log.Debug("Checking host " + host.Nickname);
                 var allPassed = true;
-                foreach (var test in host.Tests)
+                var testFactory = new TestFactory();
+                foreach (var testConfig in host.Tests)
                 {
-                    _log.Debug("Running test " + test.Name + " on " + test.HostNickname);
-                    switch (test.Name)
-                    {
-                        case "Ping":
-                            var result = _RunPingTest(host);
-                            allPassed = allPassed && result;
-                            break;
-                        default:
-                            throw new TestNotFoundException(test.Name);
-                    }
+                    var test = testFactory.Create(testConfig.Name);
+                    test.Execute(host, testConfig);
 
                     if (allPassed)
                         eventLogger.Publish("Host: " + host.Nickname + ", State: Up");
@@ -38,10 +30,45 @@ namespace Busybody
 
             eventLogger.Publish("Startup complete");
         }
+    }
+    
 
-        bool _RunPingTest(HostConfig host)
+    public interface ITestFactory
+    {
+        IBusybodyTest Create(string name);
+    }
+
+    public class TestFactory : ITestFactory
+    {
+        static Logger _log = new Logger(typeof(BusybodyDaemon));
+
+        public IBusybodyTest Create(string name)
         {
-            _log.Debug("Running ping test on host " + host.Nickname + " with hostname " + host.Hostname);
+            _log.Debug("Creating test " + name);
+            switch (name)
+            {
+                case "Ping":
+                    var result = new PingTest();
+                    return result;
+                default:
+                    throw new TestNotFoundException(name);
+            }
+        }
+    }
+
+    public interface IBusybodyTest
+    {
+        bool Execute(HostConfig host, HostTestConfig test);
+    }
+
+    public class PingTest : IBusybodyTest
+    {
+        static Logger _log = new Logger(typeof(BusybodyDaemon));
+
+        public bool Execute(HostConfig host, HostTestConfig test)
+        {
+            var pingConfig = (PingTestConfig) test;
+            _log.Debug("Running ping test on host " + pingConfig.HostNickname + " with hostname " + pingConfig.HostNickname);
             var ping = new Ping();
             var result = ping.Send(host.Hostname);
             _log.Debug("Ping status:" + result.Status);

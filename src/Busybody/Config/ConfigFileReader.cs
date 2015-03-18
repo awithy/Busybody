@@ -2,11 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Topshelf;
 
 namespace Busybody.Config
 {
+    public interface IConfigFileReader
+    {
+        BusybodyConfig ReadFromFile(string filePath);
+    }
+
     //Todo: CsvHelper
-    public class ConfigFileReader
+    public class ConfigFileReader : IConfigFileReader
     {
         static Logger _log = new Logger(typeof(ConfigFileReader));
 
@@ -28,7 +34,8 @@ namespace Busybody.Config
                     else if (line.ToLower().StartsWith("hosttest,"))
                     {
                         var testConfig = _ParseTestConfig(line);
-                        hostConfigs.Single(x => x.Nickname.ToLower() == testConfig.HostNickname.ToLower()).Tests.Add(testConfig);
+                        var hostConfig = hostConfigs.Single(x => x.Nickname.ToLower() == testConfig.HostNickname.ToLower());
+                        hostConfig.Tests.Add(testConfig);
                     }
                     line = streamReader.ReadLine();
                 }
