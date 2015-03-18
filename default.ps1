@@ -22,7 +22,7 @@ task ? -description "Helper to display task info" {
 
 task Clean {
 	if(test-path $buildDir) {
-		rmdir $buildDir | out-null
+		rmdir $buildDir -rec
 	}
 }
 
