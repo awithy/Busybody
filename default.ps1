@@ -21,6 +21,9 @@ task ? -description "Helper to display task info" {
 }
 
 task Clean {
+	if(test-path $buildDir) {
+		rmdir $buildDir | out-null
+	}
 }
 
 task default -depends UnitTests
@@ -41,4 +44,10 @@ task Restore -depends Clean {
 
 task NUnitUnitTests -depends Compile -description "NUnit unit tests" {
  exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow "/exclude=LongRunning" }
+}
+
+task Package -depends Compile, Clean {
+	$solutionBuildDir = Join-Path $srcDir "Busybody/bin/$buildConfiguration"
+	mkdir $buildDir
+	copy "$solutionBuildDir/*.*" "$buildDir/" -rec
 }
