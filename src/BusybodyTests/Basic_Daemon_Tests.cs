@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Busybody;
 using Busybody.Config;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace BusybodyTests
@@ -9,12 +11,16 @@ namespace BusybodyTests
     [TestFixture]
     public class When_starting_the_daemon_and_multiple_tests_are_configured
     {
+        FakeAppContext _fakeAppContext;
+
         [SetUp]
         public void SetUp()
         {
-            AppContext.Instance = new FakeAppContextBuilder()
+            _fakeAppContext = new FakeAppContextBuilder()
                 .WithBasicConfiguration()
                 .Build();
+
+            AppContext.Instance = _fakeAppContext;
             
             var daemon = new BusybodyDaemon();
             daemon.Start();
@@ -23,8 +29,8 @@ namespace BusybodyTests
         [Test]
         public void It_should_run_each_test_once()
         {
-            
-
+            var fakePingTest = (FakePingTest)_fakeAppContext.FakeTestFactory.Tests["Ping"];
+            fakePingTest.ExecutedCount.Should().BeGreaterOrEqualTo(1);
         }
 
         [Test]
@@ -58,6 +64,7 @@ namespace BusybodyTests
                 .BuildHostConfig()
                 .BuildConfig();
             _appContext.Config = config;
+            _appContext.FakeTestFactory.Tests.Add("Ping", new FakePingTest());
             return this;
         }
 
@@ -67,14 +74,42 @@ namespace BusybodyTests
         }
     }
 
+    public class FakePingTest : IBusybodyTest
+    {
+        public int ExecutedCount;
+        public HostConfig LastHostConfig;
+        public HostTestConfig LastHostTestConfig;
+
+        public bool Execute(HostConfig host, HostTestConfig test)
+        {
+            ExecutedCount++;
+            LastHostConfig = host;
+            LastHostTestConfig = test;
+            return true;
+        }
+    }
+
     public class FakeAppContext : IAppContext
     {
         public IEventLogger EventLogger { get; private set; }
+        public ITestFactory TestFactory { get; private set; }
         public BusybodyConfig Config { get; set; }
+        public FakeTestFactory FakeTestFactory { get { return (FakeTestFactory)TestFactory;  } }
 
         public FakeAppContext()
         {
             EventLogger = new FakeEventLogger();
+            TestFactory = new FakeTestFactory();
+        }
+    }
+
+    public class FakeTestFactory : ITestFactory
+    {
+        public Dictionary<string, IBusybodyTest> Tests = new Dictionary<string, IBusybodyTest>();
+
+        public IBusybodyTest Create(string name)
+        {
+            return Tests[name];
         }
     }
 
