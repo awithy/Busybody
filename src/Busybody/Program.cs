@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using Busybody.Config;
 
 namespace Busybody
@@ -24,7 +25,9 @@ namespace Busybody
                 busybodyDaemon.Start();
 
                 log.Info("Startup complete");
-                return 0;
+
+                while(true)
+                    Thread.Sleep(1000);
             }
             catch (Exception ex)
             {
