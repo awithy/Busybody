@@ -41,14 +41,14 @@ namespace Busybody
         {
             _log.Debug("Dispatching events");
 
-            var pendingCopy = (Dictionary<string, List<BusybodyEvent>>) null;
+            Dictionary<string, List<BusybodyEvent>> pendingCopy;
             lock (_pendingSyncLock)
             {
                 pendingCopy = _pendingEvents;
                 _pendingEvents = new Dictionary<string, List<BusybodyEvent>>();
             }
 
-            var subscriptionsCopy = (Dictionary<string, EventSubscription>) null;
+            Dictionary<string, EventSubscription> subscriptionsCopy;
             lock (_subscriptionSyncLock)
             {
                 subscriptionsCopy = _subscriptionsByName;

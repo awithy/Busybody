@@ -56,7 +56,7 @@ namespace Busybody
         {
             if (_stopFlag)
                 return;
-            for (int i = 0; i < 10 * 60 * 2; i++)
+            for (var i = 0; i < 10 * 60 * 2; i++)
             {
                 AppContext.Instance.Threading.Sleep(100);
                 if (_stopFlag)

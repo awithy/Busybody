@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace BusybodyTests
 {
     [TestFixture]
-    public class When_starting_the_daemon_and_multiple_tests_are_configured
+    public class When_starting_the_daemon_and_test_is_configured
     {
         FakeAppContext _fakeAppContext;
 
