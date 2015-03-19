@@ -51,9 +51,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicTests.cs" />
-    <Compile Include="Basic_Daemon_Tests.cs" />
+    <Compile Include="BasicConsoleTests.cs" />
+    <Compile Include="BasicDaemonTests.cs" />
+    <Compile Include="BusybodyConsoleRunner.cs" />
+    <Compile Include="ConfigBuilder.cs" />
+    <Compile Include="Fakes\FakeAppContext.cs" />
+    <Compile Include="Fakes\FakeAppContextBuilder.cs" />
+    <Compile Include="Fakes\FakeEventLogger.cs" />
+    <Compile Include="Fakes\FakePingTest.cs" />
+    <Compile Include="Fakes\FakeTestFactory.cs" />
+    <Compile Include="Fakes\FakeThreading.cs" />
+    <Compile Include="HostConfigBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestDirectory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
