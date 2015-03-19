@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 
 namespace Busybody
 {
@@ -12,7 +13,13 @@ namespace Busybody
 
         public static string CurrentConfigFilePath()
         {
-            return Path.Combine(CurrentDirectory(), "Busybody.cfg");
+            var currentConfigFilePath = Path.Combine(CurrentDirectory(), "Busybody.cfg");
+            if(File.Exists(currentConfigFilePath))
+                return currentConfigFilePath;
+            currentConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "busybody.cfg");
+            if(File.Exists(currentConfigFilePath))
+                return currentConfigFilePath;
+            throw new ConfigurationFileNotFoundException();
         }
 
         public static string EventLogFilePath()
@@ -39,5 +46,9 @@ namespace Busybody
         {
             return Path.Combine(LogsPath(), logLevel + ".log");
         }
+    }
+
+    public class ConfigurationFileNotFoundException : Exception
+    {
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Busybody.Config;
 
@@ -9,6 +11,9 @@ namespace Busybody
     {
         static int Main(string[] args)
         {
+            if (args.Contains("-d") || args.Contains("--debug"))
+                LogSetup.EnableConsoleDebug();
+
             var busybodyTempPath = CommonPaths.BusybodyTemp();
             Directory.CreateDirectory(busybodyTempPath);
             _SetupLogging();
@@ -16,7 +21,7 @@ namespace Busybody
             var log = new Logger(typeof (Program));
             try
             {
-                log.Debug("Starting");
+                log.Info("Starting Busybody v0.1");
 
                 AppContext.Instance = new AppContext();
                 var configFilePath = CommonPaths.CurrentConfigFilePath();
@@ -27,11 +32,20 @@ namespace Busybody
                 log.Info("Startup complete");
 
                 while(true)
+                {
+                    var key = Console.ReadKey();
+                    if (key.Key == ConsoleKey.Q)
+                    { 
+                        busybodyDaemon.Stop();
+                        return 0;
+                    }
+
                     Thread.Sleep(1000);
+                }
             }
             catch (Exception ex)
             {
-                log.Error("Unexpected " + ex.GetType().Name + " occurred.  Aborting.");
+                log.Error("Unexpected " + ex.GetType().Name + " occurred.  Aborting.  " + Environment.NewLine + ex);
                 return -1;
             }
         }

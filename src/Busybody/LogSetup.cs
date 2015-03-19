@@ -9,6 +9,7 @@ namespace Busybody
     public class Logger
     {
         readonly ILog _log;
+        public static bool ConsoleDebugEnabled = false;
 
         public Logger(Type type)
         {
@@ -17,17 +18,20 @@ namespace Busybody
 
         public void Debug(string message)
         {
+            if(ConsoleDebugEnabled)
+                ConsoleLog.Log("DEBUG", message);
             _log.Debug(message);
         }
 
         public void Error(string message)
         {
-            ConsoleLog.Log("ERROR:" + message);
+            ConsoleLog.Log("ERROR", message);
             _log.Error(message);
         }
 
         public void Info(string message)
         {
+            ConsoleLog.Log("INFO", message);
             _log.Info(message);
         }
 
@@ -39,9 +43,9 @@ namespace Busybody
 
     public static class ConsoleLog
     {
-        public static void Log(string message)
+        public static void Log(string level, string message)
         {
-            var logMessage = "[" + DateTime.Now.ToString("HH:mm:ss") + "] " + message;
+            var logMessage = "[" + DateTime.Now.ToString("HH:mm:ss") + "][" + level + "] " + message;
             Console.WriteLine(logMessage);
         }
     }
@@ -75,6 +79,11 @@ namespace Busybody
             lAppender.Threshold = threshhold;
             lAppender.ActivateOptions();
             return lAppender;
+        }
+
+        public static void EnableConsoleDebug()
+        {
+            Logger.ConsoleDebugEnabled = true;
         }
     }
 }

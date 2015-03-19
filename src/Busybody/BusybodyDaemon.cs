@@ -12,6 +12,7 @@ namespace Busybody
         readonly ManualResetEvent _startedEvent = new ManualResetEvent(false);
         readonly ManualResetEvent _stoppedEvent = new ManualResetEvent(false);
         bool _stopFlag;
+        bool _stopped;
 
         public void Start()
         {
@@ -27,8 +28,14 @@ namespace Busybody
 
         public void Stop()
         {
+            _log.Info("Stopping");
+
             _stopFlag = true;
             _stoppedEvent.Set();
+            while (!_stopped)
+                Thread.Sleep(100);
+
+            _log.Info("Stopped");
         }
 
         void _StartMonitoring()
@@ -46,12 +53,13 @@ namespace Busybody
             _startedEvent.Set();
             _Sleep();
 
-            while (true)
+            while (!_stopFlag)
             {
                 _RunHostTests();
                 AppContext.Instance.EventBus.DispatchPending();
                 _Sleep();
             }
+            _stopped = true;
         }
 
         void _Sleep()
