@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace BusybodyTests
 {
     [TestFixture]
-    public class When_starting_the_daemon_and_test_is_configured
+    public class When_starting_the_daemon_and_test_is_configured_and_host_is_up
     {
         FakeAppContext _fakeAppContext;
 
@@ -55,7 +55,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_pause_between_tests()
         {
-            _fakeAppContext.FakeThreading._sleeps.Count.Should().Be(60*10*2);
+            _fakeAppContext.FakeThreading._sleeps.Count.Should().BeGreaterOrEqualTo(60*10*2);
             _fakeAppContext.FakeThreading._sleeps[0].Should().Be(100);
         }
 
@@ -64,6 +64,43 @@ namespace BusybodyTests
         {
             var fakePingTest = (FakePingTest)_fakeAppContext.FakeTestFactory.Tests["Ping"];
             fakePingTest.ExecutedCount.Should().BeGreaterOrEqualTo(2);
+        }
+    }
+
+    [TestFixture]
+    public class When_starting_the_daemon_and_test_is_configured_and_host_is_down
+    {
+        FakeAppContext _fakeAppContext;
+        string _receivedText;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _fakeAppContext = new FakeAppContextBuilder()
+                .WithBasicConfiguration()
+                .Build();
+
+            _receivedText = "";
+            AppContext.Instance = _fakeAppContext;
+            AppContext.Instance.EventBus.Subscribe(new EventSubscription
+            {
+                Name = "Test Subscription",
+                EventStreamName = "All",
+                Recipient = s => _receivedText = ((HostStateEvent)s.Event).StateText,
+            });
+
+            var fakePingTest = (FakePingTest) _fakeAppContext.FakeTestFactory.Tests["Ping"];
+            fakePingTest.StubResult(false);
+            
+            var daemon = new BusybodyDaemon();
+            daemon.Start();
+            daemon.Stop();
+        }
+
+        [Test]
+        public void It_should_alert_that_the_test_failed()
+        {
+            _receivedText.Should().Be("Host: Local Machine, State: Down");
         }
     }
 }

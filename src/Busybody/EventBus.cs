@@ -4,7 +4,14 @@ using System.Linq;
 
 namespace Busybody
 {
-    public class EventBus
+    public interface IEventBus
+    {
+        void Publish(string eventStreamName, BusybodyEvent @event);
+        void Subscribe(EventSubscription subscription);
+        void DispatchPending();
+    }
+
+    public class EventBus : IEventBus
     {
         static Logger _log = new Logger(typeof (EventBus));
         static object _pendingSyncLock = new object(); 

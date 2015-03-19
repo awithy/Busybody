@@ -42,12 +42,14 @@ namespace Busybody
         void _StartMonitoringThreadStart()
         {
             _RunHostTests();
+            AppContext.Instance.EventBus.DispatchPending();
             _startedEvent.Set();
             _Sleep();
 
             while (true)
             {
                 _RunHostTests();
+                AppContext.Instance.EventBus.DispatchPending();
                 _Sleep();
             }
         }
@@ -73,10 +75,16 @@ namespace Busybody
                 foreach (var testConfig in host.Tests)
                 {
                     var test = AppContext.Instance.TestFactory.Create(testConfig.Name);
-                    test.Execute(host, testConfig);
+                    allPassed = allPassed & test.Execute(host, testConfig);
 
                     if (allPassed)
+                    {
                         _eventLogger.Publish("Host: " + host.Nickname + ", State: Up");
+                    }
+                    else
+                    {
+                        AppContext.Instance.EventBus.Publish("All", new HostStateEvent("Host: " + host.Nickname + ", State: Down"));
+                    }
                 }
             }
         }
