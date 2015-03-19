@@ -32,7 +32,6 @@ namespace Busybody
         }
     }
     
-
     public interface ITestFactory
     {
         IBusybodyTest Create(string name);
