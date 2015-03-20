@@ -88,6 +88,7 @@ namespace Busybody
                     if (allPassed)
                     {
                         _eventLogger.Publish("Host: " + host.Nickname + ", State: Up");
+                        AppContext.Instance.EventBus.Publish("All", new HostStateEvent("Host: " + host.Nickname + ", State: Up"));
                     }
                     else
                     {

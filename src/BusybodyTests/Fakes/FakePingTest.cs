@@ -18,9 +18,9 @@ namespace BusybodyTests.Fakes
             return _stubResult;
         }
 
-        public void StubResult(bool b)
+        public void StubResult(bool result)
         {
-            _stubResult = false;
+            _stubResult = result;
         }
     }
 }

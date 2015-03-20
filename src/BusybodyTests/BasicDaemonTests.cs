@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using Busybody;
 using BusybodyTests.Fakes;
 using FluentAssertions;
@@ -9,7 +7,7 @@ using NUnit.Framework;
 namespace BusybodyTests
 {
     [TestFixture]
-    public class When_starting_the_daemon_and_test_is_configured_and_host_is_up
+    public class When_starting_the_daemon
     {
         FakeAppContext _fakeAppContext;
 
@@ -68,13 +66,58 @@ namespace BusybodyTests
     }
 
     [TestFixture]
-    public class When_starting_the_daemon_and_test_is_configured_and_host_is_down
+    public class When_starting_the_daemon_and_test_is_configured_and_host_is_down : Daemon_up_down_tests
     {
-        FakeAppContext _fakeAppContext;
-        string _receivedText;
 
         [SetUp]
         public void SetUp()
+        {
+            _SetupContext();
+
+            _fakePingTest.StubResult(false);
+            
+            var daemon = new BusybodyDaemon();
+            daemon.Start();
+            daemon.Stop();
+        }
+
+        [Test]
+        public void It_should_alert_that_the_test_failed()
+        {
+            _receivedText.Should().Be("Host: Local Machine, State: Down");
+        }
+    }
+
+    [TestFixture]
+    public class When_starting_the_daemon_and_test_is_configured_and_host_is_up : Daemon_up_down_tests
+    {
+
+        [SetUp]
+        public void SetUp()
+        {
+            _SetupContext();
+
+            _fakePingTest.StubResult(true);
+            
+            var daemon = new BusybodyDaemon();
+            daemon.Start();
+            daemon.Stop();
+        }
+
+        [Test]
+        public void It_should_alert_that_the_test_failed()
+        {
+            _receivedText.Should().Be("Host: Local Machine, State: Up");
+        }
+    }
+
+    public class Daemon_up_down_tests
+    {
+        protected FakeAppContext _fakeAppContext;
+        protected FakePingTest _fakePingTest;
+        protected string _receivedText;
+
+        protected void _SetupContext()
         {
             _fakeAppContext = new FakeAppContextBuilder()
                 .WithBasicConfiguration()
@@ -86,21 +129,10 @@ namespace BusybodyTests
             {
                 Name = "Test Subscription",
                 EventStreamName = "All",
-                Recipient = s => _receivedText = ((HostStateEvent)s.Event).StateText,
+                Recipient = s => _receivedText = ((HostStateEvent) s.Event).StateText,
             });
 
-            var fakePingTest = (FakePingTest) _fakeAppContext.FakeTestFactory.Tests["Ping"];
-            fakePingTest.StubResult(false);
-            
-            var daemon = new BusybodyDaemon();
-            daemon.Start();
-            daemon.Stop();
-        }
-
-        [Test]
-        public void It_should_alert_that_the_test_failed()
-        {
-            _receivedText.Should().Be("Host: Local Machine, State: Down");
+            _fakePingTest = (FakePingTest) _fakeAppContext.FakeTestFactory.Tests["Ping"];
         }
     }
 }
