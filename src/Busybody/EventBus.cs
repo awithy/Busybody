@@ -98,5 +98,9 @@ namespace Busybody
 
     public class BusybodyEvent
     {
+        public virtual string ToLogString()
+        {
+            return "<Not Used>";
+        }
     }
 }

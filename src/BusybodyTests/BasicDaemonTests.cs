@@ -84,7 +84,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_alert_that_the_test_failed()
         {
-            _receivedText.Should().Be("Host: Local Machine, State: Down");
+            _receivedText.Should().Be("Host: Local Machine, State: DOWN");
         }
     }
 
@@ -107,7 +107,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_alert_that_the_test_failed()
         {
-            _receivedText.Should().Be("Host: Local Machine, State: Up");
+            _receivedText.Should().Be("Host: Local Machine, State: UP");
         }
     }
 

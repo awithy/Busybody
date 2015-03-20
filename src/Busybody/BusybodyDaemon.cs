@@ -19,6 +19,8 @@ namespace Busybody
             _config = AppContext.Instance.Config;
             _eventLogger = new EventLogger();
 
+            _SubscribeTextEventLogger();
+
             _StartMonitoring();
 
             _startedEvent.WaitOne(TimeSpan.FromMinutes(5));
@@ -85,17 +87,26 @@ namespace Busybody
                     var test = AppContext.Instance.TestFactory.Create(testConfig.Name);
                     allPassed = allPassed & test.Execute(host, testConfig);
 
-                    if (allPassed)
-                    {
-                        _eventLogger.Publish("Host: " + host.Nickname + ", State: Up");
-                        AppContext.Instance.EventBus.Publish("All", new HostStateEvent("Host: " + host.Nickname + ", State: Up"));
-                    }
-                    else
-                    {
-                        AppContext.Instance.EventBus.Publish("All", new HostStateEvent("Host: " + host.Nickname + ", State: Down"));
-                    }
+                    var hostState = allPassed ? HostState.UP : HostState.DOWN;
+                    _PublishHostStateEvent(host, hostState);
                 }
             }
+        }
+
+        static void _PublishHostStateEvent(HostConfig host, HostState hostState)
+        {
+            AppContext.Instance.EventBus.Publish("All", new HostStateEvent(host.Nickname, hostState));
+        }
+
+        void _SubscribeTextEventLogger()
+        {
+            var eventSubscription = new EventSubscription
+            {
+                EventStreamName = "All",
+                Name = "Event Logger",
+                Recipient = e => _eventLogger.Publish(e.Event.ToLogString()),
+            };
+            AppContext.Instance.EventBus.Subscribe(eventSubscription);
         }
     }
 

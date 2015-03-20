@@ -57,7 +57,7 @@ namespace BusybodyTests
         [Test]
         public void An_event_should_be_published_with_the_host_status_up()
         {
-            _testEventLogReader.WaitForEvent("Host: Local Machine, State: Up");
+            _testEventLogReader.WaitForEvent("Host: Local Machine, State: UP");
         }
 
         //Todo: How to clean up after every test
