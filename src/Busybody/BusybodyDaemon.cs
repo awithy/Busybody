@@ -31,9 +31,9 @@ namespace Busybody
             _log.Info("Stopping");
 
             _stopFlag = true;
-            _stoppedEvent.Set();
             while (!_stopped)
                 Thread.Sleep(100);
+            _stoppedEvent.Set();
 
             _log.Info("Stopped");
         }
