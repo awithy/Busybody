@@ -16,6 +16,11 @@ namespace Busybody
             _log = LogManager.GetLogger(type);
         }
 
+        public void Trace(string message)
+        {
+            _log.Debug(message); //TODO: Switch to using Trace level
+        }
+
         public void Debug(string message)
         {
             if(ConsoleDebugEnabled)

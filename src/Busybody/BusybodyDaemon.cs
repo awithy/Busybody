@@ -23,7 +23,7 @@ namespace Busybody
 
             _StartMonitoring();
 
-            _startedEvent.WaitOne(TimeSpan.FromMinutes(5));
+            _WaitForStart();
 
             _eventLogger.Publish("Startup complete");
         }
@@ -42,14 +42,19 @@ namespace Busybody
 
         void _StartMonitoring()
         {
+            _log.Trace("Starting Monitoring");
             var threadStart = new ThreadStart(_StartMonitoringThreadStart);
-            var thread = new Thread(threadStart);
-            thread.IsBackground = true;
+            var thread = new Thread(threadStart)
+            {
+                IsBackground = true
+            };
             thread.Start();
+            _log.Trace("Monitoring thread started");
         }
 
         void _StartMonitoringThreadStart()
         {
+            _log.Trace("Monitoring thread started");
             _RunHostTests();
             AppContext.Instance.EventBus.DispatchPending();
             _startedEvent.Set();
@@ -78,12 +83,14 @@ namespace Busybody
 
         void _RunHostTests()
         {
+            _log.Trace("Running host test");
             foreach (var host in _config.Hosts)
             {
                 _log.Debug("Checking host " + host.Nickname);
                 var allPassed = true;
                 foreach (var testConfig in host.Tests)
                 {
+                    _log.Trace("Running test " + testConfig.Name);
                     var test = AppContext.Instance.TestFactory.Create(testConfig.Name);
                     allPassed = allPassed & test.Execute(host, testConfig);
 
@@ -91,6 +98,7 @@ namespace Busybody
                     _PublishHostStateEvent(host, hostState);
                 }
             }
+            _log.Trace("Test run complete");
         }
 
         static void _PublishHostStateEvent(HostConfig host, HostState hostState)
@@ -108,6 +116,17 @@ namespace Busybody
             };
             AppContext.Instance.EventBus.Subscribe(eventSubscription);
         }
+
+        void _WaitForStart()
+        {
+            var result = _startedEvent.WaitOne(TimeSpan.FromMinutes(5));
+            if (!result)
+                throw new TimedOutWaitingForStartException();
+        }
+    }
+
+    public class TimedOutWaitingForStartException : Exception
+    {
     }
 
     public class TestNotFoundException : Exception

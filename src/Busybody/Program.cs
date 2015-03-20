@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -11,6 +10,8 @@ namespace Busybody
     {
         static int Main(string[] args)
         {
+            //TODO: Handle unhandled exceptions
+
             if (args.Contains("-d") || args.Contains("--debug"))
                 LogSetup.EnableConsoleDebug();
 

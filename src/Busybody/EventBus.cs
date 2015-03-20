@@ -46,7 +46,7 @@ namespace Busybody
 
         public void DispatchPending()
         {
-            _log.Debug("Dispatching events");
+            _log.Trace("Dispatching events");
 
             Dictionary<string, List<BusybodyEvent>> pendingCopy;
             lock (_pendingSyncLock)
@@ -64,14 +64,14 @@ namespace Busybody
 
             lock (_dispatchLock)
             {
-                foreach (var stream in pendingCopy.Keys)
+                foreach (var streamName in pendingCopy.Keys)
                 {
-                    var subscriptionsToStream = subscriptionsCopy.Values.Where(x => x.EventStreamName == stream);
+                    var subscriptionsToStream = subscriptionsCopy.Values.Where(x => x.EventStreamName == streamName);
                     foreach (var subscription in subscriptionsToStream)
                     {
-                        if (!pendingCopy.ContainsKey(stream))
+                        if (!pendingCopy.ContainsKey(streamName))
                             continue;
-                        var eventsInStream = pendingCopy[stream];
+                        var eventsInStream = pendingCopy[streamName];
                         foreach (var @event in eventsInStream)
                         {
                             subscription.Recipient.Invoke(new EventNotification{ Event = @event });
@@ -80,7 +80,7 @@ namespace Busybody
                 }
             }
 
-            _log.Debug("Dispatching events complete");
+            _log.Trace("Dispatching events complete");
         }
     }
 
