@@ -11,15 +11,17 @@ namespace Busybody
     public class Logger
     {
         readonly ILog _log;
+        Type _sourceType;
 
         public Logger(Type type)
         {
+            _sourceType = type;
             _log = LogManager.GetLogger(type);
         }
 
         public void Trace(string message)
         {
-            _log.Debug(message); //TODO: Switch to using Trace level
+            _log.Logger.Log(_sourceType, Level.Trace, message, null);
         }
 
         public void Debug(string message)
@@ -59,7 +61,7 @@ namespace Busybody
             repository.Root.RemoveAllAppenders();
             repository.Root.AddAppender(_GetFileAppender(logFile, Level.All, true));
             if (Process.GetCurrentProcess().ProcessName.ToLower().Contains("busybody")) //Mute logs when running from test runner.
-                repository.Root.AddAppender(_GetConsoleAppender(Level.All, verboseLogging));
+                repository.Root.AddAppender(_GetConsoleAppender(Level.Debug, verboseLogging));
             repository.Root.Level = Level.All;
         }
 
@@ -79,12 +81,12 @@ namespace Busybody
             return appender;
         }
 
-        private static FileAppender _GetFileAppender(string sFileName , Level threshhold ,bool bFileAppend)
+        private static FileAppender _GetFileAppender(string fileName, Level threshhold, bool append)
         {
             var appender = new FileAppender();
-            appender.Name = sFileName;
-            appender.AppendToFile = bFileAppend;
-            appender.File = sFileName;
+            appender.Name = fileName;
+            appender.AppendToFile = append;
+            appender.File = fileName;
             appender.Layout = _layout;
             appender.Threshold = threshhold;
             appender.ActivateOptions();
