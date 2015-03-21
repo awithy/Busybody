@@ -1,14 +1,39 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Busybody.Config;
 
 namespace Busybody
 {
+    public class HostRepository
+    {
+        public ConcurrentDictionary<string, Host> Hosts = new ConcurrentDictionary<string, Host>();
+
+        public Host GetOrCreateHost(string name)
+        {
+            return Hosts.AddOrUpdate(name, n => new Host {Name = n}, (n, existingHost) => existingHost);
+        }
+
+        public void UpdateHost(Host host)
+        {
+            Hosts.AddOrUpdate(host.Name, n => host, (n, existingHost) => host);
+        }
+    }
+
+    public class Host
+    {
+        public string Name { get; set; }
+        public HostState State { get; set; }
+    }
+
     public class BusybodyDaemon
     {
         static Logger _log = new Logger(typeof(BusybodyDaemon));
         BusybodyConfig _config;
         EventLogger _eventLogger;
+        HostRepository _hostRepository = new HostRepository();
         readonly ManualResetEvent _startedEvent = new ManualResetEvent(false);
         readonly ManualResetEvent _stoppedEvent = new ManualResetEvent(false);
         bool _stopFlag;
@@ -107,18 +132,24 @@ namespace Busybody
         void _RunHostTests()
         {
             _log.Trace("Running host test");
-            foreach (var host in _config.Hosts)
+            foreach (var hostConfig in _config.Hosts)
             {
-                _log.Debug("Checking host " + host.Nickname);
+                _log.Debug("Checking host " + hostConfig.Nickname);
+                var host = _hostRepository.GetOrCreateHost(hostConfig.Nickname);
                 var allPassed = true;
-                foreach (var testConfig in host.Tests)
+                foreach (var testConfig in hostConfig.Tests)
                 {
                     _log.Trace("Running test " + testConfig.Name);
                     var test = AppContext.Instance.TestFactory.Create(testConfig.Name);
-                    allPassed = allPassed & test.Execute(host, testConfig);
+                    allPassed = allPassed & test.Execute(hostConfig, testConfig);
 
                     var hostState = allPassed ? HostState.UP : HostState.DOWN;
-                    _PublishHostStateEvent(host, hostState);
+                    if (hostState != host.State)
+                    {
+                        host.State = hostState;
+                        _PublishHostStateEvent(hostConfig, hostState);
+                        _hostRepository.UpdateHost(host);
+                    }
                 }
             }
             _log.Trace("Test run complete");

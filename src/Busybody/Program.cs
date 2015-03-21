@@ -60,7 +60,7 @@ namespace Busybody
             AppContext.Instance.Config = BusybodyConfig.ReadFromFile(configFilePath);
         }
 
-        static Host _ConfigureServiceHost()
+        static Topshelf.Host _ConfigureServiceHost()
         {
             var serviceHost = HostFactory.New(x =>
             {

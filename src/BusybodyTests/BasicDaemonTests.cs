@@ -146,11 +146,51 @@ namespace BusybodyTests
             {
                 var cnt = 0;
                 if (_receivedEventText.Count < 2)
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
                 else
                     return;
                 if (cnt++ > 20)
                     Assert.Fail("Failed waiting for two state events");
+            }
+        }
+    }
+
+    [TestFixture]
+    public class When_starting_the_daemon_and_test_is_configured_and_host_is_up_and_polled_multiple_times : Daemon_up_down_tests
+    {
+
+        [SetUp]
+        public void SetUp()
+        {
+            _SetupContext();
+
+            _fakePingTest.StubResult(new[] {true, true});
+            
+            var daemon = new BusybodyDaemon();
+            daemon.Start();
+
+            _WaitForTwoTestExecutions();
+
+            daemon.Stop();
+        }
+
+        [Test]
+        public void It_should_alert_that_the_test_failed()
+        {
+            _receivedEventText.Should().ContainSingle("Host: Local Machine, State: UP");
+        }
+
+        void _WaitForTwoTestExecutions()
+        {
+            while (true)
+            {
+                var cnt = 0;
+                if (_fakePingTest.ExecutedCount < 2)
+                    Thread.Sleep(100);
+                else
+                    return;
+                if (cnt++ > 20)
+                    Assert.Fail("Failed waiting for two test executions");
             }
         }
     }
