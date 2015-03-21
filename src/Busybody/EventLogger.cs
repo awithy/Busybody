@@ -18,7 +18,7 @@ namespace Busybody
             var eventLogFilePath = CommonPaths.EventLogFilePath();
             var dateTimeString = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             var formattedEvent = "[" + dateTimeString + "] " + eventText;
-            _log.Debug("Publishing event: " + formattedEvent);
+            _log.Trace("Logging event: " + formattedEvent);
 
             lock(_syncLock)
                 using (var streamWriter = File.AppendText(eventLogFilePath))

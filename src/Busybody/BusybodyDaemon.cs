@@ -25,7 +25,7 @@ namespace Busybody
 
             _WaitForStart();
 
-            _eventLogger.Publish("Startup complete");
+            AppContext.Instance.EventBus.Publish("All", new StartupCompleteEvent());
             _log.Info("Busybody started");
         }
 
@@ -55,19 +55,27 @@ namespace Busybody
 
         void _StartMonitoringThreadStart()
         {
-            _log.Trace("Monitoring thread started");
-            _RunHostTests();
-            AppContext.Instance.EventBus.DispatchPending();
-            _startedEvent.Set();
-            _Sleep();
-
-            while (!_stopFlag)
+            _log.Trace("Monitoring thread entered");
+            try
             {
-                _RunHostTests();
+                _RunHostTestsAndSwallow();
                 AppContext.Instance.EventBus.DispatchPending();
+                _startedEvent.Set();
                 _Sleep();
+
+                while (!_stopFlag)
+                {
+                    _RunHostTestsAndSwallow();
+                    AppContext.Instance.EventBus.DispatchPending();
+                    _Sleep();
+                }
+                _stopped = true;
             }
-            _stopped = true;
+            catch (Exception ex)
+            {
+                _log.Critical("Monitoring thread experienced exception: " + ex);
+                throw;
+            }
         }
 
         void _Sleep()
@@ -80,6 +88,19 @@ namespace Busybody
                 AppContext.Instance.Threading.Sleep(100);
                 if (_stopFlag)
                     return;
+            }
+        }
+
+        void _RunHostTestsAndSwallow()
+        {
+            try
+            {
+                _RunHostTests();
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Error running host tests " + ex);
+                //Intentional swallow
             }
         }
 

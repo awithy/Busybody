@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Busybody
 {
@@ -59,7 +60,6 @@ namespace Busybody
             lock (_subscriptionSyncLock)
             {
                 subscriptionsCopy = _subscriptionsByName;
-                _subscriptionsByName = new Dictionary<string, EventSubscription>();
             }
 
             lock (_dispatchLock)

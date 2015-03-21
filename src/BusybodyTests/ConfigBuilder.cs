@@ -5,6 +5,7 @@ namespace BusybodyTests
 {
     public class ConfigBuilder
     {
+        int _pollingInterval;
         public List<HostConfig> Hosts { get; set;  }
 
         public ConfigBuilder()
@@ -18,11 +19,18 @@ namespace BusybodyTests
             return hostConfigBuilder;
         }
 
+        public ConfigBuilder WithPollingInterval(int pollingInterval)
+        {
+            _pollingInterval = pollingInterval;
+            return this;
+        }
+
         public BusybodyConfig BuildConfig()
         {
             return new BusybodyConfig
             {
                 Hosts = Hosts,
+                PollingInterval = _pollingInterval,
             };
         }
     }

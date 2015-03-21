@@ -15,6 +15,7 @@ namespace BusybodyTests
         public void Execute()
         {
             var config = new ConfigBuilder()
+                .WithPollingInterval(1)
                 .WithHost("Local Machine", "127.0.0.1")
                 .WithTest(new HostTestConfig("Ping"))
                 .BuildHostConfig()
@@ -25,7 +26,7 @@ namespace BusybodyTests
                 var configFilePath = testDirectory.FilePathFor(SharedConstants.BusybodyConfigFileName);
                 config.WriteToFile(configFilePath);
 
-                var debugLogPath = CommonPaths.LogFilePath("Debug");
+                var debugLogPath = CommonPaths.LogFilePath("Trace");
                 if (File.Exists(debugLogPath))
                     File.Delete(debugLogPath);
 
@@ -42,7 +43,7 @@ namespace BusybodyTests
         [Test]
         public void The_log_file_should_not_contain_any_errors()
         {
-            var logFilePath = Path.Combine(CommonPaths.BusybodyTemp(), "Logs", "Debug.log");
+            var logFilePath = Path.Combine(CommonPaths.BusybodyTemp(), "Logs", "Trace.log");
             var logFileContents = File.ReadAllText(logFilePath);
             logFileContents.Should().NotContain("ERROR");
         }
@@ -50,7 +51,7 @@ namespace BusybodyTests
         [Test]
         public void A_log_file_should_be_written()
         {
-            var logFilePath = Path.Combine(CommonPaths.BusybodyTemp(), "Logs", "Debug.log");
+            var logFilePath = Path.Combine(CommonPaths.BusybodyTemp(), "Logs", "Trace.log");
             Assert.That(File.Exists(logFilePath));
         }
 

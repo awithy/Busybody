@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using Busybody;
 using BusybodyTests.Fakes;
 using FluentAssertions;
@@ -86,7 +88,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_alert_that_the_test_failed()
         {
-            _receivedText.Should().Be("Host: Local Machine, State: DOWN");
+            _receivedEventText.Should().ContainSingle("Host: Local Machine, State: DOWN");
         }
     }
 
@@ -109,7 +111,47 @@ namespace BusybodyTests
         [Test]
         public void It_should_alert_that_the_test_failed()
         {
-            _receivedText.Should().Be("Host: Local Machine, State: UP");
+            _receivedEventText.Should().ContainSingle("Host: Local Machine, State: UP");
+        }
+    }
+
+    [TestFixture]
+    public class When_starting_the_daemon_and_test_is_configured_and_host_is_down_then_up : Daemon_up_down_tests
+    {
+
+        [SetUp]
+        public void SetUp()
+        {
+            _SetupContext();
+
+            _fakePingTest.StubResult(new[] {false, true});
+            
+            var daemon = new BusybodyDaemon();
+            daemon.Start();
+
+            _WaitForTwoHostStateEvents();
+
+            daemon.Stop();
+        }
+
+        [Test]
+        public void It_should_alert_that_the_test_failed()
+        {
+            _receivedEventText.Should().ContainInOrder("Host: Local Machine, State: DOWN", "Host: Local Machine, State: UP");
+        }
+
+        void _WaitForTwoHostStateEvents()
+        {
+            while (true)
+            {
+                var cnt = 0;
+                if (_receivedEventText.Count < 2)
+                    Thread.Sleep(1000);
+                else
+                    return;
+                if (cnt++ > 20)
+                    Assert.Fail("Failed waiting for two state events");
+            }
         }
     }
 
@@ -117,7 +159,7 @@ namespace BusybodyTests
     {
         protected FakeAppContext _fakeAppContext;
         protected FakePingTest _fakePingTest;
-        protected string _receivedText;
+        protected readonly List<string> _receivedEventText = new List<string>();
 
         protected void _SetupContext()
         {
@@ -125,16 +167,21 @@ namespace BusybodyTests
                 .WithBasicConfiguration()
                 .Build();
 
-            _receivedText = "";
             AppContext.Instance = _fakeAppContext;
             AppContext.Instance.EventBus.Subscribe(new EventSubscription
             {
                 Name = "Test Subscription",
                 EventStreamName = "All",
-                Recipient = s => _receivedText = ((HostStateEvent) s.Event).StateText,
+                Recipient = eventNotification => _ReceiveHostStateEvents(eventNotification),
             });
 
             _fakePingTest = (FakePingTest) _fakeAppContext.FakeTestFactory.Tests["Ping"];
+        }
+
+        void _ReceiveHostStateEvents(EventNotification eventNotification)
+        {
+            if (eventNotification.Event is HostStateEvent)
+                _receivedEventText.Add(eventNotification.Event.ToLogString());
         }
     }
 }

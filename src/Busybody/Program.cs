@@ -88,7 +88,7 @@ namespace Busybody
         {
             var logsDirectory = CommonPaths.LogsPath();
             Directory.CreateDirectory(logsDirectory);
-            var logFilePath = CommonPaths.LogFilePath("Debug");
+            var logFilePath = CommonPaths.LogFilePath("Trace");
             LogSetup.Setup(logFilePath, _verboseLogging);
         }
 
