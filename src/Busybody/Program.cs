@@ -19,9 +19,9 @@ namespace Busybody
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Fatal exception");                
+                Console.WriteLine("Fatal last chance exception");                
                 Console.WriteLine(ex.ToString());
-                Environment.FailFast("Fatal exception");
+                Environment.FailFast("Fatal last chance exception " + ex);
             }
             return -1;
         }
@@ -48,7 +48,7 @@ namespace Busybody
             }
             catch (Exception ex)
             {
-                _log.Error("Unexpected " + ex.GetType().Name + " occurred.  Aborting.  " + Environment.NewLine + ex);
+                _log.Critical("Unexpected critical " + ex.GetType().Name + " occurred.  Aborting.  " + Environment.NewLine + ex);
                 Environment.FailFast("Failing fast due to unexpected exception of type: " + ex.GetType().Name + ".  Detail: " + ex);
             }
         }
@@ -96,7 +96,7 @@ namespace Busybody
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                _log.Error("Unhandled exception occurred.  Type: " + args.ExceptionObject.GetType().Name + ".  Detail: " + args.ExceptionObject.ToString());
+                _log.Critical("Unhandled critical " + args.ExceptionObject.GetType().Name + " occurred.  Detail: " + args.ExceptionObject.ToString());
                 Environment.FailFast("Failing fast due to exception of type: " + args.ExceptionObject.GetType().Name);
             };
         }

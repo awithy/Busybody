@@ -29,11 +29,6 @@ namespace Busybody
             _log.Debug(message);
         }
 
-        public void Error(string message)
-        {
-            _log.Error(message);
-        }
-
         public void Info(string message)
         {
             _log.Info(message);
@@ -42,6 +37,16 @@ namespace Busybody
         public void Warn(string message)
         {
             _log.Warn(message);
+        }
+
+        public void Error(string message)
+        {
+            _log.Error(message);
+        }
+
+        public void Critical(string message)
+        {
+            _log.Logger.Log(_sourceType, Level.Critical, message, null);
         }
     }
 
