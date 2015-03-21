@@ -9,7 +9,6 @@ namespace Busybody
     {
         static Logger _log;
         static bool _debug;
-        static Host _serviceHost;
 
         static int Main(string[] args)
         {
