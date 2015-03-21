@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Reflection;
 using log4net;
+using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
@@ -11,7 +11,6 @@ namespace Busybody
     public class Logger
     {
         readonly ILog _log;
-        public static bool ConsoleDebugEnabled = false;
 
         public Logger(Type type)
         {
@@ -25,45 +24,22 @@ namespace Busybody
 
         public void Debug(string message)
         {
-            if(ConsoleDebugEnabled)
-                ConsoleLog.Log("DEBUG", message);
             _log.Debug(message);
         }
 
         public void Error(string message)
         {
-            ConsoleLog.Log("ERROR", message);
             _log.Error(message);
         }
 
         public void Info(string message)
         {
-            ConsoleLog.Log("INFO", message);
             _log.Info(message);
         }
 
         public void Warn(string message)
         {
             _log.Warn(message);
-        }
-    }
-
-    public static class ConsoleLog
-    {
-        static readonly bool _consoleEnabled = true;
-
-        static ConsoleLog()
-        {
-            if (!Process.GetCurrentProcess().ProcessName.ToLower().Contains("busybody")) //Mute logs when running from test runner.
-                _consoleEnabled = false;
-        }
-
-        public static void Log(string level, string message)
-        {
-            if (!_consoleEnabled)
-                return;
-            var logMessage = "[" + DateTime.Now.ToString("HH:mm:ss") + "][" + level + "] " + message;
-            Console.WriteLine(logMessage);
         }
     }
 
@@ -76,31 +52,43 @@ namespace Busybody
             _layout = new PatternLayout("[%d{HH:mm:ss}][%level][%logger][%thread] %message%newline");
         }
 
-        public static void Setup(string logFile)
+        public static void Setup(string logFile, bool verboseLogging)
         {
             log4net.Config.BasicConfigurator.Configure();
             var repository = (Hierarchy) LogManager.GetRepository();
             repository.Root.RemoveAllAppenders();
             repository.Root.AddAppender(_GetFileAppender(logFile, Level.All, true));
-            //repository.Root.AddAppender(new ConsoleAppender {Layout = _layout});
+            if (Process.GetCurrentProcess().ProcessName.ToLower().Contains("busybody")) //Mute logs when running from test runner.
+                repository.Root.AddAppender(_GetConsoleAppender(Level.All, verboseLogging));
             repository.Root.Level = Level.All;
         }
 
-        private static log4net.Appender.FileAppender _GetFileAppender(string sFileName , Level threshhold ,bool bFileAppend)
+        private static ManagedColoredConsoleAppender _GetConsoleAppender(Level threshhold, bool verboseLogging)
         {
-            var lAppender = new log4net.Appender.FileAppender();
-            lAppender.Name = sFileName;
-            lAppender.AppendToFile = bFileAppend;
-            lAppender.File = sFileName;
-            lAppender.Layout = _layout;
-            lAppender.Threshold = threshhold;
-            lAppender.ActivateOptions();
-            return lAppender;
+            var appender = new ManagedColoredConsoleAppender();
+            appender.Name = "Console Appender";
+            appender.Layout = _layout;
+            appender.Threshold = threshhold;
+            if(verboseLogging) //Use default unless debug is enabled, and then highlight with green
+                appender.AddMapping(new ManagedColoredConsoleAppender.LevelColors{ Level = Level.Info, ForeColor = ConsoleColor.Green });
+            appender.AddMapping(new ManagedColoredConsoleAppender.LevelColors {Level = Level.Debug, ForeColor = ConsoleColor.Gray});
+            appender.AddMapping(new ManagedColoredConsoleAppender.LevelColors {Level = Level.Warn, ForeColor = ConsoleColor.Yellow});
+            appender.AddMapping(new ManagedColoredConsoleAppender.LevelColors {Level = Level.Error, ForeColor = ConsoleColor.Red});
+            appender.AddMapping(new ManagedColoredConsoleAppender.LevelColors {Level = Level.Critical, ForeColor = ConsoleColor.Red});
+            appender.ActivateOptions();
+            return appender;
         }
 
-        public static void EnableConsoleDebug()
+        private static FileAppender _GetFileAppender(string sFileName , Level threshhold ,bool bFileAppend)
         {
-            Logger.ConsoleDebugEnabled = true;
+            var appender = new FileAppender();
+            appender.Name = sFileName;
+            appender.AppendToFile = bFileAppend;
+            appender.File = sFileName;
+            appender.Layout = _layout;
+            appender.Threshold = threshhold;
+            appender.ActivateOptions();
+            return appender;
         }
     }
 }

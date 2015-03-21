@@ -8,7 +8,7 @@ namespace Busybody
     class Program
     {
         static Logger _log;
-        static bool _debug;
+        static bool _verboseLogging;
 
         static int Main()
         {
@@ -52,7 +52,7 @@ namespace Busybody
                 x.SetDescription("Busybody");
                 x.SetDisplayName("Busybody");
                 x.SetServiceName("Busybody");
-                x.AddCommandLineSwitch("d", debug => _debug = debug);
+                x.AddCommandLineSwitch("v", verboseLogging => _verboseLogging = verboseLogging);
 
                 x.Service<BusybodyDaemon>(s =>
                 {
@@ -71,9 +71,7 @@ namespace Busybody
             var logsDirectory = CommonPaths.LogsPath();
             Directory.CreateDirectory(logsDirectory);
             var logFilePath = CommonPaths.LogFilePath("Debug");
-            LogSetup.Setup(logFilePath);
-            if (_debug)
-                LogSetup.EnableConsoleDebug();
+            LogSetup.Setup(logFilePath, _verboseLogging);
         }
     }
 }
