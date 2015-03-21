@@ -54,7 +54,7 @@ namespace Busybody
 
         static ConsoleLog()
         {
-            if (!Process.GetCurrentProcess().ProcessName.ToLower().Contains("busybody"))
+            if (!Process.GetCurrentProcess().ProcessName.ToLower().Contains("busybody")) //Mute logs when running from test runner.
                 _consoleEnabled = false;
         }
 
