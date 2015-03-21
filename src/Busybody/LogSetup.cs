@@ -96,6 +96,7 @@ namespace Busybody
 
         private static FileAppender _GetFileAppender(string fileName, Level threshhold, bool append)
         {
+            //TODO: Use a rolling file appender
             var appender = new FileAppender();
             appender.Name = fileName;
             appender.AppendToFile = append;
