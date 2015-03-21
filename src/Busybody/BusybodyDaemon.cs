@@ -26,6 +26,7 @@ namespace Busybody
             _WaitForStart();
 
             _eventLogger.Publish("Startup complete");
+            _log.Info("Busybody started");
         }
 
         public void Stop()
