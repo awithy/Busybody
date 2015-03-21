@@ -10,7 +10,7 @@ namespace Busybody
         static Logger _log;
         static bool _debug;
 
-        static int Main(string[] args)
+        static int Main()
         {
             //TODO: Handle unhandled exceptions
 
