@@ -12,34 +12,52 @@ namespace Busybody
 
         static int Main()
         {
-            //TODO: Handle unhandled exceptions
+            try
+            {
+                _Main();
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Fatal exception");                
+                Console.WriteLine(ex.ToString());
+                Environment.FailFast("Fatal exception");
+            }
+            return -1;
+        }
 
+        static void _Main()
+        {
             var host = _ConfigureServiceHost();
 
-            var busybodyTempPath = CommonPaths.BusybodyTemp();
-            Directory.CreateDirectory(busybodyTempPath);
+            Directory.CreateDirectory(CommonPaths.BusybodyTemp());
 
             _SetupLogging();
 
             _log = new Logger(typeof (Program));
             try
             {
+                _HandleUnhandledExceptions();
+
                 _log.Info("Starting Busybody v0.1");
 
-                AppContext.Instance = new AppContext();
-                var configFilePath = CommonPaths.CurrentConfigFilePath();
-                AppContext.Instance.Config = BusybodyConfig.ReadFromFile(configFilePath);
+                _SetupAppContext();
 
-                _log.Debug("Running host");
+                _log.Trace("Running host");
                 host.Run();
-
-                return 0;
             }
             catch (Exception ex)
             {
                 _log.Error("Unexpected " + ex.GetType().Name + " occurred.  Aborting.  " + Environment.NewLine + ex);
-                return -1;
+                Environment.FailFast("Failing fast due to unexpected exception of type: " + ex.GetType().Name + ".  Detail: " + ex);
             }
+        }
+
+        static void _SetupAppContext()
+        {
+            AppContext.Instance = new AppContext();
+            var configFilePath = CommonPaths.CurrentConfigFilePath();
+            AppContext.Instance.Config = BusybodyConfig.ReadFromFile(configFilePath);
         }
 
         static Host _ConfigureServiceHost()
@@ -72,6 +90,15 @@ namespace Busybody
             Directory.CreateDirectory(logsDirectory);
             var logFilePath = CommonPaths.LogFilePath("Debug");
             LogSetup.Setup(logFilePath, _verboseLogging);
+        }
+
+        static void _HandleUnhandledExceptions()
+        {
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                _log.Error("Unhandled exception occurred.  Type: " + args.ExceptionObject.GetType().Name + ".  Detail: " + args.ExceptionObject.ToString());
+                Environment.FailFast("Failing fast due to exception of type: " + args.ExceptionObject.GetType().Name);
+            };
         }
     }
 }
