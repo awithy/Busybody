@@ -94,6 +94,7 @@ Note: Polling interval is in seconds.
 - Local event store with history
 - Web portal
 - Availability (distributed)
+- Windows system tray monitoring app
 - Azure hosted service extension
 - Azure storage event store
 - Amazon S3 event store
