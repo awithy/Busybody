@@ -66,18 +66,26 @@ namespace Busybody
             repository.Root.RemoveAllAppenders();
             repository.Root.AddAppender(_GetFileAppender(logFile, Level.All, true));
             if (Process.GetCurrentProcess().ProcessName.ToLower().Contains("busybody")) //Mute logs when running from test runner.
-                repository.Root.AddAppender(_GetConsoleAppender(Level.Debug, verboseLogging));
+                repository.Root.AddAppender(_GetConsoleAppender(verboseLogging));
             repository.Root.Level = Level.All;
         }
 
-        private static ManagedColoredConsoleAppender _GetConsoleAppender(Level threshhold, bool verboseLogging)
+        private static ManagedColoredConsoleAppender _GetConsoleAppender(bool verboseLogging)
         {
             var appender = new ManagedColoredConsoleAppender();
             appender.Name = "Console Appender";
             appender.Layout = _layout;
-            appender.Threshold = threshhold;
+
             if(verboseLogging) //Use default unless debug is enabled, and then highlight with green
+            {
+                appender.Threshold = Level.Debug;
                 appender.AddMapping(new ManagedColoredConsoleAppender.LevelColors{ Level = Level.Info, ForeColor = ConsoleColor.Green });
+            }
+            else
+            {
+                appender.Threshold = Level.Info;
+            }
+
             appender.AddMapping(new ManagedColoredConsoleAppender.LevelColors {Level = Level.Debug, ForeColor = ConsoleColor.Gray});
             appender.AddMapping(new ManagedColoredConsoleAppender.LevelColors {Level = Level.Warn, ForeColor = ConsoleColor.Yellow});
             appender.AddMapping(new ManagedColoredConsoleAppender.LevelColors {Level = Level.Error, ForeColor = ConsoleColor.Red});
