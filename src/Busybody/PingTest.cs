@@ -9,7 +9,7 @@ namespace Busybody
 
         public bool Execute(HostConfig host, HostTestConfig test)
         {
-            _log.Debug("Running ping test on host " + test.HostNickname + " with hostname " + test.HostNickname);
+            _log.Debug("Running ping test on host " + host.Nickname + " with hostname " + host.Hostname);
             var ping = new Ping();
             var result = ping.Send(host.Hostname);
             _log.Debug("Ping status:" + result.Status);

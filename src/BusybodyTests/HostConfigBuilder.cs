@@ -32,7 +32,6 @@ namespace BusybodyTests
 
         public HostConfigBuilder WithTest(HostTestConfig hostTestConfig)
         {
-            hostTestConfig.HostNickname = _nickname;
             Tests.Add(hostTestConfig);
             return this;
         }
