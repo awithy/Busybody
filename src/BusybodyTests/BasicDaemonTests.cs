@@ -18,6 +18,8 @@ namespace BusybodyTests
                 .WithBasicConfiguration()
                 .Build();
 
+            _fakeAppContext.Config.PollingInterval = 2 * 60;
+
             AppContext.Instance = _fakeAppContext;
             
             var daemon = new BusybodyDaemon();

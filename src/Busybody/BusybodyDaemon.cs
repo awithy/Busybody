@@ -73,7 +73,8 @@ namespace Busybody
         {
             if (_stopFlag)
                 return;
-            for (var i = 0; i < 10 * 60 * 2; i++)
+            var pollingInterval = AppContext.Instance.Config.PollingInterval;
+            for (var i = 0; i < 10 * pollingInterval; i++)
             {
                 AppContext.Instance.Threading.Sleep(100);
                 if (_stopFlag)

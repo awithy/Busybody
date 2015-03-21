@@ -6,7 +6,8 @@ namespace Busybody.Config
 {
     public class BusybodyConfig
     {
-        public List<HostConfig> Hosts = new List<HostConfig>();
+        public int PollingInterval { get; set; }
+        public List<HostConfig> Hosts;
 
         public BusybodyConfig()
         {
@@ -23,7 +24,14 @@ namespace Busybody.Config
         {
             var configText = File.ReadAllText(filePath);
             var config = JsonConvert.DeserializeObject<BusybodyConfig>(configText);
+            _SetDefaults(config);
             return config;
+        }
+
+        static void _SetDefaults(BusybodyConfig config)
+        {
+            if (config.PollingInterval == 0)
+                config.PollingInterval = 60;
         }
     }
 }
