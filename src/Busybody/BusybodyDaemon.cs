@@ -32,7 +32,6 @@ namespace Busybody
     {
         static Logger _log = new Logger(typeof(BusybodyDaemon));
         BusybodyConfig _config;
-        EventLogger _eventLogger;
         HostRepository _hostRepository = new HostRepository();
         readonly ManualResetEvent _startedEvent = new ManualResetEvent(false);
         readonly ManualResetEvent _stoppedEvent = new ManualResetEvent(false);
@@ -42,7 +41,6 @@ namespace Busybody
         public void Start()
         {
             _config = AppContext.Instance.Config;
-            _eventLogger = new EventLogger();
 
             _SubscribeTextEventLogger();
 
@@ -166,7 +164,7 @@ namespace Busybody
             {
                 EventStreamName = "All",
                 Name = "Event Logger",
-                Recipient = e => _eventLogger.Publish(e.Event.ToLogString()),
+                Recipient = e => AppContext.Instance.EventLogger.Publish(e.Event.ToLogString()),
             };
             AppContext.Instance.EventBus.Subscribe(eventSubscription);
         }

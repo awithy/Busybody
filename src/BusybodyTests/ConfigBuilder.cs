@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using Busybody.Config;
 
 namespace BusybodyTests
@@ -31,6 +32,7 @@ namespace BusybodyTests
             {
                 Hosts = Hosts,
                 PollingInterval = _pollingInterval,
+                DataDirectory = Path.Combine(Path.GetTempPath(), "Busybody"),
             };
         }
     }

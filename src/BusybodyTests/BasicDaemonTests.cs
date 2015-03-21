@@ -86,7 +86,7 @@ namespace BusybodyTests
         }
 
         [Test]
-        public void It_should_alert_that_the_test_failed()
+        public void It_should_raise_event_that_host_is_down()
         {
             _receivedEventText.Should().ContainSingle("Host: Local Machine, State: DOWN");
         }
@@ -109,7 +109,7 @@ namespace BusybodyTests
         }
 
         [Test]
-        public void It_should_alert_that_the_test_failed()
+        public void It_should_raise_event_that_host_is_up()
         {
             _receivedEventText.Should().ContainSingle("Host: Local Machine, State: UP");
         }
@@ -135,7 +135,7 @@ namespace BusybodyTests
         }
 
         [Test]
-        public void It_should_alert_that_the_test_failed()
+        public void It_should_raise_two_events()
         {
             _receivedEventText.Should().ContainInOrder("Host: Local Machine, State: DOWN", "Host: Local Machine, State: UP");
         }
@@ -175,7 +175,7 @@ namespace BusybodyTests
         }
 
         [Test]
-        public void It_should_alert_that_the_test_failed()
+        public void It_should_only_raise_one_event()
         {
             _receivedEventText.Should().ContainSingle("Host: Local Machine, State: UP");
         }

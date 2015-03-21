@@ -21,6 +21,9 @@ namespace BusybodyTests
                 .BuildHostConfig()
                 .BuildConfig();
 
+            AppContext.Instance = new AppContext();
+            AppContext.Instance.Config = config;
+
             using (var testDirectory = new TestDirectory())
             {
                 var configFilePath = testDirectory.FilePathFor(SharedConstants.BusybodyConfigFileName);
@@ -43,7 +46,7 @@ namespace BusybodyTests
         [Test]
         public void The_log_file_should_not_contain_any_errors()
         {
-            var logFilePath = Path.Combine(CommonPaths.BusybodyTemp(), "Logs", "Trace.log");
+            var logFilePath = Path.Combine(CommonPaths.BusybodyData(), "Logs", "Trace.log");
             var logFileContents = File.ReadAllText(logFilePath);
             logFileContents.Should().NotContain("ERROR");
         }
@@ -51,7 +54,7 @@ namespace BusybodyTests
         [Test]
         public void A_log_file_should_be_written()
         {
-            var logFilePath = Path.Combine(CommonPaths.BusybodyTemp(), "Logs", "Trace.log");
+            var logFilePath = Path.Combine(CommonPaths.BusybodyData(), "Logs", "Trace.log");
             Assert.That(File.Exists(logFilePath));
         }
 

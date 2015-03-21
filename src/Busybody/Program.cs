@@ -28,23 +28,19 @@ namespace Busybody
 
         static void _Main()
         {
-            var host = _ConfigureServiceHost();
-
-            Directory.CreateDirectory(CommonPaths.BusybodyTemp());
-
-            _SetupLogging();
-
-            _log = new Logger(typeof (Program));
             try
             {
-                _HandleUnhandledExceptions();
+                _ReadConfigAndSetupAppContext();
+
+                Directory.CreateDirectory(CommonPaths.BusybodyData());
+
+                _SetupLogging();
 
                 _log.Info("Starting Busybody v0.1");
 
-                _SetupAppContext();
+                _HandleUnhandledExceptions();
 
-                _log.Trace("Running host");
-                host.Run();
+                _RunHost();
             }
             catch (Exception ex)
             {
@@ -53,15 +49,17 @@ namespace Busybody
             }
         }
 
-        static void _SetupAppContext()
+        static void _ReadConfigAndSetupAppContext()
         {
             AppContext.Instance = new AppContext();
             var configFilePath = CommonPaths.CurrentConfigFilePath();
             AppContext.Instance.Config = BusybodyConfig.ReadFromFile(configFilePath);
         }
 
-        static Topshelf.Host _ConfigureServiceHost()
+        static void _RunHost()
         {
+            _log.Trace("Running host");
+
             var serviceHost = HostFactory.New(x =>
             {
                 x.AfterInstall(() => _log.Info("The Busybody service has been installed."));
@@ -81,7 +79,7 @@ namespace Busybody
                 });
 
             });
-            return serviceHost;
+            serviceHost.Run();
         }
 
         static void _SetupLogging()
@@ -90,6 +88,7 @@ namespace Busybody
             Directory.CreateDirectory(logsDirectory);
             var logFilePath = CommonPaths.LogFilePath("Trace");
             LogSetup.Setup(logFilePath, _verboseLogging);
+            _log = new Logger(typeof (Program));
         }
 
         static void _HandleUnhandledExceptions()

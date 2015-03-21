@@ -7,6 +7,8 @@ namespace Busybody.Config
     public class BusybodyConfig
     {
         public int PollingInterval { get; set; }
+        public string DataDirectory { get; set; }
+
         public List<HostConfig> Hosts;
 
         public BusybodyConfig()
@@ -32,6 +34,8 @@ namespace Busybody.Config
         {
             if (config.PollingInterval == 0)
                 config.PollingInterval = 60;
+            if (config.DataDirectory == null)
+                config.DataDirectory = Path.Combine(Path.GetTempPath(), "Busybody");
         }
     }
 }

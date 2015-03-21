@@ -24,7 +24,7 @@ namespace Busybody
 
         public static string EventLogFilePath()
         {
-            return Path.Combine(BusybodyTemp(), "Events.log");
+            return Path.Combine(BusybodyData(), "Events.log");
         }
 
         public static string RandomName()
@@ -32,20 +32,26 @@ namespace Busybody
             return DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Guid.NewGuid().ToString("N").Substring(0, 5);
         }
 
-        public static string BusybodyTemp()
+        public static string BusybodyData()
         {
-            return Path.Combine(Path.GetTempPath(), "Busybody");
+            if (AppContext.Instance.Config.DataDirectory == null)
+                throw new DataDirectoryNullException();
+            return AppContext.Instance.Config.DataDirectory;
         }
 
         public static string LogsPath()
         {
-            return Path.Combine(BusybodyTemp(), "Logs");
+            return Path.Combine(BusybodyData(), "Logs");
         }
 
         public static string LogFilePath(string logLevel)
         {
             return Path.Combine(LogsPath(), logLevel + ".log");
         }
+    }
+
+    public class DataDirectoryNullException : Exception
+    {
     }
 
     public class ConfigurationFileNotFoundException : Exception
