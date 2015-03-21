@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Busybody.Config
 {
@@ -13,14 +15,14 @@ namespace Busybody.Config
 
         public void WriteToFile(string filePath)
         {
-            var configFileWriter = new ConfigFileWriter();
-            configFileWriter.Write(this, filePath);
+            var configText = JsonConvert.SerializeObject(this);
+            File.WriteAllText(filePath, configText);
         }
 
         public static BusybodyConfig ReadFromFile(string filePath)
         {
-            var configFileReader = new ConfigFileReader();
-            var config = configFileReader.ReadFromFile(filePath);
+            var configText = File.ReadAllText(filePath);
+            var config = JsonConvert.DeserializeObject<BusybodyConfig>(configText);
             return config;
         }
     }

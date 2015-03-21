@@ -16,7 +16,7 @@ namespace BusybodyTests
         {
             var config = new ConfigBuilder()
                 .WithHost("Local Machine", "127.0.0.1")
-                .WithTest(new PingTestConfig())
+                .WithTest(new HostTestConfig("Ping"))
                 .BuildHostConfig()
                 .BuildConfig();
 

@@ -18,9 +18,8 @@ namespace Busybody
 
             var busybodyTempPath = CommonPaths.BusybodyTemp();
             Directory.CreateDirectory(busybodyTempPath);
+
             _SetupLogging();
-            if (_debug)
-                LogSetup.EnableConsoleDebug();
 
             _log = new Logger(typeof (Program));
             try
@@ -29,7 +28,7 @@ namespace Busybody
 
                 AppContext.Instance = new AppContext();
                 var configFilePath = CommonPaths.CurrentConfigFilePath();
-                AppContext.Instance.Config = new ConfigFileReader().ReadFromFile(configFilePath);
+                AppContext.Instance.Config = BusybodyConfig.ReadFromFile(configFilePath);
 
                 _log.Debug("Running host");
                 host.Run();
@@ -73,6 +72,8 @@ namespace Busybody
             Directory.CreateDirectory(logsDirectory);
             var logFilePath = CommonPaths.LogFilePath("Debug");
             LogSetup.Setup(logFilePath);
+            if (_debug)
+                LogSetup.EnableConsoleDebug();
         }
     }
 }

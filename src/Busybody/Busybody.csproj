@@ -55,10 +55,7 @@
     <Compile Include="BusybodyDaemon.cs" />
     <Compile Include="CommonPaths.cs" />
     <Compile Include="Config\BusybodyConfig.cs" />
-    <Compile Include="Config\ConfigFileReader.cs" />
-    <Compile Include="Config\ConfigFileWriter.cs" />
     <Compile Include="Config\HostConfig.cs" />
-    <Compile Include="Config\PingTestConfig.cs" />
     <Compile Include="Config\HostTestConfig.cs" />
     <Compile Include="EventBus.cs" />
     <Compile Include="EventLogger.cs" />
@@ -73,7 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Busybody.cfg">
+    <None Include="busybody.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
