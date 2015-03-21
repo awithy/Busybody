@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using log4net;
 using log4net.Core;
 using log4net.Layout;
@@ -48,8 +50,18 @@ namespace Busybody
 
     public static class ConsoleLog
     {
+        static readonly bool _consoleEnabled = true;
+
+        static ConsoleLog()
+        {
+            if (!Process.GetCurrentProcess().ProcessName.ToLower().Contains("busybody"))
+                _consoleEnabled = false;
+        }
+
         public static void Log(string level, string message)
         {
+            if (!_consoleEnabled)
+                return;
             var logMessage = "[" + DateTime.Now.ToString("HH:mm:ss") + "][" + level + "] " + message;
             Console.WriteLine(logMessage);
         }
