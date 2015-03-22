@@ -142,6 +142,7 @@ namespace BusybodyTests
         {
             EventHandler = new TestEventHandler();
             TestAppContext = new FakeAppContext();
+            Daemon = new BusybodyDaemon();
 
             TestAppContext = new FakeAppContextBuilder()
                 .WithBasicConfiguration()
@@ -156,8 +157,6 @@ namespace BusybodyTests
                 EventStreamName = "All",
                 Recipient = eventNotification => EventHandler.Handle(eventNotification),
             });
-
-            Daemon = new BusybodyDaemon();
         }
     }
 

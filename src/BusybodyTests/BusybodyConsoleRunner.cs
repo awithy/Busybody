@@ -7,17 +7,17 @@ namespace BusybodyTests
 {
     public class BusybodyConsoleRunner : IDisposable
     {
-        readonly Process _process;
+        Process _process;
+        ProcessStartInfo _processStartInfo;
 
         public BusybodyConsoleRunner(string workingDirectory)
         {
             var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var consoleExePath = Path.Combine(assemblyDirectory, "Busybody.exe");
-            var processStartInfo = new ProcessStartInfo(consoleExePath)
+            _processStartInfo = new ProcessStartInfo(consoleExePath)
             {
                 WorkingDirectory = workingDirectory,
             };
-            _process = Process.Start(processStartInfo);
         }
 
         public void Dispose()
@@ -29,6 +29,11 @@ namespace BusybodyTests
             catch // Intentional
             {
             }
+        }
+
+        public void Start()
+        {
+            _process = Process.Start(_processStartInfo);
         }
     }
 }

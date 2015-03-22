@@ -21,7 +21,7 @@ namespace BusybodyTests
                 File.Delete(_eventLogFilePath);
         }
 
-        //This crap is just tempoary until I do this properly
+        //This crap is just tempoary until I do a proper event store or alerting
         public void WaitForEvent(string text)
         {
             var startTime = DateTime.Now;

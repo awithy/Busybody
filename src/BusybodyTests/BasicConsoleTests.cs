@@ -14,30 +14,18 @@ namespace BusybodyTests
         [SetUp]
         public void Execute()
         {
-            var config = new ConfigBuilder()
-                .WithPollingInterval(1)
-                .WithHost("Local Machine", "127.0.0.1")
-                .WithTest(new HostTestConfig("Ping"))
-                .BuildHostConfig()
-                .BuildConfig();
-
-            AppContext.Instance = new AppContext();
-            AppContext.Instance.Config = config;
-
             using (var testDirectory = new TestDirectory())
             {
-                var configFilePath = testDirectory.FilePathFor(SharedConstants.BusybodyConfigFileName);
-                config.WriteToFile(configFilePath);
+                _BuildAndWriteConfigFile(testDirectory.FilePathFor(SharedConstants.BusybodyConfigFileName));
 
-                var debugLogPath = CommonPaths.LogFilePath("Trace");
-                if (File.Exists(debugLogPath))
-                    File.Delete(debugLogPath);
+                _ClearLogs();
 
                 _testEventLogReader = new TestEventLogReader();
                 _testEventLogReader.ClearEventLog();
 
                 using (var busybodyConsoleRunner = new BusybodyConsoleRunner(testDirectory.RootPath))
                 {
+                    busybodyConsoleRunner.Start();
                     _testEventLogReader.WaitForEvent("Startup complete");
                 }
             }
@@ -64,7 +52,27 @@ namespace BusybodyTests
             _testEventLogReader.WaitForEvent("Host: Local Machine, State: UP");
         }
 
-        //Todo: How to clean up after every test
+        static void _ClearLogs()
+        {
+            var debugLogPath = CommonPaths.LogFilePath("Trace");
+            if (File.Exists(debugLogPath))
+                File.Delete(debugLogPath);
+        }
+
+        static void _BuildAndWriteConfigFile(string configFilePath)
+        {
+            var config = new ConfigBuilder()
+                .WithPollingInterval(1)
+                .WithHost("Local Machine", "127.0.0.1")
+                .WithTest(new HostTestConfig("Ping"))
+                .BuildHostConfig()
+                .BuildConfig();
+
+            AppContext.Instance = new AppContext();
+            AppContext.Instance.Config = config;
+            config.WriteToFile(configFilePath);
+        }
+
         //Todo: Figure out how to run with ReSharper shadow-copy DLLs
     }
 }
