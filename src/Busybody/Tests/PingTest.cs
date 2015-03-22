@@ -41,10 +41,10 @@ namespace Busybody.Tests
 
             public PingTestParameters(Dictionary<string,string> parameters)
             {
-                TimeoutMs = _ParseInt(parameters, "TimeoutMs", 2000);
-                Count = _ParseInt(parameters, "Count", 1);
-                MaxFailures = _ParseInt(parameters, "MaxFailures", 1);
-                DelayMs = _ParseInt(parameters, "DelayMs", 500);
+                TimeoutMs = _ParseIntFromDictionary(parameters, "TimeoutMs", 2000);
+                Count = _ParseIntFromDictionary(parameters, "Count", 1);
+                MaxFailures = _ParseIntFromDictionary(parameters, "MaxFailures", 1);
+                DelayMs = _ParseIntFromDictionary(parameters, "DelayMs", 500);
             }
 
             public string ToLogString()
@@ -52,7 +52,7 @@ namespace Busybody.Tests
                 return string.Format("Timeout:{0}, Count:{1}, MaxFailures:{2}, Delay:{3}", TimeoutMs, Count, MaxFailures, DelayMs);
             }
 
-            int _ParseInt(Dictionary<string, string> parameters, string paramName, int defaultValue)
+            int _ParseIntFromDictionary(Dictionary<string, string> parameters, string paramName, int defaultValue)
             {
                 var timeoutParam = parameters.GetValueOrNullIgnoreCase(paramName);
                 if (timeoutParam != null)
