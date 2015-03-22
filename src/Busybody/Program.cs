@@ -48,7 +48,8 @@ namespace Busybody
             }
             catch (Exception ex)
             {
-                _log.CriticalFormat(ex, "Unexpected critical {0} occurred.  Aborting.", ex.GetType().Name);
+                if(_log != null)
+                    _log.CriticalFormat(ex, "Unexpected critical {0} occurred.  Aborting.", ex.GetType().Name);
                 Environment.FailFast(string.Format("Failing fast due to unexpected exception of type: {0}.  Detail: {1}", ex.GetType().Name, ex));
             }
         }
@@ -102,7 +103,8 @@ namespace Busybody
                 var detail = "";
                 if (args != null && args.ExceptionObject != null)
                     detail = args.ExceptionObject.ToString();
-                _log.CriticalFormat(null, "Unhandled critical {0} occurred.  Detail:{1}", args.ExceptionObject.GetType().Name, detail);
+                if(_log != null)
+                    _log.CriticalFormat(null, "Unhandled critical {0} occurred.  Detail:{1}", args.ExceptionObject.GetType().Name, detail);
                 Environment.FailFast("Failing fast due to exception of type: " + args.ExceptionObject.GetType().Name  + "  Detail:" + detail);
             };
         }
