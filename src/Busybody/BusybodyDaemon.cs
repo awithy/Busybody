@@ -7,23 +7,17 @@ namespace Busybody
 {
     public class BusybodyDaemon
     {
-        static Logger _log = new Logger(typeof(BusybodyDaemon));
+        readonly Logger _log = new Logger(typeof(BusybodyDaemon));
         readonly HostRepository _hostRepository = new HostRepository();
-        readonly ManualResetEvent _startedEvent = new ManualResetEvent(false);
         readonly ManualResetEvent _stoppedEvent = new ManualResetEvent(false);
-        BusybodyConfig _config;
         bool _stopFlag;
         bool _stopped;
 
         public void Start()
         {
-            _config = AppContext.Instance.Config;
-
             _SubscribeTextEventLogger();
 
             _StartMonitoring();
-
-            _WaitforStartupToComplete();
 
             AppContext.Instance.EventBus.Publish("All", new StartupCompleteEvent());
             _log.Info("Busybody started");
@@ -58,11 +52,6 @@ namespace Busybody
             _log.Trace("Monitoring thread entered");
             try
             {
-                _RunHostTestsAndCatch();
-                AppContext.Instance.EventBus.DispatchPending();
-                _startedEvent.Set();
-                _Sleep();
-
                 while (!_stopFlag)
                 {
                     _RunHostTestsAndCatch();
@@ -107,7 +96,8 @@ namespace Busybody
         void _RunHostTests()
         {
             _log.Trace("Running host test");
-            foreach (var hostConfig in _config.Hosts)
+            var config = AppContext.Instance.Config;
+            foreach (var hostConfig in config.Hosts)
             {
                 _log.DebugFormat("Checking host {0}", hostConfig.Nickname);
                 var host = _hostRepository.GetOrCreateHost(hostConfig.Nickname);
@@ -131,7 +121,7 @@ namespace Busybody
             _log.Trace("Test run complete");
         }
 
-        static bool _ExecuteTestWithoutThrowing(IBusybodyTest test, HostConfig hostConfig, HostTestConfig testConfig)
+        bool _ExecuteTestWithoutThrowing(IBusybodyTest test, HostConfig hostConfig, HostTestConfig testConfig)
         {
             try
             {
@@ -158,13 +148,6 @@ namespace Busybody
                 Recipient = e => AppContext.Instance.EventLogger.Publish(e.Event.ToLogString()),
             };
             AppContext.Instance.EventBus.Subscribe(eventSubscription);
-        }
-
-        void _WaitforStartupToComplete()
-        {
-            var result = _startedEvent.WaitOne(TimeSpan.FromMinutes(5));
-            if (!result)
-                throw new TimedOutWaitingForStartException();
         }
     }
 

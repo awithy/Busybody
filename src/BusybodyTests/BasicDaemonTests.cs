@@ -51,6 +51,7 @@ namespace BusybodyTests
         {
             _testContext.FakePingTest.StubResult(false);
             _testContext.Daemon.Start();
+            _testContext.FakePingTest.WaitForNumberOfExecutions(1);
         }
 
         [Test]
@@ -69,6 +70,7 @@ namespace BusybodyTests
         {
             _testContext.FakePingTest.StubResult(true);
             _testContext.Daemon.Start();
+            _testContext.FakePingTest.WaitForNumberOfExecutions(1);
         }
 
         [Test]
@@ -106,6 +108,7 @@ namespace BusybodyTests
         {
             _testContext.FakePingTest.StubResult(new[] {true, true});
             _testContext.Daemon.Start();
+            _testContext.FakePingTest.WaitForNumberOfExecutions(2);
         }
 
         [Test]
