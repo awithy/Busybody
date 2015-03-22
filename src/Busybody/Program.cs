@@ -12,7 +12,6 @@ namespace Busybody
         //TODO: Busybody process memory monitoring
         //TODO: Better error handling when bad config file
         //TODO: Report on average ping latency
-        //TODO: Decouple starting from first test
         //TODO: Time limit each test to some maximum allowable level then abort
 
         static Logger _log;
