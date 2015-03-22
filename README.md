@@ -80,7 +80,6 @@ Note: Polling interval is in seconds.
 
 ## Immediate To-Do ##
 
-1. Refactor test context builders to be more maintainable
 1. File system persistent host state
 1. E-mail alerting
 1. Parameterized ping test
