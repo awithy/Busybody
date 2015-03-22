@@ -89,6 +89,7 @@ Note: Polling interval is in seconds.
 
 ## Immediate To-Do ##
 
+1. Asyncify
 1. E-mail alerting
 1. Error handling/reporting/alerting
 1. HTTP/HTTPS test
