@@ -10,7 +10,6 @@ namespace Busybody
         //TODO: Error handling/reporting/alerting
         //TODO: Test last chance exceptions and unhandled exceptions
         //TODO: Busybody process memory monitoring
-        //TODO: Better error handling when bad config file
         //TODO: Report on average ping latency
         //TODO: Time limit each test to some maximum allowable level then abort
 
@@ -38,30 +37,35 @@ namespace Busybody
             try
             {
                 _ReadConfigAndSetupAppContext();
-
                 Directory.CreateDirectory(CommonPaths.BusybodyData());
-
                 _SetupLogging();
-
                 _log.Info("Starting Busybody v0.1");
-
                 _HandleUnhandledExceptions();
-
                 _RunHost();
             }
             catch (Exception ex)
             {
-                if(_log != null)
-                    _log.CriticalFormat(ex, "Unexpected critical {0} occurred.  Aborting.", ex.GetType().Name);
-                Environment.FailFast(string.Format("Failing fast due to unexpected exception of type: {0}.  Detail: {1}", ex.GetType().Name, ex));
+                var errorMessage = string.Format("Failing fast due to unexpected exception of type: {0}.  Detail: {1}", ex.GetType().Name, ex);
+                if (_log != null)
+                    _log.Critical(errorMessage, ex);
+                else
+                    Console.WriteLine(errorMessage);
+                Environment.FailFast(errorMessage);
             }
         }
 
         static void _ReadConfigAndSetupAppContext()
         {
-            AppContext.Instance = new AppContext();
-            var configFilePath = CommonPaths.CurrentConfigFilePath();
-            AppContext.Instance.Config = BusybodyConfig.ReadFromFile(configFilePath);
+            try
+            {
+                AppContext.Instance = new AppContext();
+                var configFilePath = CommonPaths.CurrentConfigFilePath();
+                AppContext.Instance.Config = BusybodyConfig.ReadFromFile(configFilePath);
+            }
+            catch (Exception ex)
+            {
+                throw new ConfigFileReadException(ex);
+            }
         }
 
         static void _RunHost()
@@ -110,6 +114,13 @@ namespace Busybody
                     _log.CriticalFormat(null, "Unhandled critical {0} occurred.  Detail:{1}", args.ExceptionObject.GetType().Name, detail);
                 Environment.FailFast("Failing fast due to exception of type: " + args.ExceptionObject.GetType().Name  + "  Detail:" + detail);
             };
+        }
+    }
+
+    internal class ConfigFileReadException : Exception
+    {
+        public ConfigFileReadException(Exception exception) : base("Failed to read config file.", exception)
+        {
         }
     }
 }
