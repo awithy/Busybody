@@ -167,20 +167,22 @@ namespace BusybodyTests
     public class TestEventHandler
     {
         public readonly List<EventNotification> ReceivedEventNotifications = new List<EventNotification>();
+        readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
 
         public void Handle(EventNotification eventNotification)
         {
             ReceivedEventNotifications.Add(eventNotification);
+            _autoResetEvent.Set();
         }
 
         public void WaitForNumberOfEventsOfType<T>(int count) where T : BusybodyEvent
         {
-            WaitForNumberOfEventsMatching(count, e => e.GetType() == typeof (T));
-        }
-
-        public void WaitForNumberOfEventsMatching(int count, Predicate<BusybodyEvent> pred)
-        {
-            TestUtility.WaitFor(() => ReceivedEventNotifications.Count(x => pred(x.Event)) >= count);
+            while (ReceivedEventNotifications.Count() < count)
+            {
+                var result = _autoResetEvent.WaitOne(TimeSpan.FromSeconds(5));
+                if (!result)
+                    Assert.Fail("Failed waiting for number of events of type: {0}", typeof(T).Name);
+            }
         }
 
         public void AssertSingleHostStateReceived(HostState hostState)
@@ -200,23 +202,6 @@ namespace BusybodyTests
                 .Select(x => x.State)
                 .Should()
                 .BeEquivalentTo(hostStates);
-        }
-    }
-
-    public static class TestUtility
-    {
-        public static void WaitFor(Func<bool> func)
-        {
-            while (true)
-            {
-                var cnt = 0;
-                if (!func())
-                    Thread.Sleep(100);
-                else
-                    return;
-                if (cnt++ > 20)
-                    Assert.Fail("Timed out waiting");
-            }
         }
     }
 }

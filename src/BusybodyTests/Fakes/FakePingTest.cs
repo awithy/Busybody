@@ -1,5 +1,8 @@
+using System;
+using System.Threading;
 using Busybody;
 using Busybody.Config;
+using NUnit.Framework;
 
 namespace BusybodyTests.Fakes
 {
@@ -8,10 +11,12 @@ namespace BusybodyTests.Fakes
         public int ExecutedCount;
         int _stubIndex;
         bool[] _stubResults;
+        AutoResetEvent _executionOccurredEvent = new AutoResetEvent(false);
 
         public bool Execute(HostConfig host, HostTestConfig test)
         {
             ExecutedCount++;
+            _executionOccurredEvent.Set();
 
             if (_stubResults == null)
                 return true;
@@ -25,7 +30,12 @@ namespace BusybodyTests.Fakes
 
         public void WaitForNumberOfExecutions(int count)
         {
-            TestUtility.WaitFor(() => ExecutedCount >= count);
+            while (ExecutedCount < count)
+            {
+                var result = _executionOccurredEvent.WaitOne(TimeSpan.FromSeconds(5));
+                if (!result)
+                    Assert.Fail("Failed waiting for ping test executions");
+            }
         }
 
         public void StubResult(bool result)
