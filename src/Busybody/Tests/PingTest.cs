@@ -18,15 +18,14 @@ namespace Busybody.Tests
             var failures = 0;
             for (var cnt = 0; cnt < parameters.Count; cnt++)
             {
-                var ping = new Ping();
-                var result = ping.Send(host.Hostname);
+                var result = new Ping().Send(host.Hostname);
                 _log.Debug(string.Format("Ping result received. Status:{0}, RoundtripMs:{1}", result.Status, result.RoundtripTime));
-                var success = result.Status == IPStatus.Success;
-                success = success && result.RoundtripTime <= parameters.TimeoutMs;
+                var success = result.Status == IPStatus.Success && result.RoundtripTime <= parameters.TimeoutMs;
                 if (!success)
                     failures++;
                 if (failures > parameters.MaxFailures)
                     return false;
+
                 Thread.Sleep(parameters.DelayMs);
             }
             return true;
