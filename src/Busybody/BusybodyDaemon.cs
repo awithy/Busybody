@@ -58,14 +58,14 @@ namespace Busybody
             _log.Trace("Monitoring thread entered");
             try
             {
-                _RunHostTestsAndSwallow();
+                _RunHostTestsAndCatch();
                 AppContext.Instance.EventBus.DispatchPending();
                 _startedEvent.Set();
                 _Sleep();
 
                 while (!_stopFlag)
                 {
-                    _RunHostTestsAndSwallow();
+                    _RunHostTestsAndCatch();
                     AppContext.Instance.EventBus.DispatchPending();
                     _Sleep();
                 }
@@ -91,7 +91,7 @@ namespace Busybody
             }
         }
 
-        void _RunHostTestsAndSwallow()
+        void _RunHostTestsAndCatch()
         {
             try
             {
