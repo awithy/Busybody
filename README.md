@@ -1,7 +1,7 @@
 # Busybody
 
 By Adrian Withy  
-Last Updated 22 March 2015
+Last Updated 23 March 2015
 
 ## Summary ##
 
@@ -51,6 +51,8 @@ Verbose console logging: `-v`
 **To-Do**
 
 * HTTP/HTTPS
+* Windows host memory/disk
+* Linux host memory/disk
 * SSH
 * OpenVPN
 * FTP/SFTP
@@ -60,20 +62,26 @@ Verbose console logging: `-v`
 
 ## Sample Config File ##
 
+    {
+		"DataDirectory":"C:\\Busybody\\Data",
+		"PollingInterval":10,
+		"Hosts":[
+		{
+			"Nickname":"Local Machine",
+			"Hostname":"127.0.0.1",
+			"Tests":[
+			{
+				"Name":"Ping",
+				"Parameters":{
+					"TimeoutMs":"500",
+					"Count":"5",
+					"MaxFailures":"0",
+					"DelayMs":"500",
+				}
+			}]
+		}]
+	}
 
-    {  
-    	"DataDirectory":"C:\\Busybody\\Data",
-    	"PollingInterval":120,
-    	"Hosts":[
-    	{
-    		"Nickname":"Local Machine",
-    		"Hostname":"127.0.0.1",
-    		"Tests":[
-    		{
-    			"Name":"Ping",
-    		}]
-    	}]
-    }
 
 
 Note: Polling interval is in seconds.
@@ -82,15 +90,21 @@ Note: Polling interval is in seconds.
 ## Immediate To-Do ##
 
 1. E-mail alerting
+1. Error handling/reporting/alerting
 1. HTTP/HTTPS test
 1. OpenVPN test
 1. SSH test
+1. Busybody process memory monitoring
 
 
 ## Ideas ##
 
 - Local event store with history
-- Web portal
+- Web portal for status
+- Web portal for configuration
+- Command line configuration wizard
+- Automated updates
+- Windows agent
 - Availability (distributed)
 - Windows system tray monitoring app
 - Azure hosted service extension
@@ -101,6 +115,7 @@ Note: Polling interval is in seconds.
 - Linux agent
 - Linux core (Mono)
 - Android app
+- Installer
 
 
 ## License ##
