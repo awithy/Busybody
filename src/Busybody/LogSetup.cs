@@ -11,8 +11,6 @@ namespace Busybody
 {
     public class Logger
     {
-        //TODO: support format strings
-
         readonly ILog _log;
         readonly Type _sourceType;
 
@@ -22,9 +20,19 @@ namespace Busybody
             _log = LogManager.GetLogger(type);
         }
 
+        public void TraceFormat(string message, params object[] formatObjects)
+        {
+            Trace(string.Format(message, formatObjects));
+        }
+
         public void Trace(string message)
         {
             _log.Logger.Log(_sourceType, Level.Trace, message, null);
+        }
+
+        public void DebugFormat(string message, params object[] formatObjects)
+        {
+            Debug(string.Format(message, formatObjects));
         }
 
         public void Debug(string message)
@@ -32,14 +40,29 @@ namespace Busybody
             _log.Debug(message);
         }
 
+        public void InfoFormat(string message, params object[] formatObjects)
+        {
+            Info(string.Format(message, formatObjects));
+        }
+
         public void Info(string message)
         {
             _log.Info(message);
         }
 
+        public void WarnFormat(string message, params object[] formatObjects)
+        {
+            Warn(string.Format(message, formatObjects));
+        }
+
         public void Warn(string message)
         {
             _log.Warn(message);
+        }
+
+        public void ErrorFormat(Exception exception, string message, params object[] formatObjects)
+        {
+            Error(string.Format(message, formatObjects), exception);
         }
 
         public void Error(string message, Exception exception)
@@ -48,6 +71,11 @@ namespace Busybody
             sb.AppendLine("ERROR: " + message);
             sb.AppendLine("Details: " + exception);
             _log.Error(sb.ToString());
+        }
+
+        public void CriticalFormat(Exception exception, string message, params object[] formatObjects)
+        {
+            Critical(string.Format(message, formatObjects), exception);
         }
 
         public void Critical(string message, Exception exception)
@@ -85,7 +113,7 @@ namespace Busybody
             appender.Name = "Console Appender";
             appender.Layout = _layout;
 
-            if(verboseLogging) //Use default unless debug is enabled, and then highlight with green
+            if(verboseLogging) //Use default unless verbose console logging is enabled, and then highlight with green
             {
                 appender.Threshold = Level.Debug;
                 appender.AddMapping(new ManagedColoredConsoleAppender.LevelColors{ Level = Level.Info, ForeColor = ConsoleColor.Green });

@@ -23,7 +23,7 @@ namespace Busybody
 
             _StartMonitoring();
 
-            _WaitForStart();
+            _WaitforStartupToComplete();
 
             AppContext.Instance.EventBus.Publish("All", new StartupCompleteEvent());
             _log.Info("Busybody started");
@@ -99,7 +99,7 @@ namespace Busybody
             }
             catch (Exception ex)
             {
-                _log.Error("Exception of type " + ex.GetType().Name + " thrown while running host tests.", ex);
+                _log.ErrorFormat(ex, "Exception of type {0} thrown while running host tests.", ex.GetType().Name);
                 throw;
             }
         }
@@ -109,12 +109,12 @@ namespace Busybody
             _log.Trace("Running host test");
             foreach (var hostConfig in _config.Hosts)
             {
-                _log.Debug("Checking host " + hostConfig.Nickname);
+                _log.DebugFormat("Checking host {0}", hostConfig.Nickname);
                 var host = _hostRepository.GetOrCreateHost(hostConfig.Nickname);
                 var allPassed = true;
                 foreach (var testConfig in hostConfig.Tests)
                 {
-                    _log.Trace("Running test " + testConfig.Name);
+                    _log.TraceFormat("Running test {0}", testConfig.Name);
                     var test = AppContext.Instance.TestFactory.Create(testConfig.Name);
                     var execute = _ExecuteTestWithoutThrowing(test, hostConfig, testConfig);
                     allPassed = allPassed & execute;
@@ -139,7 +139,7 @@ namespace Busybody
             }
             catch (Exception ex)
             {
-                _log.Error("Exception of type " + ex.GetType().Name + " thrown during test execution", ex);
+                _log.ErrorFormat(ex, string.Format("Exception of type {0} thrown during test execution", ex.GetType().Name));
                 return false;
             }
         }
@@ -160,7 +160,7 @@ namespace Busybody
             AppContext.Instance.EventBus.Subscribe(eventSubscription);
         }
 
-        void _WaitForStart()
+        void _WaitforStartupToComplete()
         {
             var result = _startedEvent.WaitOne(TimeSpan.FromMinutes(5));
             if (!result)
@@ -174,7 +174,7 @@ namespace Busybody
 
     public class TestNotFoundException : Exception
     {
-        public TestNotFoundException(string name) : base("Test " + name + " not found.")
+        public TestNotFoundException(string name) : base(string.Format("Test {0} not found.", name))
         {
         }
    }

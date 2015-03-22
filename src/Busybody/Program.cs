@@ -7,6 +7,9 @@ namespace Busybody
 {
     class Program
     {
+        //TODO: Error handling/reporting/alerting
+        //TODO: Test last chance exceptions and unhandled exceptions
+
         static Logger _log;
         static bool _verboseLogging;
 
@@ -44,8 +47,8 @@ namespace Busybody
             }
             catch (Exception ex)
             {
-                _log.Critical("Unexpected critical " + ex.GetType().Name + " occurred.  Aborting.", ex);
-                Environment.FailFast("Failing fast due to unexpected exception of type: " + ex.GetType().Name + ".  Detail: " + ex);
+                _log.CriticalFormat(ex, "Unexpected critical {0} occurred.  Aborting.", ex.GetType().Name);
+                Environment.FailFast(string.Format("Failing fast due to unexpected exception of type: {0}.  Detail: {1}", ex.GetType().Name, ex));
             }
         }
 
@@ -98,7 +101,7 @@ namespace Busybody
                 var detail = "";
                 if (args != null && args.ExceptionObject != null)
                     detail = args.ExceptionObject.ToString();
-                _log.Critical("Unhandled critical " + args.ExceptionObject.GetType().Name + " occurred.  Detail:" + detail, null);
+                _log.CriticalFormat(null, "Unhandled critical {0} occurred.  Detail:{1}", args.ExceptionObject.GetType().Name, detail);
                 Environment.FailFast("Failing fast due to exception of type: " + args.ExceptionObject.GetType().Name  + "  Detail:" + detail);
             };
         }
