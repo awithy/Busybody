@@ -10,6 +10,7 @@ namespace Busybody
         //TODO: Error handling/reporting/alerting
         //TODO: Test last chance exceptions and unhandled exceptions
         //TODO: Busybody process memory monitoring
+        //TODO: Better error handling when bad config file
 
         static Logger _log;
         static bool _verboseLogging;
