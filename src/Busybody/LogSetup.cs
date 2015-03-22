@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -11,7 +12,7 @@ namespace Busybody
     public class Logger
     {
         readonly ILog _log;
-        Type _sourceType;
+        readonly Type _sourceType;
 
         public Logger(Type type)
         {
@@ -39,14 +40,20 @@ namespace Busybody
             _log.Warn(message);
         }
 
-        public void Error(string message)
+        public void Error(string message, Exception exception)
         {
-            _log.Error(message);
+            var sb = new StringBuilder();
+            sb.AppendLine("ERROR: " + message);
+            sb.AppendLine("Details: " + exception);
+            _log.Error(sb.ToString());
         }
 
-        public void Critical(string message)
+        public void Critical(string message, Exception exception)
         {
-            _log.Logger.Log(_sourceType, Level.Critical, message, null);
+            var sb = new StringBuilder();
+            sb.AppendLine("CRITICAL: " + message);
+            sb.AppendLine("Details: " + exception);
+            _log.Logger.Log(_sourceType, Level.Critical, sb.ToString(), null);
         }
     }
 

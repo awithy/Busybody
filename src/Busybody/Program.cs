@@ -44,7 +44,7 @@ namespace Busybody
             }
             catch (Exception ex)
             {
-                _log.Critical("Unexpected critical " + ex.GetType().Name + " occurred.  Aborting.  " + Environment.NewLine + ex);
+                _log.Critical("Unexpected critical " + ex.GetType().Name + " occurred.  Aborting.", ex);
                 Environment.FailFast("Failing fast due to unexpected exception of type: " + ex.GetType().Name + ".  Detail: " + ex);
             }
         }
@@ -95,8 +95,11 @@ namespace Busybody
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                _log.Critical("Unhandled critical " + args.ExceptionObject.GetType().Name + " occurred.  Detail: " + args.ExceptionObject.ToString());
-                Environment.FailFast("Failing fast due to exception of type: " + args.ExceptionObject.GetType().Name);
+                var detail = "";
+                if (args != null && args.ExceptionObject != null)
+                    detail = args.ExceptionObject.ToString();
+                _log.Critical("Unhandled critical " + args.ExceptionObject.GetType().Name + " occurred.  Detail:" + detail, null);
+                Environment.FailFast("Failing fast due to exception of type: " + args.ExceptionObject.GetType().Name  + "  Detail:" + detail);
             };
         }
     }

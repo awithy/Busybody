@@ -59,6 +59,8 @@
     <Compile Include="Config\HostTestConfig.cs" />
     <Compile Include="EventBus.cs" />
     <Compile Include="EventLogger.cs" />
+    <Compile Include="Host.cs" />
+    <Compile Include="HostRepository.cs" />
     <Compile Include="HostStateEvent.cs" />
     <Compile Include="IThreading.cs" />
     <Compile Include="LogSetup.cs" />

@@ -1,40 +1,16 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Busybody.Config;
 
 namespace Busybody
 {
-    public class HostRepository
-    {
-        public ConcurrentDictionary<string, Host> Hosts = new ConcurrentDictionary<string, Host>();
-
-        public Host GetOrCreateHost(string name)
-        {
-            return Hosts.AddOrUpdate(name, n => new Host {Name = n}, (n, existingHost) => existingHost);
-        }
-
-        public void UpdateHost(Host host)
-        {
-            Hosts.AddOrUpdate(host.Name, n => host, (n, existingHost) => host);
-        }
-    }
-
-    public class Host
-    {
-        public string Name { get; set; }
-        public HostState State { get; set; }
-    }
-
     public class BusybodyDaemon
     {
         static Logger _log = new Logger(typeof(BusybodyDaemon));
-        BusybodyConfig _config;
-        HostRepository _hostRepository = new HostRepository();
+        readonly HostRepository _hostRepository = new HostRepository();
         readonly ManualResetEvent _startedEvent = new ManualResetEvent(false);
         readonly ManualResetEvent _stoppedEvent = new ManualResetEvent(false);
+        BusybodyConfig _config;
         bool _stopFlag;
         bool _stopped;
 
@@ -96,7 +72,7 @@ namespace Busybody
             }
             catch (Exception ex)
             {
-                _log.Critical("Monitoring thread experienced exception: " + ex);
+                _log.Critical("Monitoring thread experienced critical exception", ex);
                 throw;
             }
         }
@@ -122,8 +98,8 @@ namespace Busybody
             }
             catch (Exception ex)
             {
-                _log.Error("Error running host tests " + ex);
-                //Intentional swallow
+                _log.Error("Exception of type " + ex.GetType().Name + " thrown while running host tests.", ex);
+                throw;
             }
         }
 
@@ -139,7 +115,8 @@ namespace Busybody
                 {
                     _log.Trace("Running test " + testConfig.Name);
                     var test = AppContext.Instance.TestFactory.Create(testConfig.Name);
-                    allPassed = allPassed & test.Execute(hostConfig, testConfig);
+                    var execute = _ExecuteTestWithoutThrowing(test, hostConfig, testConfig);
+                    allPassed = allPassed & execute;
 
                     var hostState = allPassed ? HostState.UP : HostState.DOWN;
                     if (hostState != host.State)
@@ -151,6 +128,19 @@ namespace Busybody
                 }
             }
             _log.Trace("Test run complete");
+        }
+
+        static bool _ExecuteTestWithoutThrowing(IBusybodyTest test, HostConfig hostConfig, HostTestConfig testConfig)
+        {
+            try
+            {
+                return test.Execute(hostConfig, testConfig);
+            }
+            catch (Exception ex)
+            {
+                _log.Error("Exception of type " + ex.GetType().Name + " thrown during test execution", ex);
+                return false;
+            }
         }
 
         static void _PublishHostStateEvent(HostConfig host, HostState hostState)
