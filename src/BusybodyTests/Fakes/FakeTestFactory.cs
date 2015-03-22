@@ -11,5 +11,10 @@ namespace BusybodyTests.Fakes
         {
             return Tests[name];
         }
+
+        public T GetTest<T>(string name)
+        {
+            return (T) Tests[name];
+        }
     }
 }

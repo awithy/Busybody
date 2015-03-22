@@ -6,16 +6,13 @@ namespace BusybodyTests.Fakes
     public class FakePingTest : IBusybodyTest
     {
         public int ExecutedCount;
-        public HostConfig LastHostConfig;
-        public HostTestConfig LastHostTestConfig;
         int _stubIndex;
         bool[] _stubResults;
 
         public bool Execute(HostConfig host, HostTestConfig test)
         {
             ExecutedCount++;
-            LastHostConfig = host;
-            LastHostTestConfig = test;
+
             if (_stubResults == null)
                 return true;
             bool result;
@@ -24,6 +21,11 @@ namespace BusybodyTests.Fakes
             else
                 result = _stubResults[_stubIndex++];
             return result;
+        }
+
+        public void WaitForNumberOfExecutions(int count)
+        {
+            TestUtility.WaitFor(() => ExecutedCount >= count);
         }
 
         public void StubResult(bool result)

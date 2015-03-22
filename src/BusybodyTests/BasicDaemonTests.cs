@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Busybody;
 using BusybodyTests.Fakes;
@@ -9,63 +10,34 @@ using NUnit.Framework;
 namespace BusybodyTests
 {
     [TestFixture]
-    public class When_starting_the_daemon
+    public class When_starting_the_daemon : Daemon_up_down_tests
     {
-        FakeAppContext _fakeAppContext;
-
         [SetUp]
         public void SetUp()
         {
-            _fakeAppContext = new FakeAppContextBuilder()
-                .WithBasicConfiguration()
-                .Build();
+            _testContext.TestAppContext.Config.PollingInterval = 2 * 60;
 
-            _fakeAppContext.Config.PollingInterval = 2 * 60;
-
-            AppContext.Instance = _fakeAppContext;
-            
-            var daemon = new BusybodyDaemon();
-            daemon.Start();
-
-            _WaitFor2Tests();
-
-            daemon.Stop();
-        }
-
-        void _WaitFor2Tests()
-        {
-            var waits = 0;
-            while (true)
-            {
-                var fakePingTest = (FakePingTest) _fakeAppContext.FakeTestFactory.Tests["Ping"];
-                var count = fakePingTest.ExecutedCount;
-                if (count >= 2)
-                    return;
-                Thread.Sleep(100);
-                if (waits > 100)
-                    Assert.Fail("Timed out waiting for 2 rounds of tests to finish");
-            }
+            _testContext.Daemon.Start();
+            _testContext.FakePingTest.WaitForNumberOfExecutions(2);
         }
 
         [Test]
         public void It_should_run_each_test_once()
         {
-            var fakePingTest = (FakePingTest)_fakeAppContext.FakeTestFactory.Tests["Ping"];
-            fakePingTest.ExecutedCount.Should().BeGreaterOrEqualTo(1);
+            _testContext.FakePingTest.ExecutedCount.Should().BeGreaterOrEqualTo(1);
         }
 
         [Test]
         public void It_should_pause_between_tests()
         {
-            _fakeAppContext.FakeThreading._sleeps.Count.Should().BeGreaterOrEqualTo(60*10*2);
-            _fakeAppContext.FakeThreading._sleeps[0].Should().Be(100);
+            _testContext.TestAppContext.FakeThreading._sleeps.Count.Should().BeGreaterOrEqualTo(60*10*2);
+            _testContext.TestAppContext.FakeThreading._sleeps[0].Should().Be(100);
         }
 
         [Test]
         public void It_should_rerun_the_tests_after_pausing()
         {
-            var fakePingTest = (FakePingTest)_fakeAppContext.FakeTestFactory.Tests["Ping"];
-            fakePingTest.ExecutedCount.Should().BeGreaterOrEqualTo(2);
+            _testContext.FakePingTest.ExecutedCount.Should().BeGreaterOrEqualTo(2);
         }
     }
 
@@ -76,19 +48,14 @@ namespace BusybodyTests
         [SetUp]
         public void SetUp()
         {
-            _SetupContext();
-
-            _fakePingTest.StubResult(false);
-            
-            var daemon = new BusybodyDaemon();
-            daemon.Start();
-            daemon.Stop();
+            _testContext.FakePingTest.StubResult(false);
+            _testContext.Daemon.Start();
         }
 
         [Test]
         public void It_should_raise_event_that_host_is_down()
         {
-            _receivedEventText.Should().ContainSingle("Host: Local Machine, State: DOWN");
+            _testContext.EventHandler.AssertSingleHostStateReceived(HostState.DOWN);
         }
     }
 
@@ -99,19 +66,14 @@ namespace BusybodyTests
         [SetUp]
         public void SetUp()
         {
-            _SetupContext();
-
-            _fakePingTest.StubResult(true);
-            
-            var daemon = new BusybodyDaemon();
-            daemon.Start();
-            daemon.Stop();
+            _testContext.FakePingTest.StubResult(true);
+            _testContext.Daemon.Start();
         }
 
         [Test]
         public void It_should_raise_event_that_host_is_up()
         {
-            _receivedEventText.Should().ContainSingle("Host: Local Machine, State: UP");
+            _testContext.EventHandler.AssertSingleHostStateReceived(HostState.UP);
         }
     }
 
@@ -122,36 +84,15 @@ namespace BusybodyTests
         [SetUp]
         public void SetUp()
         {
-            _SetupContext();
-
-            _fakePingTest.StubResult(new[] {false, true});
-            
-            var daemon = new BusybodyDaemon();
-            daemon.Start();
-
-            _WaitForTwoHostStateEvents();
-
-            daemon.Stop();
+            _testContext.FakePingTest.StubResult(new[] {false, true});
+            _testContext.Daemon.Start();
+            _testContext.EventHandler.WaitForNumberOfEventsOfType<HostStateEvent>(2);
         }
 
         [Test]
         public void It_should_raise_two_events()
         {
-            _receivedEventText.Should().ContainInOrder("Host: Local Machine, State: DOWN", "Host: Local Machine, State: UP");
-        }
-
-        void _WaitForTwoHostStateEvents()
-        {
-            while (true)
-            {
-                var cnt = 0;
-                if (_receivedEventText.Count < 2)
-                    Thread.Sleep(100);
-                else
-                    return;
-                if (cnt++ > 20)
-                    Assert.Fail("Failed waiting for two state events");
-            }
+            _testContext.EventHandler.AssertMultipleHostStateReceived(HostState.DOWN, HostState.UP);
         }
     }
 
@@ -162,66 +103,117 @@ namespace BusybodyTests
         [SetUp]
         public void SetUp()
         {
-            _SetupContext();
-
-            _fakePingTest.StubResult(new[] {true, true});
-            
-            var daemon = new BusybodyDaemon();
-            daemon.Start();
-
-            _WaitForTwoTestExecutions();
-
-            daemon.Stop();
+            _testContext.FakePingTest.StubResult(new[] {true, true});
+            _testContext.Daemon.Start();
         }
 
         [Test]
         public void It_should_only_raise_one_event()
         {
-            _receivedEventText.Should().ContainSingle("Host: Local Machine, State: UP");
-        }
-
-        void _WaitForTwoTestExecutions()
-        {
-            while (true)
-            {
-                var cnt = 0;
-                if (_fakePingTest.ExecutedCount < 2)
-                    Thread.Sleep(100);
-                else
-                    return;
-                if (cnt++ > 20)
-                    Assert.Fail("Failed waiting for two test executions");
-            }
+            _testContext.EventHandler.AssertSingleHostStateReceived(HostState.UP);
         }
     }
 
     public class Daemon_up_down_tests
     {
-        protected FakeAppContext _fakeAppContext;
-        protected FakePingTest _fakePingTest;
-        protected readonly List<string> _receivedEventText = new List<string>();
+        protected TestContext _testContext;
 
-        protected void _SetupContext()
+        [SetUp]
+        public void BaseSetUp()
         {
-            _fakeAppContext = new FakeAppContextBuilder()
+            _testContext = new TestContext();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _testContext.Daemon.Stop();
+        }
+    }
+
+    public class TestContext
+    {
+        public TestEventHandler EventHandler { get; set; }
+        public FakePingTest FakePingTest { get; set; }
+        public FakeAppContext TestAppContext { get; set; }
+        public BusybodyDaemon Daemon { get; set; }
+
+        public TestContext()
+        {
+            EventHandler = new TestEventHandler();
+            TestAppContext = new FakeAppContext();
+
+            TestAppContext = new FakeAppContextBuilder()
                 .WithBasicConfiguration()
                 .Build();
 
-            AppContext.Instance = _fakeAppContext;
+            FakePingTest = TestAppContext.FakeTestFactory.GetTest<FakePingTest>("Ping");
+
+            AppContext.Instance = TestAppContext;
             AppContext.Instance.EventBus.Subscribe(new EventSubscription
             {
                 Name = "Test Subscription",
                 EventStreamName = "All",
-                Recipient = eventNotification => _ReceiveHostStateEvents(eventNotification),
+                Recipient = eventNotification => EventHandler.Handle(eventNotification),
             });
 
-            _fakePingTest = (FakePingTest) _fakeAppContext.FakeTestFactory.Tests["Ping"];
+            Daemon = new BusybodyDaemon();
+        }
+    }
+
+    public class TestEventHandler
+    {
+        public readonly List<EventNotification> ReceivedEventNotifications = new List<EventNotification>();
+
+        public void Handle(EventNotification eventNotification)
+        {
+            ReceivedEventNotifications.Add(eventNotification);
         }
 
-        void _ReceiveHostStateEvents(EventNotification eventNotification)
+        public void WaitForNumberOfEventsOfType<T>(int count) where T : BusybodyEvent
         {
-            if (eventNotification.Event is HostStateEvent)
-                _receivedEventText.Add(eventNotification.Event.ToLogString());
+            WaitForNumberOfEventsMatching(count, e => e.GetType() == typeof (T));
+        }
+
+        public void WaitForNumberOfEventsMatching(int count, Predicate<BusybodyEvent> pred)
+        {
+            TestUtility.WaitFor(() => ReceivedEventNotifications.Count(x => pred(x.Event)) >= count);
+        }
+
+        public void AssertSingleHostStateReceived(HostState hostState)
+        {
+            ReceivedEventNotifications
+                .Select(x => x.Event as HostStateEvent)
+                .Where(x => x != null)
+                .Should()
+                .ContainSingle(x => x.State == hostState);
+        }
+
+        public void AssertMultipleHostStateReceived(params HostState[] hostStates)
+        {
+            ReceivedEventNotifications
+                .Where(x => x.Event is HostStateEvent)
+                .Select(x => x.Event as HostStateEvent)
+                .Select(x => x.State)
+                .Should()
+                .BeEquivalentTo(hostStates);
+        }
+    }
+
+    public static class TestUtility
+    {
+        public static void WaitFor(Func<bool> func)
+        {
+            while (true)
+            {
+                var cnt = 0;
+                if (!func())
+                    Thread.Sleep(100);
+                else
+                    return;
+                if (cnt++ > 20)
+                    Assert.Fail("Timed out waiting");
+            }
         }
     }
 }
