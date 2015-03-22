@@ -1,4 +1,6 @@
-﻿namespace Busybody
+﻿using Busybody.Events;
+
+namespace Busybody
 {
     public class Host
     {

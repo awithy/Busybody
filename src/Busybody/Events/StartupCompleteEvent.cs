@@ -1,4 +1,4 @@
-﻿namespace Busybody
+﻿namespace Busybody.Events
 {
     public class StartupCompleteEvent : BusybodyEvent
     {

@@ -11,6 +11,8 @@ namespace Busybody
 {
     public class Logger
     {
+        //TODO: support format strings
+
         readonly ILog _log;
         readonly Type _sourceType;
 

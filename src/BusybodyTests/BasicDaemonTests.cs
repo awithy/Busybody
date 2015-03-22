@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Busybody;
+using Busybody.Events;
 using BusybodyTests.Fakes;
 using FluentAssertions;
 using NUnit.Framework;

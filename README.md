@@ -55,6 +55,7 @@ Verbose console logging: `-v`
 * OpenVPN
 * FTP/SFTP
 * SNMP
+* DNS
 
 
 ## Sample Config File ##
@@ -81,7 +82,6 @@ Note: Polling interval is in seconds.
 ## Immediate To-Do ##
 
 1. E-mail alerting
-1. Parameterized ping test
 1. HTTP/HTTPS test
 1. OpenVPN test
 1. SSH test

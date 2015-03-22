@@ -18,7 +18,7 @@ namespace Busybody.Config
 
         public void WriteToFile(string filePath)
         {
-            var configText = JsonConvert.SerializeObject(this);
+            var configText = JsonConvert.SerializeObject(this, Formatting.Indented);
             File.WriteAllText(filePath, configText);
         }
 
