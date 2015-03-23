@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Threading;
 using Busybody.Config;
 
@@ -17,12 +19,22 @@ namespace Busybody.Tests
             var failures = 0;
             for (var cnt = 0; cnt < parameters.Count; cnt++)
             {
-                var result = new Ping().Send(host.Hostname);
-                _log.Trace(string.Format("Ping result received. Status:{0}, RoundtripMs:{1}", result.Status, result.RoundtripTime));
-                var success = result.Status == IPStatus.Success && result.RoundtripTime <= parameters.TimeoutMs;
+                var success = false;
+                try
+                {
+                    var result = new Ping().Send(host.Hostname);
+                    if(result != null)
+                        success = result.Status == IPStatus.Success && result.RoundtripTime <= parameters.TimeoutMs;
+                    _log.TraceFormat("Ping result received. Status:{0}, RoundtripMs:{1}", result.Status, result.RoundtripTime);
+                }
+                catch (PingException ex)
+                {
+                    _log.TraceFormat("PingException occurred while pinging host with detail: " + ex);
+                }
+
                 if (!success)
                     failures++;
-                if (failures > parameters.MaxFailures)
+                if (failures >= parameters.MaxFailures)
                     return false;
 
                 Thread.Sleep(parameters.DelayMs);

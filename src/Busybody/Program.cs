@@ -12,6 +12,8 @@ namespace Busybody
         //TODO: Report on average ping latency
         //TODO: Time limit each test to some maximum allowable level then abort
         //TODO: Figure out how to run with ReSharper shadow-copy DLLs
+        //TODO: More rich status from tests than boolean
+        //TODO: Configure long running tests
 
         static Logger _log = new Logger(typeof(Program));
         static bool _verboseLogging;
