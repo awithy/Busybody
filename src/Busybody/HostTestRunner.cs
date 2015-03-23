@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Busybody.Config;
 using Busybody.Events;
+using Topshelf.Runtime.Windows;
 
 namespace Busybody
 {
@@ -13,27 +18,29 @@ namespace Busybody
         {
             _log.Trace("Running host test");
             var config = AppContext.Instance.Config;
-            foreach (var hostConfig in config.Hosts)
-            {
-                _log.DebugFormat("Checking host {0}", hostConfig.Nickname);
-                var host = _hostRepository.GetOrCreateHost(hostConfig.Nickname);
-                var allPassed = true;
-                foreach (var testConfig in hostConfig.Tests)
-                {
-                    _log.TraceFormat("Running test {0}", testConfig.Name);
-                    var test = AppContext.Instance.TestFactory.Create(testConfig.Name);
-                    var execute = _ExecuteTestWithoutThrowing(test, hostConfig, testConfig);
-                    allPassed = allPassed & execute;
 
-                    var hostState = allPassed ? HostState.UP : HostState.DOWN;
-                    if (hostState != host.State)
-                    {
-                        host.State = hostState;
-                        _PublishHostStateEvent(hostConfig, hostState);
-                        _hostRepository.UpdateHost(host);
-                    }
+            var hostTestCollection = config.Hosts.SelectMany(hostConfig => hostConfig.Tests.Select(testConfig => new { HostConfig = hostConfig, TestConfig = testConfig }));
+            _log.TraceFormat("{0} tests to run", hostTestCollection.Count());
+            var hostResults = new ConcurrentDictionary<string, bool>();
+
+            Parallel.ForEach(hostTestCollection, new ParallelOptions {MaxDegreeOfParallelism = 5}, hostTest =>
+            {
+                _log.TraceFormat("Running test {0} on host {1}", hostTest.HostConfig.Nickname, hostTest.TestConfig.Name);
+                var test = AppContext.Instance.TestFactory.Create(hostTest.TestConfig.Name);
+                var testResult = _ExecuteTestWithoutThrowing(test, hostTest.HostConfig, hostTest.TestConfig);
+                var hostCombinedResult = hostResults.GetOrAdd(hostTest.HostConfig.Nickname, name => true);
+                hostCombinedResult = hostCombinedResult && testResult;
+                hostResults.TryUpdate(hostTest.HostConfig.Nickname, hostCombinedResult, false);
+
+                var hostState = hostCombinedResult ? HostState.UP : HostState.DOWN;
+                var host = _hostRepository.GetOrCreateHost(hostTest.HostConfig.Nickname);
+                if (hostState != host.State)
+                {
+                    host.State = hostState;
+                    _PublishHostStateEvent(hostTest.HostConfig, hostState);
+                    _hostRepository.UpdateHost(host);
                 }
-            }
+            });
             _log.Trace("Test run complete");
         }
 
