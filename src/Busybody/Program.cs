@@ -11,9 +11,11 @@ namespace Busybody
         //TODO: Busybody process memory monitoring
         //TODO: Report on average ping latency
         //TODO: Time limit each test to some maximum allowable level then abort
+        //TODO: Figure out how to run with ReSharper shadow-copy DLLs
 
-        static Logger _log;
+        static Logger _log = new Logger(typeof(Program));
         static bool _verboseLogging;
+        static string _configFilePathParameter;
 
         static int Main()
         {
@@ -35,12 +37,13 @@ namespace Busybody
         {
             try
             {
+                var serviceHost = _CreateHost();
                 _ReadConfigAndSetupAppContext();
                 Directory.CreateDirectory(CommonPaths.BusybodyData());
                 _SetupLogging();
                 _log.Info("Starting Busybody v0.1");
                 _HandleUnhandledExceptions();
-                _RunHost();
+                serviceHost.Run();
             }
             catch (Exception ex)
             {
@@ -59,6 +62,14 @@ namespace Busybody
             {
                 AppContext.Instance = new AppContext();
                 var configFilePath = CommonPaths.CurrentConfigFilePath();
+
+                if (_configFilePathParameter != null)
+                {
+                    if (!File.Exists(_configFilePathParameter))
+                        throw new ConfigFileNotFoundException(_configFilePathParameter);
+                    configFilePath = _configFilePathParameter;
+                }
+
                 AppContext.Instance.Config = BusybodyConfig.ReadFromFile(configFilePath);
             }
             catch (Exception ex)
@@ -67,10 +78,9 @@ namespace Busybody
             }
         }
 
-        static void _RunHost()
+        static Topshelf.Host _CreateHost()
         {
-            _log.Trace("Running host");
-
+            _log.Trace("Creating host");
             var serviceHost = HostFactory.New(x =>
             {
                 x.AfterInstall(() => _log.Info("The Busybody service has been installed."));
@@ -80,6 +90,7 @@ namespace Busybody
                 x.SetDisplayName("Busybody");
                 x.SetServiceName("Busybody");
                 x.AddCommandLineSwitch("v", verboseLogging => _verboseLogging = verboseLogging);
+                x.AddCommandLineDefinition("c", configFilePathParameter => _configFilePathParameter = configFilePathParameter);
 
                 x.Service<BusybodyDaemon>(s =>
                 {
@@ -88,9 +99,8 @@ namespace Busybody
                     s.WhenStarted(busybodyDaemon => busybodyDaemon.Start());
                     s.WhenStopped(busybodyDaemon => busybodyDaemon.Stop());
                 });
-
             });
-            serviceHost.Run();
+            return serviceHost;
         }
 
         static void _SetupLogging()
@@ -98,7 +108,8 @@ namespace Busybody
             var logsDirectory = CommonPaths.LogsPath();
             Directory.CreateDirectory(logsDirectory);
             LogSetup.Setup(CommonPaths.LogsPath(), _verboseLogging);
-            _log = new Logger(typeof (Program));
+            if(_configFilePathParameter != null)
+                _log.Debug("Overridden config file specified:" + _configFilePathParameter);
         }
 
         static void _HandleUnhandledExceptions()
@@ -112,6 +123,13 @@ namespace Busybody
                     _log.CriticalFormat(null, "Unhandled critical {0} occurred.  Detail:{1}", args.ExceptionObject.GetType().Name, detail);
                 Environment.FailFast("Failing fast due to exception of type: " + args.ExceptionObject.GetType().Name  + "  Detail:" + detail);
             };
+        }
+    }
+
+    public class ConfigFileNotFoundException : Exception
+    {
+        public ConfigFileNotFoundException(string configFilePathParameter) : base(string.Format("Config file not found at " + configFilePathParameter))
+        {
         }
     }
 

@@ -43,11 +43,6 @@ namespace Busybody
         {
             return Path.Combine(BusybodyData(), "Logs");
         }
-
-        public static string LogFilePath(string logLevel)
-        {
-            return Path.Combine(LogsPath(), logLevel + ".log");
-        }
     }
 
     public class DataDirectoryNullException : Exception
