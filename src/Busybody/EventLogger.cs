@@ -10,7 +10,7 @@ namespace Busybody
 
     public class EventLogger : IEventLogger
     {
-        static readonly Logger _log = new Logger(typeof (Program));
+        static readonly Logger _log = new Logger(typeof (EventLogger));
         static readonly object _syncLock = new object();
 
         public void Publish(string eventText)

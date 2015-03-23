@@ -15,11 +15,11 @@ namespace Busybody
 
     public class TestFactory : ITestFactory
     {
-        static Logger _log = new Logger(typeof(BusybodyDaemon));
+        static Logger _log = new Logger(typeof(TestFactory));
 
         public IBusybodyTest Create(string name)
         {
-            _log.Debug("Creating test " + name);
+            _log.Trace("Creating test " + name);
             switch (name)
             {
                 case "Ping":

@@ -7,7 +7,7 @@ namespace Busybody.Tests
 {
     public class PingTest : IBusybodyTest
     {
-        static readonly Logger _log = new Logger(typeof(BusybodyDaemon));
+        static readonly Logger _log = new Logger(typeof(PingTest));
 
         public bool Execute(HostConfig host, HostTestConfig test)
         {
@@ -19,7 +19,7 @@ namespace Busybody.Tests
             for (var cnt = 0; cnt < parameters.Count; cnt++)
             {
                 var result = new Ping().Send(host.Hostname);
-                _log.Debug(string.Format("Ping result received. Status:{0}, RoundtripMs:{1}", result.Status, result.RoundtripTime));
+                _log.Trace(string.Format("Ping result received. Status:{0}, RoundtripMs:{1}", result.Status, result.RoundtripTime));
                 var success = result.Status == IPStatus.Success && result.RoundtripTime <= parameters.TimeoutMs;
                 if (!success)
                     failures++;
