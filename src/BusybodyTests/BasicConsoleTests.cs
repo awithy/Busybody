@@ -34,16 +34,17 @@ namespace BusybodyTests
         [Test]
         public void The_log_file_should_not_contain_any_errors()
         {
-            var logFilePath = Path.Combine(CommonPaths.BusybodyData(), "Logs", "Trace.log");
+            var logFilePath = Path.Combine(CommonPaths.BusybodyData(), "Logs", "Info.log");
             var logFileContents = File.ReadAllText(logFilePath);
             logFileContents.Should().NotContain("ERROR");
         }
 
         [Test]
-        public void A_log_file_should_be_written()
+        public void Log_files_should_be_written()
         {
-            var logFilePath = Path.Combine(CommonPaths.BusybodyData(), "Logs", "Trace.log");
-            Assert.That(File.Exists(logFilePath));
+            Assert.That(File.Exists(Path.Combine(CommonPaths.BusybodyData(), "Logs", "Info.log")));
+            Assert.That(File.Exists(Path.Combine(CommonPaths.BusybodyData(), "Logs", "Debug.log")));
+            Assert.That(File.Exists(Path.Combine(CommonPaths.BusybodyData(), "Logs", "Trace.log")));
         }
 
         [Test]
@@ -54,9 +55,10 @@ namespace BusybodyTests
 
         static void _ClearLogs()
         {
-            var debugLogPath = CommonPaths.LogFilePath("Trace");
-            if (File.Exists(debugLogPath))
-                File.Delete(debugLogPath);
+            var logsPath = CommonPaths.LogsPath();
+            if(Directory.Exists(logsPath))
+                Directory.Delete(logsPath, true);
+            Directory.CreateDirectory(logsPath);
         }
 
         static void _BuildAndWriteConfigFile(string configFilePath)

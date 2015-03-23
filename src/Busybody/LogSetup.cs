@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 using log4net;
 using log4net.Appender;
@@ -96,12 +97,14 @@ namespace Busybody
             _layout = new PatternLayout("[%d{HH:mm:ss}][%level][%logger][%thread] %message%newline");
         }
 
-        public static void Setup(string logFile, bool verboseLogging)
+        public static void Setup(string logsDirectory, bool verboseLogging)
         {
             log4net.Config.BasicConfigurator.Configure();
             var repository = (Hierarchy) LogManager.GetRepository();
             repository.Root.RemoveAllAppenders();
-            repository.Root.AddAppender(_GetFileAppender(logFile, Level.All, true));
+            repository.Root.AddAppender(_GetFileAppender(Path.Combine(logsDirectory, "Info.log"), Level.Info, true));
+            repository.Root.AddAppender(_GetFileAppender(Path.Combine(logsDirectory, "Debug.log"), Level.Debug, true));
+            repository.Root.AddAppender(_GetFileAppender(Path.Combine(logsDirectory, "Trace.log"), Level.Trace, true));
             if (Process.GetCurrentProcess().ProcessName.ToLower().Contains("busybody")) //Mute logs when running from test runner.
                 repository.Root.AddAppender(_GetConsoleAppender(verboseLogging));
             repository.Root.Level = Level.All;
@@ -135,7 +138,7 @@ namespace Busybody
         {
             //TODO: Use a rolling file appender
             var appender = new FileAppender();
-            appender.Name = fileName;
+            appender.Name = threshhold.Name;
             appender.AppendToFile = append;
             appender.File = fileName;
             appender.Layout = _layout;
