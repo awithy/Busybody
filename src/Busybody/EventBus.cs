@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Busybody
 {
@@ -25,7 +24,7 @@ namespace Busybody
 
         public void Publish(string eventStreamName, BusybodyEvent @event)
         {
-            _log.Debug("Publishing event " + @event);
+            _log.Trace("Publishing event " + @event);
             lock (_pendingSyncLock)
             {
                 if (!_pendingEvents.ContainsKey(eventStreamName))
@@ -36,7 +35,7 @@ namespace Busybody
 
         public void Subscribe(EventSubscription subscription)
         {
-            _log.Debug("Subscribe to event " + subscription.Name);
+            _log.Trace("Subscribe to event " + subscription.Name);
             lock (_subscriptionSyncLock)
             {
                 if (_subscriptionsByName.ContainsKey(subscription.Name))

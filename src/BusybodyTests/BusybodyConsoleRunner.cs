@@ -17,7 +17,7 @@ namespace BusybodyTests
             var consoleExePath = Path.Combine(assemblyDirectory, "Busybody.exe");
             _processStartInfo = new ProcessStartInfo(consoleExePath) { WorkingDirectory = workingDirectory, };
             if (configFilePath != null)
-                _processStartInfo.Arguments = string.Format("-c:\"{0}\"", configFilePath);
+                _processStartInfo.Arguments = string.Format("-c:{0}", configFilePath);
         }
 
         public void Dispose()

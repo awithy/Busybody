@@ -66,7 +66,9 @@ namespace Busybody
                 if (_configFilePathParameter != null)
                 {
                     if (!File.Exists(_configFilePathParameter))
+                    {
                         throw new ConfigFileNotFoundException(_configFilePathParameter);
+                    }
                     configFilePath = _configFilePathParameter;
                 }
 

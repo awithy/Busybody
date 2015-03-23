@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Busybody.Config;
 using Busybody.Events;
-using Topshelf.Runtime.Windows;
 
 namespace Busybody
 {
@@ -37,6 +35,7 @@ namespace Busybody
                 if (hostState != host.State)
                 {
                     host.State = hostState;
+                    _log.DebugFormat("Host <{0}> state changed. New state:{1}", hostTest.HostConfig.Nickname, hostState);
                     _PublishHostStateEvent(hostTest.HostConfig, hostState);
                     _hostRepository.UpdateHost(host);
                 }

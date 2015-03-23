@@ -64,8 +64,8 @@ namespace BusybodyTests
         {
             using (var testDirectory = new TestDirectory())
             {
-                var configFilePath = Path.Combine(Path.GetTempFileName());
-                ConsoleContextHelper.BuildAndWriteConfigFile(testDirectory.FilePathFor(SharedConstants.BusybodyConfigFileName));
+                var configFilePath = Path.GetTempFileName();
+                ConsoleContextHelper.BuildAndWriteConfigFile(configFilePath);
 
                 TestUtility.DeleteDirectoryWithRetries(CommonPaths.LogsPath());
 
