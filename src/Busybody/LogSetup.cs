@@ -136,13 +136,16 @@ namespace Busybody
 
         private static FileAppender _GetFileAppender(string fileName, Level threshhold, bool append)
         {
-            //TODO: Use a rolling file appender
-            var appender = new FileAppender();
+            var appender = new RollingFileAppender();
             appender.Name = threshhold.Name;
             appender.AppendToFile = append;
             appender.File = fileName;
             appender.Layout = _layout;
             appender.Threshold = threshhold;
+            appender.RollingStyle = RollingFileAppender.RollingMode.Size;
+            appender.MaximumFileSize = "20MB";
+            appender.MaxSizeRollBackups = 3;
+            appender.PreserveLogFileNameExtension = true;
             appender.ActivateOptions();
             return appender;
         }
