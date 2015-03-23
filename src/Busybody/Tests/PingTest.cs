@@ -11,9 +11,8 @@ namespace Busybody.Tests
 
         public bool Execute(HostConfig host, HostTestConfig test)
         {
-            _log.Debug("Running ping test on host " + host.Nickname + " with hostname " + host.Hostname);
             var parameters = new PingTestParameters(test.Parameters);
-            _log.Debug(parameters.ToLogString());
+            _log.Debug(string.Format("Running ping test on Host: {0}, Hostname: {1}, {2}", host.Nickname, host.Hostname, parameters.ToLogString()));
 
             var failures = 0;
             for (var cnt = 0; cnt < parameters.Count; cnt++)
