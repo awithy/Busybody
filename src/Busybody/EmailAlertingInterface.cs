@@ -10,20 +10,22 @@ namespace Busybody
 
     public class EmailAlertingInterface : IEmailAlertingInterface
     {
+        readonly Logger _log = new Logger(typeof (EmailAlertingInterface));
         static DateTime LastSend = DateTime.MinValue;
         public void Alert(EmailAlert emailAlert)
         {
-            LastSend = DateTime.Now;
+            _log.DebugFormat("Alerting email subject:" + emailAlert.Subject);
             if ((DateTime.Now - LastSend) < TimeSpan.FromMinutes(5)) //TODO: change to messages sent in last 15
                 return;
+            LastSend = DateTime.Now;
 
             var errorAlertEmailConfiguration = new ErrorAlertEmailConfiguration();
-            errorAlertEmailConfiguration.Host = "";
-            errorAlertEmailConfiguration.FromAddress = "";
-            errorAlertEmailConfiguration.Port = 123;
-            errorAlertEmailConfiguration.Password = "";
+            errorAlertEmailConfiguration.Host = "smtp-mail.outlook.com ";
+            errorAlertEmailConfiguration.FromAddress = "FROM_ADDRESS";
+            errorAlertEmailConfiguration.Port = 587;
+            errorAlertEmailConfiguration.Password = "PASSWORD";
             var emailClient = new EmailClient(errorAlertEmailConfiguration);
-            IEnumerable<string> toAddresses = new[] {"awithy@msn.com"};
+            IEnumerable<string> toAddresses = new[] {"TO_ADDRESS"};
             var email = new Email(toAddresses, emailAlert.Subject, emailAlert.Body);
             emailClient.Send(email);
         }
