@@ -50,6 +50,7 @@ namespace BusybodyTests.TestTests
                     hostTestConfig,
                 },
             };
+            hostTestConfig.Parameters.Add("MaxFailures", "0");
 
             var pingTest = new PingTest();
             var result = pingTest.Execute(hostConfig, hostTestConfig);

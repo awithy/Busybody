@@ -34,7 +34,7 @@ namespace Busybody.Tests
 
                 if (!success)
                     failures++;
-                if (failures >= parameters.MaxFailures)
+                if (failures > parameters.MaxFailures)
                     return false;
 
                 Thread.Sleep(parameters.DelayMs);

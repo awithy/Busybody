@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using Busybody.Config;
 
 namespace Busybody
 {
     public class EmailClient
     {
-        readonly ErrorAlertEmailConfiguration _configuration;
+        readonly EmailAlertConfiguration _configuration;
         readonly Logger _logger;
 
-        public EmailClient(ErrorAlertEmailConfiguration errorAlertEmailConfiguration)
+        public EmailClient(EmailAlertConfiguration emailAlertConfiguration)
         {
             _logger = new Logger(typeof(EmailClient));
-            _configuration = errorAlertEmailConfiguration;
+            _configuration = emailAlertConfiguration;
         }
 
         public void Send(Email email)
@@ -65,13 +66,5 @@ namespace Busybody
             Subject = subject;
             Body = body;
         }
-    }
-
-    public class ErrorAlertEmailConfiguration
-    {
-        public string FromAddress;
-        public string Password;
-        public string Host;
-        public int Port;
     }
 }

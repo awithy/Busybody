@@ -46,10 +46,13 @@ namespace Busybody
 
         void _SendMailAlertIfNeeded(Host host)
         {
-            var emailInterface = AppContext.Instance.EmailAlertingInterface;
-            var subject = string.Format("BB ALERT: {0}:{1}", host.Name, host.State);
-            var message = string.Format("Host {0} state changed.  New state:{1}", host.Name, host.State);
-            emailInterface.Alert(new EmailAlert {Subject = subject, Body = message});
+            if (host.State == HostState.DOWN)
+            {
+                var emailInterface = AppContext.Instance.EmailAlertingInterface;
+                var subject = string.Format("BB ALERT: {0}:{1}", host.Name, host.State);
+                var message = string.Format("Host {0} state changed.  New state:{1}", host.Name, host.State);
+                emailInterface.Alert(new EmailAlert {Subject = subject, Body = message});
+            }
         }
 
         bool _ExecuteTestWithoutThrowing(IBusybodyTest test, HostConfig hostConfig, HostTestConfig testConfig)

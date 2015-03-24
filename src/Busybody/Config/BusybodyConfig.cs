@@ -8,6 +8,7 @@ namespace Busybody.Config
     {
         public int PollingInterval { get; set; }
         public string DataDirectory { get; set; }
+        public EmailAlertConfiguration EmailAlertConfiguration { get; set; }
 
         public List<HostConfig> Hosts;
 

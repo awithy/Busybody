@@ -64,7 +64,15 @@ Verbose console logging: `-v`
 
     {
 		"DataDirectory":"C:\\Busybody\\Data",
-		"PollingInterval":10,
+		"PollingInterval":300,
+		"EmailAlertConfiguration":
+		{
+			"FromAddress":"adrian@adrianwithy.com",
+			"ToEmailAddress":"adrian@adrianwithy.com",
+			"Host":"%SMTP_HOSTNAME%",
+			"Port":587,
+			"Password":"%PASSWORD%",
+		},
 		"Hosts":[
 		{
 			"Nickname":"Local Machine",
@@ -90,7 +98,7 @@ Note: Polling interval is in seconds.
 ## Immediate To-Do ##
 
 1. Write simple static html status page
-1. E-mail alerting
+f1. E-mail alerting
 1. Error handling/reporting/alerting
 1. HTTP/HTTPS test
 1. OpenVPN test

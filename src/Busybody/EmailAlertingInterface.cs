@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using Busybody.Config;
 
 namespace Busybody
 {
@@ -14,18 +16,23 @@ namespace Busybody
         static DateTime LastSend = DateTime.MinValue;
         public void Alert(EmailAlert emailAlert)
         {
+            if (AppContext.Instance.Config.EmailAlertConfiguration == null)
+            {
+                _log.Debug("E-Mail alerting not configured.");
+                return;
+            }
             _log.DebugFormat("Alerting email subject:" + emailAlert.Subject);
             if ((DateTime.Now - LastSend) < TimeSpan.FromMinutes(5)) //TODO: change to messages sent in last 15
                 return;
             LastSend = DateTime.Now;
 
-            var errorAlertEmailConfiguration = new ErrorAlertEmailConfiguration();
-            errorAlertEmailConfiguration.Host = "smtp-mail.outlook.com ";
-            errorAlertEmailConfiguration.FromAddress = "FROM_ADDRESS";
-            errorAlertEmailConfiguration.Port = 587;
-            errorAlertEmailConfiguration.Password = "PASSWORD";
-            var emailClient = new EmailClient(errorAlertEmailConfiguration);
-            IEnumerable<string> toAddresses = new[] {"TO_ADDRESS"};
+            var emailConfig = AppContext.Instance.Config.EmailAlertConfiguration;
+            emailConfig.Host = emailConfig.Host;
+            emailConfig.FromAddress = emailConfig.FromAddress;
+            emailConfig.Port = emailConfig.Port;
+            emailConfig.Password = emailConfig.Password;
+            var emailClient = new EmailClient(emailConfig);
+            IEnumerable<string> toAddresses = new []{emailConfig.ToEmailAddress};
             var email = new Email(toAddresses, emailAlert.Subject, emailAlert.Body);
             emailClient.Send(email);
         }
