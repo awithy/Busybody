@@ -1,7 +1,6 @@
 # Busybody
 
 By Adrian Withy  
-Last Updated 22 March 2015
 
 ## Summary ##
 
@@ -98,12 +97,12 @@ Note: Polling interval is in seconds.
 ## Immediate To-Do ##
 
 1. Write simple static html status page
-f1. E-mail alerting
 1. Error handling/reporting/alerting
 1. HTTP/HTTPS test
 1. OpenVPN test
 1. SSH test
 1. Busybody process memory monitoring
+1. Multiple e-mail alerting
 
 
 ## Ideas ##
