@@ -11,6 +11,7 @@ namespace Busybody
     {
         readonly Logger _log = new Logger(typeof(HostTestRunner));
         readonly HostRepository _hostRepository = new HostRepository();
+        bool _firstRun = true;
 
         public void RunHostTests()
         {
@@ -41,12 +42,13 @@ namespace Busybody
                     _hostRepository.UpdateHost(host);
                 }
             });
+            _firstRun = false;
             _log.Trace("Test run complete");
         }
 
         void _SendMailAlertIfNeeded(Host host)
         {
-            if (host.State == HostState.DOWN)
+            if (host.State == HostState.DOWN || _firstRun == false)
             {
                 var emailInterface = AppContext.Instance.EmailAlertingInterface;
                 var subject = string.Format("BB ALERT: {0}:{1}", host.Name, host.State);
