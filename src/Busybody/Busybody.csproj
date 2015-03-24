@@ -58,6 +58,7 @@
     <Compile Include="Config\HostConfig.cs" />
     <Compile Include="Config\HostTestConfig.cs" />
     <Compile Include="EmailAlertingInterface.cs" />
+    <Compile Include="EmailClient.cs" />
     <Compile Include="EventBus.cs" />
     <Compile Include="EventLogger.cs" />
     <Compile Include="Host.cs" />
