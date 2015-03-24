@@ -9,9 +9,11 @@ namespace BusybodyTests.Fakes
         public ITestFactory TestFactory { get; private set; }
         public IThreading Threading { get; private set; }
         public IEventBus EventBus { get; private set; }
+        public IEmailAlertingInterface EmailAlertingInterface { get; private set; }
         public BusybodyConfig Config { get; set; }
         public FakeTestFactory FakeTestFactory { get { return (FakeTestFactory)TestFactory;  } }
         public FakeThreading FakeThreading { get { return (FakeThreading) Threading; } }
+        public FakeEmailAlertingInterface FakeEmailAlertingInterface { get { return (FakeEmailAlertingInterface) EmailAlertingInterface; }}
 
         public FakeAppContext()
         {
@@ -19,6 +21,7 @@ namespace BusybodyTests.Fakes
             TestFactory = new FakeTestFactory();
             Threading = new FakeThreading();
             EventBus = new EventBus();
+            EmailAlertingInterface = new FakeEmailAlertingInterface();
         }
     }
 }

@@ -37,10 +37,19 @@ namespace Busybody
                     host.State = hostState;
                     _log.DebugFormat("Host <{0}> state changed. New state:{1}", hostTest.HostConfig.Nickname, hostState);
                     _PublishHostStateEvent(hostTest.HostConfig, hostState);
+                    _SendMailAlertIfNeeded(host);
                     _hostRepository.UpdateHost(host);
                 }
             });
             _log.Trace("Test run complete");
+        }
+
+        void _SendMailAlertIfNeeded(Host host)
+        {
+            var emailInterface = AppContext.Instance.EmailAlertingInterface;
+            var subject = string.Format("BB ALERT: {0}:{1}", host.Name, host.State);
+            var message = string.Format("Host {0} state changed.  New state:{1}", host.Name, host.State);
+            emailInterface.Alert(new EmailAlert {Subject = subject, Message = message});
         }
 
         bool _ExecuteTestWithoutThrowing(IBusybodyTest test, HostConfig hostConfig, HostTestConfig testConfig)

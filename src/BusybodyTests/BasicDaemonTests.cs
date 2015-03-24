@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Busybody;
-using Busybody.Events;
-using BusybodyTests.Fakes;
+﻿using Busybody.Events;
 using FluentAssertions;
 using NUnit.Framework;
 
 namespace BusybodyTests
 {
     [TestFixture]
-    public class When_starting_the_daemon : Daemon_up_down_tests
+    public class When_starting_the_daemon_and_running_host_tests : Daemon_up_down_tests
     {
         [SetUp]
         public void SetUp()
@@ -45,6 +39,7 @@ namespace BusybodyTests
     [TestFixture]
     public class When_starting_the_daemon_and_test_is_configured_and_host_is_down : Daemon_up_down_tests
     {
+        bool _emailReceived;
 
         [SetUp]
         public void SetUp()
@@ -52,12 +47,19 @@ namespace BusybodyTests
             _testContext.FakePingTest.StubResult(false);
             _testContext.Daemon.Start();
             _testContext.FakePingTest.WaitForNumberOfExecutions(1);
+            _emailReceived = _testContext.TestAppContext.FakeEmailAlertingInterface.WaitForEmails(1);
         }
 
         [Test]
         public void It_should_raise_event_that_host_is_down()
         {
             _testContext.EventHandler.AssertSingleHostStateReceived(HostState.DOWN);
+        }
+
+        [Test]
+        public void It_should_send_an_email_alert()
+        {
+            _emailReceived.Should().BeTrue();
         }
     }
 
@@ -132,76 +134,6 @@ namespace BusybodyTests
         public void TearDown()
         {
             _testContext.Daemon.Stop();
-        }
-    }
-
-    public class TestContext
-    {
-        public TestEventHandler EventHandler { get; set; }
-        public FakePingTest FakePingTest { get; set; }
-        public FakeAppContext TestAppContext { get; set; }
-        public BusybodyDaemon Daemon { get; set; }
-
-        public TestContext()
-        {
-            EventHandler = new TestEventHandler();
-            TestAppContext = new FakeAppContext();
-            Daemon = new BusybodyDaemon();
-
-            TestAppContext = new FakeAppContextBuilder()
-                .WithBasicConfiguration()
-                .Build();
-
-            FakePingTest = TestAppContext.FakeTestFactory.GetTest<FakePingTest>("Ping");
-
-            AppContext.Instance = TestAppContext;
-            AppContext.Instance.EventBus.Subscribe(new EventSubscription
-            {
-                Name = "Test Subscription",
-                EventStreamName = "All",
-                Recipient = eventNotification => EventHandler.Handle(eventNotification),
-            });
-        }
-    }
-
-    public class TestEventHandler
-    {
-        public readonly List<EventNotification> ReceivedEventNotifications = new List<EventNotification>();
-        readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
-
-        public void Handle(EventNotification eventNotification)
-        {
-            ReceivedEventNotifications.Add(eventNotification);
-            _autoResetEvent.Set();
-        }
-
-        public void WaitForNumberOfEventsOfType<T>(int count) where T : BusybodyEvent
-        {
-            while (ReceivedEventNotifications.Count() < count)
-            {
-                var result = _autoResetEvent.WaitOne(TimeSpan.FromSeconds(5));
-                if (!result)
-                    Assert.Fail("Failed waiting for number of events of type: {0}", typeof(T).Name);
-            }
-        }
-
-        public void AssertSingleHostStateReceived(HostState hostState)
-        {
-            ReceivedEventNotifications
-                .Select(x => x.Event as HostStateEvent)
-                .Where(x => x != null)
-                .Should()
-                .ContainSingle(x => x.State == hostState);
-        }
-
-        public void AssertMultipleHostStateReceived(params HostState[] hostStates)
-        {
-            ReceivedEventNotifications
-                .Where(x => x.Event is HostStateEvent)
-                .Select(x => x.Event as HostStateEvent)
-                .Select(x => x.State)
-                .Should()
-                .BeEquivalentTo(hostStates);
         }
     }
 }
