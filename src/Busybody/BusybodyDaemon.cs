@@ -11,12 +11,15 @@ namespace Busybody
         readonly HostTestRunner _hostTestRunner = new HostTestRunner();
         bool _stopFlag;
         bool _stopped;
+        SamplePoller _samplePoller = new SamplePoller();
 
         public void Start()
         {
             _SubscribeTextEventLogger();
 
             _StartMonitoring();
+
+            _samplePoller.Start();
 
             AppContext.Instance.EventBus.Publish("All", new StartupCompleteEvent());
             _log.Info("Busybody started");
@@ -27,6 +30,9 @@ namespace Busybody
             _log.Info("Stopping");
 
             _stopFlag = true;
+            
+            _samplePoller.Stop();
+
             while (!_stopped)
                 Thread.Sleep(100);
             _stoppedEvent.Set();

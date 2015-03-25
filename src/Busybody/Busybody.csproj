@@ -69,6 +69,8 @@
     <Compile Include="IThreading.cs" />
     <Compile Include="LogSetup.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="PollerBase.cs" />
+    <Compile Include="SamplePoller.cs" />
     <Compile Include="Tests\PingTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
