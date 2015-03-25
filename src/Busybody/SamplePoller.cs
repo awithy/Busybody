@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Busybody
 {
@@ -16,9 +18,9 @@ namespace Busybody
             get { return TimeSpan.FromSeconds(5); }
         }
 
-        protected override void _OnPoll()
+        protected override Task _OnPoll(CancellationToken cancellationToken)
         {
-            _log.Info("Sample");
+            return Task.Run(() => _log.Debug("Sample"), cancellationToken);
         }
     }
 }

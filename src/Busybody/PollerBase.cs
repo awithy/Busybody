@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Busybody
 {
@@ -7,7 +8,7 @@ namespace Busybody
     {
         readonly Logger _log = new Logger(typeof(PollerBase));
         readonly ManualResetEvent _stoppedEvent = new ManualResetEvent(false);
-        Timer _timer;
+        CancellationTokenSource _cancellationTokenSource;
         bool _stopFlag;
         bool _stopped;
 
@@ -17,6 +18,7 @@ namespace Busybody
 
         public void Start()
         {
+            _log.Debug("Starting " + Name);
             _StartPolling();
             _OnStarted();
         }
@@ -24,38 +26,24 @@ namespace Busybody
         void _StartPolling()
         {
             _log.Trace("Starting polling thread");
-            var threadStart = new ThreadStart(() => _StartPollingThreadStart(null));
-            var thread = new Thread(threadStart)
-            {
-                IsBackground = true
-            };
-            thread.Start();
+
+            _cancellationTokenSource = new CancellationTokenSource();
+            var task = _Poll(_cancellationTokenSource.Token);
+            task.ContinueWith(t => _StartPolling(), _cancellationTokenSource.Token);
+
             _log.Trace("Polling thread started");
         }
 
-        void _StartPollingThreadStart(object state)
+        async Task _Poll(CancellationToken cancellationToken)
         {
-            _log.Trace("Role service polling control");
-            if(_timer != null)
-                _timer.Dispose();
-            if (_stopped)
-                return;
-
-            try
-            {
-                _OnPoll();
-
-                if (!_stopFlag)
-                    _timer = new Timer(_StartPollingThreadStart, null, Period, TimeSpan.FromMilliseconds(Timeout.Infinite));
-                else
-                    _stoppedEvent.Set();
-            }
-            catch (Exception ex)
-            {
-                _log.Error("Unexpected exception while executing polling mehtod.", ex);
-                Thread.Sleep(TimeSpan.FromMinutes(5));
-            }
+            _log.Trace("PollerBase _Poll");
+            await _OnPoll(cancellationToken);
+            await Task.Delay(Period, cancellationToken);
+            if (_stopFlag)
+                _stoppedEvent.Set();
         }
+
+        protected abstract Task _OnPoll(CancellationToken cancellationToken);
 
         protected virtual void _OnStarted()
         {
@@ -63,18 +51,19 @@ namespace Busybody
 
         public void Stop()
         {
+            _log.Debug("Stopping " + Name);
             _OnStopping();
             _stopFlag = true;
-            if (!_stoppedEvent.WaitOne(TimeSpan.FromMinutes(5)))
+            _cancellationTokenSource.Cancel();
+            var stoppedSuccessfully = _stoppedEvent.WaitOne(TimeSpan.FromMinutes(5));
+            if (!stoppedSuccessfully)
                 throw new FailedWaitingForStopException(Name);
+            _log.Debug(Name + " stopped");
         }
 
         protected virtual void _OnStopping()
         {
-            
         }
-
-        protected abstract void _OnPoll();
     }
 
     public class FailedWaitingForStopException : Exception
