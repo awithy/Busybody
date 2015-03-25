@@ -28,9 +28,6 @@ task Clean {
 
 task default -depends UnitTests
 
-task UnitTests -depends NUnitUnitTests, Compile {
-}
-
 task AllTests -depends UnitTest, Compile {
 }
 
@@ -42,7 +39,11 @@ task Restore -depends Clean {
 	exec { & $nuget restore $solutionPath }
 }
 
-task NUnitUnitTests -depends Compile -description "NUnit unit tests" {
+task EndToEndTests -depends Compile -description "NUnit unit tests" {
+ exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow "/include=EndToEnd" }
+}
+
+task UnitTests -depends Compile -description "NUnit unit tests" {
  exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow "/exclude=LongRunning" }
 }
 

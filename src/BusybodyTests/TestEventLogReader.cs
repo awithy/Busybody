@@ -22,8 +22,9 @@ namespace BusybodyTests
         }
 
         //This crap is just tempoary until I do a proper event store or alerting
-        public void WaitForEvent(string text)
+        public bool WaitForEvent(string text)
         {
+            //Thread.Sleep(30000);
             var startTime = DateTime.Now;
             while (true)
             {
@@ -32,11 +33,11 @@ namespace BusybodyTests
                     var allText = File.ReadAllText(_eventLogFilePath);
                     var containsText = allText.Contains(text);
                     if (containsText)
-                        return;
+                        return true;
                 }
                 var timeSinceStart = DateTime.Now - startTime;
                 if (timeSinceStart > TimeSpan.FromSeconds(5))
-                    Assert.Fail("Failed waiting for <<" + text + ">>");
+                    return false;
                 Thread.Sleep(500);
             }
         }

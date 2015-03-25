@@ -6,10 +6,12 @@ using NUnit.Framework;
 
 namespace BusybodyTests
 {
+    [Category("EndToEnd")]
     [TestFixture]
     public class Given_an_alive_host_ping_test_when_console_started
     {
         TestEventLogReader _testEventLogReader;
+        bool _upEventReceived;
 
         [SetUp]
         public void Execute()
@@ -26,7 +28,7 @@ namespace BusybodyTests
                 using (var busybodyConsoleRunner = new BusybodyConsoleRunner(testDirectory.RootPath))
                 {
                     busybodyConsoleRunner.Start();
-                    _testEventLogReader.WaitForEvent("Startup complete");
+                    _upEventReceived = _testEventLogReader.WaitForEvent("Host: Local Machine, State: UP");
                 }
             }
         }
@@ -50,10 +52,11 @@ namespace BusybodyTests
         [Test]
         public void An_event_should_be_published_with_the_host_status_up()
         {
-            _testEventLogReader.WaitForEvent("Host: Local Machine, State: UP");
+            _upEventReceived.Should().BeTrue();
         }
     }
 
+    [Category("EndToEnd")]
     [TestFixture]
     public class When_starting_the_console_with_a_config_file_location_parameter
     {

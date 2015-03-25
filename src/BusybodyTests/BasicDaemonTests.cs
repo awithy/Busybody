@@ -10,7 +10,7 @@ namespace BusybodyTests
         [SetUp]
         public void SetUp()
         {
-            _testContext.TestAppContext.Config.PollingInterval = 2 * 60;
+            _testContext.TestAppContext.Config.PollingInterval = 1;
 
             _testContext.Daemon.Start();
             _testContext.FakePingTest.WaitForNumberOfExecutions(2);
@@ -20,13 +20,6 @@ namespace BusybodyTests
         public void It_should_run_each_test_once()
         {
             _testContext.FakePingTest.ExecutedCount.Should().BeGreaterOrEqualTo(1);
-        }
-
-        [Test]
-        public void It_should_pause_between_tests()
-        {
-            _testContext.TestAppContext.FakeThreading._sleeps.Count.Should().BeGreaterOrEqualTo(60*10*2);
-            _testContext.TestAppContext.FakeThreading._sleeps[0].Should().Be(100);
         }
 
         [Test]
@@ -53,6 +46,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_raise_event_that_host_is_down()
         {
+            _testContext.EventHandler.WaitForNumberOfEventsOfType<HostStateEvent>(1);
             _testContext.EventHandler.AssertSingleHostStateReceived(HostState.DOWN);
         }
 
@@ -72,12 +66,12 @@ namespace BusybodyTests
         {
             _testContext.FakePingTest.StubResult(true);
             _testContext.Daemon.Start();
-            _testContext.FakePingTest.WaitForNumberOfExecutions(1);
         }
 
         [Test]
         public void It_should_raise_event_that_host_is_up()
         {
+            _testContext.EventHandler.WaitForNumberOfEventsOfType<HostStateEvent>(1);
             _testContext.EventHandler.AssertSingleHostStateReceived(HostState.UP);
         }
     }
@@ -91,12 +85,12 @@ namespace BusybodyTests
         {
             _testContext.FakePingTest.StubResult(new[] {false, true});
             _testContext.Daemon.Start();
-            _testContext.EventHandler.WaitForNumberOfEventsOfType<HostStateEvent>(2);
         }
 
         [Test]
         public void It_should_raise_two_events()
         {
+            _testContext.EventHandler.WaitForNumberOfEventsOfType<HostStateEvent>(2);
             _testContext.EventHandler.AssertMultipleHostStateReceived(HostState.DOWN, HostState.UP);
         }
     }
@@ -104,18 +98,17 @@ namespace BusybodyTests
     [TestFixture]
     public class When_starting_the_daemon_and_test_is_configured_and_host_is_up_and_polled_multiple_times : Daemon_up_down_tests
     {
-
         [SetUp]
         public void SetUp()
         {
             _testContext.FakePingTest.StubResult(new[] {true, true});
             _testContext.Daemon.Start();
-            _testContext.FakePingTest.WaitForNumberOfExecutions(2);
         }
 
         [Test]
         public void It_should_only_raise_one_event()
         {
+            _testContext.EventHandler.WaitForNumberOfEventsOfType<HostStateEvent>(1);
             _testContext.EventHandler.AssertSingleHostStateReceived(HostState.UP);
         }
     }

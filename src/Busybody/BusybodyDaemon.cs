@@ -1,25 +1,19 @@
-﻿using System;
-using System.Threading;
-using Busybody.Events;
+﻿using Busybody.Events;
 
 namespace Busybody
 {
     public class BusybodyDaemon
     {
         readonly Logger _log = new Logger(typeof(BusybodyDaemon));
-        readonly ManualResetEvent _stoppedEvent = new ManualResetEvent(false);
-        readonly HostTestRunner _hostTestRunner = new HostTestRunner();
-        bool _stopFlag;
-        bool _stopped;
-        SamplePoller _samplePoller = new SamplePoller();
+        readonly HostTestRunnerRoleService _hostTestRunnerRoleService = new HostTestRunnerRoleService();
+        readonly EventProcessorRoleService _eventProcessorRoleService = new EventProcessorRoleService();
 
         public void Start()
         {
             _SubscribeTextEventLogger();
 
-            _StartMonitoring();
-
-            _samplePoller.Start();
+            _hostTestRunnerRoleService.Start();
+            _eventProcessorRoleService.Start();
 
             AppContext.Instance.EventBus.Publish("All", new StartupCompleteEvent());
             _log.Info("Busybody started");
@@ -29,78 +23,10 @@ namespace Busybody
         {
             _log.Info("Stopping");
 
-            _stopFlag = true;
-            
-            _samplePoller.Stop();
-
-            while (!_stopped)
-                Thread.Sleep(100);
-            _stoppedEvent.Set();
+            _hostTestRunnerRoleService.Stop();
+            _eventProcessorRoleService.Stop();
 
             _log.Info("Stopped");
-        }
-
-        void _StartMonitoring()
-        {
-            _log.Trace("Starting Monitoring");
-            var threadStart = new ThreadStart(_StartMonitoringThreadStart);
-            var thread = new Thread(threadStart)
-            {
-                IsBackground = true
-            };
-            thread.Start();
-            _log.Trace("Monitoring thread started");
-        }
-
-        void _StartMonitoringThreadStart()
-        {
-            _log.Trace("Monitoring thread entered");
-            try
-            {
-                while (!_stopFlag)
-                {
-                    _RunHostTestsAndCatch();
-                    AppContext.Instance.EventBus.DispatchPending();
-                    _Sleep();
-                }
-                _stopped = true;
-            }
-            catch (Exception ex)
-            {
-                _log.Critical("Monitoring thread experienced critical exception", ex);
-                throw;
-            }
-        }
-
-        void _Sleep()
-        {
-            if (_stopFlag)
-                return;
-            var pollingInterval = AppContext.Instance.Config.PollingInterval;
-            for (var i = 0; i < 10 * pollingInterval; i++)
-            {
-                AppContext.Instance.Threading.Sleep(100);
-                if (_stopFlag)
-                    return;
-            }
-        }
-
-        void _RunHostTestsAndCatch()
-        {
-            try
-            {
-                _RunHostTests();
-            }
-            catch (Exception ex)
-            {
-                _log.ErrorFormat(ex, "Exception of type {0} thrown while running host tests.", ex.GetType().Name);
-                throw;
-            }
-        }
-
-        void _RunHostTests()
-        {
-            _hostTestRunner.RunHostTests();
         }
 
         void _SubscribeTextEventLogger()
@@ -114,11 +40,4 @@ namespace Busybody
             AppContext.Instance.EventBus.Subscribe(eventSubscription);
         }
     }
-
-    public class TestNotFoundException : Exception
-    {
-        public TestNotFoundException(string name) : base(string.Format("Test {0} not found.", name))
-        {
-        }
-   }
 }

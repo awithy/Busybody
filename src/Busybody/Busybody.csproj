@@ -62,15 +62,15 @@
     <Compile Include="Config\EmailAlertConfiguration.cs" />
     <Compile Include="EventBus.cs" />
     <Compile Include="EventLogger.cs" />
+    <Compile Include="EventProcessorRoleService.cs" />
     <Compile Include="Host.cs" />
     <Compile Include="HostRepository.cs" />
     <Compile Include="Events\HostStateEvent.cs" />
-    <Compile Include="HostTestRunner.cs" />
+    <Compile Include="HostTestRunnerRoleService.cs" />
     <Compile Include="IThreading.cs" />
     <Compile Include="LogSetup.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PollerBase.cs" />
-    <Compile Include="SamplePoller.cs" />
     <Compile Include="Tests\PingTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

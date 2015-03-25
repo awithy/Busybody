@@ -20,14 +20,15 @@ namespace BusybodyTests
             _autoResetEvent.Set();
         }
 
-        public void WaitForNumberOfEventsOfType<T>(int count) where T : BusybodyEvent
+        public bool WaitForNumberOfEventsOfType<T>(int count) where T : BusybodyEvent
         {
-            while (ReceivedEventNotifications.Count() < count)
+            while (ReceivedEventNotifications.Count(x => x.Event.GetType() == typeof(T)) < count)
             {
                 var result = _autoResetEvent.WaitOne(TimeSpan.FromSeconds(5));
                 if (!result)
-                    Assert.Fail("Failed waiting for number of events of type: {0}", typeof(T).Name);
+                    return false;
             }
+            return true;
         }
 
         public void AssertSingleHostStateReceived(HostState hostState)

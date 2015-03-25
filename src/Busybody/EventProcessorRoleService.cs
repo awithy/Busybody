@@ -4,23 +4,21 @@ using System.Threading.Tasks;
 
 namespace Busybody
 {
-    public class SamplePoller : PollerBase
+    public class EventProcessorRoleService : PollerBase
     {
-        readonly Logger _log = new Logger(typeof(SamplePoller));
-
         public override string Name
         {
-            get { return "Sample"; }
+            get { return "Event Processor Role Service"; }
         }
 
         public override TimeSpan Period
         {
-            get { return TimeSpan.FromSeconds(5); }
+            get { return TimeSpan.FromMilliseconds(1000); }
         }
 
         protected override Task _OnPoll(CancellationToken cancellationToken)
         {
-            return Task.Run(() => _log.Debug("Sample"), cancellationToken);
+            return Task.Run(() => AppContext.Instance.EventBus.DispatchPending(), cancellationToken);
         }
     }
 }
