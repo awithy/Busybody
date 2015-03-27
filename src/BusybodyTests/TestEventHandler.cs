@@ -5,49 +5,38 @@ using System.Threading;
 using Busybody;
 using Busybody.Events;
 using FluentAssertions;
-using NUnit.Framework;
 
 namespace BusybodyTests
 {
-    public class TestEventHandler
+    public class TestEventHandler : IHandle<HostStateEvent>
     {
-        public readonly List<EventNotification> ReceivedEventNotifications = new List<EventNotification>();
-        readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+        public static List<HostStateEvent> ReceivedHostStateEvents = new List<HostStateEvent>();
 
-        public void Handle(EventNotification eventNotification)
+        public bool WaitForHostStateEvents(int count)
         {
-            ReceivedEventNotifications.Add(eventNotification);
-            _autoResetEvent.Set();
-        }
-
-        public bool WaitForNumberOfEventsOfType<T>(int count) where T : BusybodyEvent
-        {
-            while (ReceivedEventNotifications.Count(x => x.Event.GetType() == typeof(T)) < count)
-            {
-                var result = _autoResetEvent.WaitOne(TimeSpan.FromSeconds(5));
-                if (!result)
-                    return false;
-            }
+            while (ReceivedHostStateEvents.Count < count)
+                Thread.Sleep(100);
             return true;
         }
 
         public void AssertSingleHostStateReceived(HostState hostState)
         {
-            ReceivedEventNotifications
-                .Select(x => x.Event as HostStateEvent)
-                .Where(x => x != null)
+            ReceivedHostStateEvents
                 .Should()
                 .ContainSingle(x => x.State == hostState);
         }
 
         public void AssertMultipleHostStateReceived(params HostState[] hostStates)
         {
-            ReceivedEventNotifications
-                .Where(x => x.Event is HostStateEvent)
-                .Select(x => x.Event as HostStateEvent)
+            ReceivedHostStateEvents
                 .Select(x => x.State)
                 .Should()
                 .BeEquivalentTo(hostStates);
+        }
+
+        public void Handle(HostStateEvent @event)
+        {
+            ReceivedHostStateEvents.Add(@event);
         }
     }
 }

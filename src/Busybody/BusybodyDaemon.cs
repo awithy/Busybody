@@ -13,6 +13,7 @@ namespace Busybody
             _SubscribeTextEventLogger();
 
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (AlertingEventHandler));
+            AppContext.Instance.EventBus.RegisterHandler("All", typeof (EventLogger));
 
             _hostTestRunnerRoleService.Start();
             _eventProcessorRoleService.Start();
@@ -39,7 +40,7 @@ namespace Busybody
                 Name = "Event Logger",
                 Recipient = e => AppContext.Instance.EventLogger.Publish(e.Event.ToLogString()),
             };
-            AppContext.Instance.EventBus.Subscribe(eventSubscription);
+            //AppContext.Instance.EventBus.Subscribe(eventSubscription);
         }
     }
 }

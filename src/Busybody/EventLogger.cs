@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Busybody.Events;
 
 namespace Busybody
 {
@@ -8,7 +9,9 @@ namespace Busybody
         void Publish(string eventText);
     }
 
-    public class EventLogger : IEventLogger
+    public class EventLogger : IEventLogger, 
+        IHandle<HostStateEvent>,
+        IHandle<StartupCompleteEvent>
     {
         static readonly Logger _log = new Logger(typeof (EventLogger));
         static readonly object _syncLock = new object();
@@ -27,6 +30,16 @@ namespace Busybody
                     streamWriter.Flush();
                     streamWriter.Close();
                 }
+        }
+
+        public void Handle(HostStateEvent @event)
+        {
+            Publish(@event.ToLogString());
+        }
+
+        public void Handle(StartupCompleteEvent @event)
+        {
+            Publish(@event.ToLogString());
         }
     }
 }

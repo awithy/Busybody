@@ -8,7 +8,6 @@ namespace Busybody
     {
         readonly Logger _log = new Logger(typeof(PollerBase));
         CancellationTokenSource _cancellationTokenSource;
-        Task _task;
 
         public abstract string Name { get; }
 
@@ -25,9 +24,24 @@ namespace Busybody
         {
             _log.Trace("Starting polling thread");
 
+            //This is a bit of a mess
             _cancellationTokenSource = new CancellationTokenSource();
-            _task = _Poll(_cancellationTokenSource.Token);
-            _task.ContinueWith(t => _StartPolling(), _cancellationTokenSource.Token);
+            var task = Task.Factory.StartNew(() => _Poll(_cancellationTokenSource.Token).Wait(),
+                _cancellationTokenSource.Token,
+                TaskCreationOptions.None,
+                TaskScheduler.Default);
+            var delayTask = task.ContinueWith(t => Task.Delay(Period),
+                _cancellationTokenSource.Token,
+                TaskContinuationOptions.NotOnFaulted,
+                TaskScheduler.Default);
+            delayTask.ContinueWith(t =>
+            {
+                t.Wait();
+                _StartPolling();
+            },
+            _cancellationTokenSource.Token,
+            TaskContinuationOptions.NotOnFaulted,
+            TaskScheduler.Default);
 
             _log.Trace("Polling thread started");
         }
@@ -37,23 +51,14 @@ namespace Busybody
             try
             {
                 _log.Trace("PollerBase _Poll");
-                var error = false;
                 try
                 {
                     await _OnPoll(cancellationToken);
-
                 }
                 catch (Exception ex)
                 {
                     _log.ErrorFormat(ex, "Unexpected {0} exception thrown while polling in {1}", ex.GetType().Name, Name);
-                    error = true;
                 }
-
-                if(error)
-                    await Task.Delay(TimeSpan.FromMinutes(5), cancellationToken);
-                else
-                    await Task.Delay(Period, cancellationToken);
-
             }
             catch (TaskCanceledException)
             {
@@ -71,10 +76,6 @@ namespace Busybody
             _log.Debug("Stopping " + Name);
             _OnStopping();
             _cancellationTokenSource.Cancel();
-            var result = _task.Wait(TimeSpan.FromMinutes(5));
-            if (!result)
-                throw new FailedWaitingForStopException(Name);
-            
             _log.Debug(Name + " stopped");
         }
 

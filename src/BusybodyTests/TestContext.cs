@@ -20,15 +20,13 @@ namespace BusybodyTests
                 .WithBasicConfiguration()
                 .Build();
 
+            TestAppContext.EventBus.RegisterHandler("All", typeof(TestEventHandler));
+
             FakePingTest = TestAppContext.FakeTestFactory.GetTest<FakePingTest>("Ping");
 
+            TestEventHandler.ReceivedHostStateEvents.Clear();
+
             AppContext.Instance = TestAppContext;
-            AppContext.Instance.EventBus.Subscribe(new EventSubscription
-            {
-                Name = "Test Subscription",
-                EventStreamName = "All",
-                Recipient = eventNotification => EventHandler.Handle(eventNotification),
-            });
         }
     }
 }

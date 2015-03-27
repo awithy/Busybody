@@ -1,4 +1,5 @@
-﻿using Busybody.Events;
+﻿using System;
+using Busybody.Events;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -46,7 +47,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_raise_event_that_host_is_down()
         {
-            _testContext.EventHandler.WaitForNumberOfEventsOfType<HostStateEvent>(1);
+            _testContext.EventHandler.WaitForHostStateEvents(1);
             _testContext.EventHandler.AssertSingleHostStateReceived(HostState.DOWN);
         }
 
@@ -71,7 +72,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_raise_event_that_host_is_up()
         {
-            _testContext.EventHandler.WaitForNumberOfEventsOfType<HostStateEvent>(1);
+            _testContext.EventHandler.WaitForHostStateEvents(1);
             _testContext.EventHandler.AssertSingleHostStateReceived(HostState.UP);
         }
     }
@@ -90,7 +91,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_raise_two_events()
         {
-            _testContext.EventHandler.WaitForNumberOfEventsOfType<HostStateEvent>(2);
+            _testContext.EventHandler.WaitForHostStateEvents(2);
             _testContext.EventHandler.AssertMultipleHostStateReceived(HostState.DOWN, HostState.UP);
         }
     }
@@ -108,7 +109,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_only_raise_one_event()
         {
-            _testContext.EventHandler.WaitForNumberOfEventsOfType<HostStateEvent>(1);
+            _testContext.EventHandler.WaitForHostStateEvents(1).Should().BeTrue();
             _testContext.EventHandler.AssertSingleHostStateReceived(HostState.UP);
         }
     }
