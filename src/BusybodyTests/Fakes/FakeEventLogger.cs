@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Busybody;
+using Busybody.Events;
 
 namespace BusybodyTests.Fakes
 {
@@ -7,9 +8,14 @@ namespace BusybodyTests.Fakes
     {
         public readonly List<string> Events = new List<string>();
 
-        public void Publish(string eventText)
+        public void Handle(HostStateEvent @event)
         {
-            Events.Add(eventText);
+            Events.Add(@event.ToLogString());
+        }
+
+        public void Handle(StartupCompleteEvent @event)
+        {
+            Events.Add(@event.ToLogString());
         }
     }
 }

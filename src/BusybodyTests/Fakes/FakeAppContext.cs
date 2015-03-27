@@ -12,7 +12,6 @@ namespace BusybodyTests.Fakes
         public IEmailAlertingInterface EmailAlertingInterface { get; private set; }
         public BusybodyConfig Config { get; set; }
         public FakeTestFactory FakeTestFactory { get { return (FakeTestFactory)TestFactory;  } }
-        public FakeThreading FakeThreading { get { return (FakeThreading) Threading; } }
         public FakeEmailAlertingInterface FakeEmailAlertingInterface { get { return (FakeEmailAlertingInterface) EmailAlertingInterface; }}
 
         public FakeAppContext()
