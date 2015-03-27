@@ -10,8 +10,6 @@ namespace Busybody
 
         public void Start()
         {
-            _SubscribeTextEventLogger();
-
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (AlertingEventHandler));
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (EventLogger));
 
@@ -30,17 +28,6 @@ namespace Busybody
             _eventProcessorRoleService.Stop();
 
             _log.Info("Stopped");
-        }
-
-        void _SubscribeTextEventLogger()
-        {
-            var eventSubscription = new EventSubscription
-            {
-                EventStreamName = "All",
-                Name = "Event Logger",
-                Recipient = e => AppContext.Instance.EventLogger.Publish(e.Event.ToLogString()),
-            };
-            //AppContext.Instance.EventBus.Subscribe(eventSubscription);
         }
     }
 }

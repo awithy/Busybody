@@ -9,7 +9,6 @@ namespace Busybody
     public interface IEventBus
     {
         void Publish(string eventStreamName, BusybodyEvent @event);
-        void Subscribe(EventSubscription subscription);
         void DispatchPending();
         void RegisterHandler(string streamName, Type handlerType);
     }
@@ -19,9 +18,6 @@ namespace Busybody
         static Logger _log = new Logger(typeof (EventBus));
         static object _pendingSyncLock = new object(); 
         Dictionary<string, List<BusybodyEvent>> _pendingEvents = new Dictionary<string, List<BusybodyEvent>>(); 
-
-        static object _subscriptionSyncLock = new object(); 
-        Dictionary<string, EventSubscription> _subscriptionsByName = new Dictionary<string, EventSubscription>();
 
         ConcurrentDictionary<string, List<HandlerRegistration>> _handlerRegistrations = new ConcurrentDictionary<string, List<HandlerRegistration>>();
 
@@ -38,17 +34,6 @@ namespace Busybody
             }
         }
 
-        public void Subscribe(EventSubscription subscription)
-        {
-            _log.Trace("Subscribe to event " + subscription.Name);
-            lock (_subscriptionSyncLock)
-            {
-                if (_subscriptionsByName.ContainsKey(subscription.Name))
-                    _log.Warn("Subscription " + subscription.Name + " subscribed already.");
-                _subscriptionsByName.Add(subscription.Name, subscription);
-            }
-        }
-
         public void DispatchPending()
         {
             _log.Trace("Dispatching events");
@@ -58,12 +43,6 @@ namespace Busybody
             {
                 pendingCopy = _pendingEvents;
                 _pendingEvents = new Dictionary<string, List<BusybodyEvent>>();
-            }
-
-            Dictionary<string, EventSubscription> subscriptionsCopy;
-            lock (_subscriptionSyncLock)
-            {
-                subscriptionsCopy = _subscriptionsByName;
             }
 
             lock (_dispatchLock)
@@ -99,18 +78,6 @@ namespace Busybody
                             }
                         }
                     }
-
-                    var subscriptionsToStream = subscriptionsCopy.Values.Where(x => x.EventStreamName == streamName);
-                    foreach (var subscription in subscriptionsToStream)
-                    {
-                        if (!pendingCopy.ContainsKey(streamName))
-                            continue;
-                        var eventsInStream = pendingCopy[streamName];
-                        foreach (var @event in eventsInStream)
-                        {
-                            subscription.Recipient.Invoke(new EventNotification{ Event = @event });
-                        }
-                    }
                 }
             }
 
@@ -135,29 +102,10 @@ namespace Busybody
         }
     }
 
-    public class StreamNotFoundException : Exception
-    {
-        public StreamNotFoundException(string streamName) : base("Could not find stream " + streamName)
-        {
-        }
-    }
-
     public class HandlerRegistration
     {
         public string StreamName { get; set; }
         public Type HandlerType { get; set; }
-    }
-
-    public class EventSubscription
-    {
-        public string Name { get; set; }
-        public string EventStreamName { get; set; }
-        public Action<EventNotification> Recipient { get; set; }
-    }
-
-    public class EventNotification
-    {
-        public BusybodyEvent Event { get; set; }
     }
 
     public class BusybodyEvent
