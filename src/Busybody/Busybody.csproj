@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlertingEventHandler.cs" />
     <Compile Include="AppContext.cs" />
     <Compile Include="BusybodyDaemon.cs" />
     <Compile Include="CommonPaths.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="HostRepository.cs" />
     <Compile Include="Events\HostStateEvent.cs" />
     <Compile Include="HostTestRunnerRoleService.cs" />
+    <Compile Include="IHandle.cs" />
     <Compile Include="IThreading.cs" />
     <Compile Include="LogSetup.cs" />
     <Compile Include="Extensions.cs" />

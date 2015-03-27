@@ -12,6 +12,8 @@ namespace Busybody
         {
             _SubscribeTextEventLogger();
 
+            AppContext.Instance.EventBus.RegisterHandler("All", typeof (AlertingEventHandler));
+
             _hostTestRunnerRoleService.Start();
             _eventProcessorRoleService.Start();
 
