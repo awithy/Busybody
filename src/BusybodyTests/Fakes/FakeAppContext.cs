@@ -7,7 +7,6 @@ namespace BusybodyTests.Fakes
     {
         public IEventLogger EventLogger { get; private set; }
         public ITestFactory TestFactory { get; private set; }
-        public IThreading Threading { get; private set; }
         public IEventBus EventBus { get; private set; }
         public IEmailAlertingInterface EmailAlertingInterface { get; private set; }
         public BusybodyConfig Config { get; set; }
@@ -18,7 +17,6 @@ namespace BusybodyTests.Fakes
         {
             EventLogger = new FakeEventLogger();
             TestFactory = new FakeTestFactory();
-            Threading = new FakeThreading();
             EventBus = new EventBus();
             EmailAlertingInterface = new FakeEmailAlertingInterface();
         }
