@@ -1,5 +1,6 @@
 ﻿using System;
 using Busybody.Events;
+using BusybodyTests.Helpers;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -116,12 +117,12 @@ namespace BusybodyTests
 
     public class Daemon_up_down_tests
     {
-        protected TestContext _testContext;
+        protected BusybodyTestContext _testContext;
 
         [SetUp]
         public void BaseSetUp()
         {
-            _testContext = TestContext.Setup();
+            _testContext = BusybodyTestContext.Setup();
         }
 
         [TearDown]

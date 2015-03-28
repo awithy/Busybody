@@ -1,18 +1,18 @@
 using Busybody;
 using BusybodyTests.Fakes;
 
-namespace BusybodyTests
+namespace BusybodyTests.Helpers
 {
-    public class TestContext
+    public class BusybodyTestContext
     {
         public TestEventHandler EventHandler { get; set; }
         public FakePingTest FakePingTest { get; set; }
         public FakeAppContext TestAppContext { get; set; }
         public BusybodyDaemon Daemon { get; set; }
 
-        public static TestContext Setup()
+        public static BusybodyTestContext Setup()
         {
-            var testContext = new TestContext
+            var testContext = new BusybodyTestContext
             {
                 EventHandler = new TestEventHandler(),
                 Daemon = new BusybodyDaemon(),

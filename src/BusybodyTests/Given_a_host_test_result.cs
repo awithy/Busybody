@@ -1,5 +1,6 @@
 ﻿using Busybody;
 using Busybody.Events;
+using BusybodyTests.Helpers;
 using NUnit.Framework;
 
 namespace BusybodyTests
@@ -7,7 +8,6 @@ namespace BusybodyTests
     [TestFixture]
     public class Given_a_host_test_result_and_test_failed : Given_a_host_test_result
     {
-
         [SetUp]
         public void SetUp()
         {
@@ -142,13 +142,13 @@ namespace BusybodyTests
     [TestFixture]
     public class Given_a_host_test_result
     {
-        protected TestContext _testContext;
+        protected BusybodyTestContext _testContext;
         protected HostEventHandler _hostEventHandler;
 
         [SetUp]
         public void BaseSetUp()
         {
-            _testContext = TestContext.Setup();
+            _testContext = BusybodyTestContext.Setup();
             _hostEventHandler = new HostEventHandler();
         }
 

@@ -56,10 +56,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicConsoleTests.cs" />
-    <Compile Include="BasicDaemonTests.cs" />
-    <Compile Include="BusybodyConsoleRunner.cs" />
-    <Compile Include="ConfigBuilder.cs" />
+    <Compile Include="When_starting_the_console.cs" />
+    <Compile Include="When_starting_the_daemon.cs" />
+    <Compile Include="Helpers\BusybodyConsoleRunner.cs" />
+    <Compile Include="Helpers\ConfigBuilder.cs" />
     <Compile Include="Fakes\FakeAppContext.cs" />
     <Compile Include="Fakes\FakeAppContextBuilder.cs" />
     <Compile Include="Fakes\FakeEmailAlertingInterface.cs" />
@@ -67,14 +67,14 @@
     <Compile Include="Fakes\FakePingTest.cs" />
     <Compile Include="Fakes\FakeTestFactory.cs" />
     <Compile Include="Given_a_host_test_result.cs" />
-    <Compile Include="HostConfigBuilder.cs" />
+    <Compile Include="Helpers\HostConfigBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestContext.cs" />
-    <Compile Include="TestDirectory.cs" />
-    <Compile Include="TestEventHandler.cs" />
-    <Compile Include="TestEventLogReader.cs" />
+    <Compile Include="Helpers\TestContext.cs" />
+    <Compile Include="Helpers\TestDirectory.cs" />
+    <Compile Include="Helpers\TestEventHandler.cs" />
+    <Compile Include="Helpers\TestEventLogReader.cs" />
     <Compile Include="TestTests\PingTestTests.cs" />
-    <Compile Include="TestUtility.cs" />
+    <Compile Include="Helpers\TestUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

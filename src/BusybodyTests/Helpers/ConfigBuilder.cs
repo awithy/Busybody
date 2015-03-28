@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using Busybody.Config;
 
-namespace BusybodyTests
+namespace BusybodyTests.Helpers
 {
     public class ConfigBuilder
     {

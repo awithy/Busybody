@@ -6,7 +6,7 @@ using Busybody;
 using Busybody.Events;
 using FluentAssertions;
 
-namespace BusybodyTests
+namespace BusybodyTests.Helpers
 {
     public class TestEventHandler : IHandle<HostStateEvent>, IHandle<HostTestResultEvent>
     {

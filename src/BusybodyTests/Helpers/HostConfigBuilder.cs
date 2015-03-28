@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Busybody.Config;
 
-namespace BusybodyTests
+namespace BusybodyTests.Helpers
 {
     public class HostConfigBuilder
     {

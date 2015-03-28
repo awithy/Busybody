@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Busybody;
 using Busybody.Config;
+using BusybodyTests.Helpers;
 using FluentAssertions;
 using NUnit.Framework;
 

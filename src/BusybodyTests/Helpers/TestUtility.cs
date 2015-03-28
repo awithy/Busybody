@@ -1,7 +1,7 @@
 using System.IO;
 using System.Threading;
 
-namespace BusybodyTests
+namespace BusybodyTests.Helpers
 {
     public class TestUtility
     {

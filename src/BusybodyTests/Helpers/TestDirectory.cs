@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using Busybody;
 
-namespace BusybodyTests
+namespace BusybodyTests.Helpers
 {
     public class TestDirectory : IDisposable
     {

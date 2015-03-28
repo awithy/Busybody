@@ -2,9 +2,8 @@ using System;
 using System.IO;
 using System.Threading;
 using Busybody;
-using NUnit.Framework;
 
-namespace BusybodyTests
+namespace BusybodyTests.Helpers
 {
     public class TestEventLogReader
     {
