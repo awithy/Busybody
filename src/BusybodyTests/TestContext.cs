@@ -24,7 +24,7 @@ namespace BusybodyTests
 
             FakePingTest = TestAppContext.FakeTestFactory.GetTest<FakePingTest>("Ping");
 
-            TestEventHandler.ReceivedHostStateEvents.Clear();
+            TestEventHandler.Clear();
 
             AppContext.Instance = TestAppContext;
         }

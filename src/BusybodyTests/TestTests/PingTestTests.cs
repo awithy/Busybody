@@ -26,7 +26,7 @@ namespace BusybodyTests.TestTests
         [Test]
         public void When_pinging_ip_that_is_not_available()
         {
-            var result = _PingHost("10.1.10.1");
+            var result = _PingHost("99.100.10.1");
             result.Should().BeFalse();
         }
 

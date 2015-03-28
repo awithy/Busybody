@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -14,8 +15,13 @@ namespace BusybodyTests
 
         public bool WaitForHostStateEvents(int count)
         {
+            var startTime = DateTime.Now;
             while (ReceivedHostStateEvents.Count < count)
+            {
                 Thread.Sleep(100);
+                if ((DateTime.Now - startTime).TotalSeconds > 5)
+                    return false;
+            }
             return true;
         }
 
@@ -37,6 +43,11 @@ namespace BusybodyTests
         public void Handle(HostStateEvent @event)
         {
             ReceivedHostStateEvents.Add(@event);
+        }
+
+        public static void Clear()
+        {
+            ReceivedHostStateEvents.Clear();
         }
     }
 }
