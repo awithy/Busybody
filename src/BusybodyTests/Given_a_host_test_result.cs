@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace BusybodyTests
 {
     [TestFixture]
-    public class test_failed : Given_a_host_test_result
+    public class Given_a_host_test_result_and_test_failed : Given_a_host_test_result
     {
 
         [SetUp]
