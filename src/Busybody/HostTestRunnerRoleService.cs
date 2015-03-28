@@ -37,7 +37,6 @@ namespace Busybody
 
             var hostTestCollection = config.Hosts.SelectMany(hostConfig => hostConfig.Tests.Select(testConfig => new { HostConfig = hostConfig, TestConfig = testConfig }));
             _log.TraceFormat("{0} tests to run", hostTestCollection.Count());
-            var hostResults = new ConcurrentDictionary<string, bool>();
 
             Parallel.ForEach(hostTestCollection, new ParallelOptions {MaxDegreeOfParallelism = 5}, hostTest =>
             {
@@ -46,7 +45,7 @@ namespace Busybody
 
                 _log.TraceFormat("Running test {0} on host {1}", hostTest.HostConfig.Nickname, hostTest.TestConfig.Name);
                 var test = AppContext.Instance.TestFactory.Create(hostTest.TestConfig.Name);
-                var testResult = _ExecuteTestWithoutThrowing(test, hostTest.HostConfig, hostTest.TestConfig);
+                var testResult = _ExecuteTestErrorOnException(test, hostTest.HostConfig, hostTest.TestConfig);
                 _PublishHostTestResult(hostTest.HostConfig.Nickname, hostTest.TestConfig.Name, testResult);
             });
             _log.Trace("Test run complete");
@@ -63,7 +62,7 @@ namespace Busybody
             AppContext.Instance.EventBus.Publish("All", @event);
         }
 
-        bool _ExecuteTestWithoutThrowing(IBusybodyTest test, HostConfig hostConfig, HostTestConfig testConfig)
+        bool _ExecuteTestErrorOnException(IBusybodyTest test, HostConfig hostConfig, HostTestConfig testConfig)
         {
             try
             {
