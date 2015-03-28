@@ -10,12 +10,10 @@ namespace BusybodyTests
 {
     public class TestEventHandler : IHandle<HostStateEvent>, IHandle<HostTestResultEvent>
     {
-        public static List<HostStateEvent> ReceivedHostStateEvents = new List<HostStateEvent>();
         public static List<BusybodyEvent> ReceivedEvents = new List<BusybodyEvent>();
 
         public void Handle(HostStateEvent @event)
         {
-            ReceivedHostStateEvents.Add(@event);
             ReceivedEvents.Add(@event);
         }
 
@@ -27,7 +25,7 @@ namespace BusybodyTests
         public bool WaitForHostStateEvents(int count)
         {
             var startTime = DateTime.Now;
-            while (ReceivedHostStateEvents.Count < count)
+            while (_GetEventsOfType<HostStateEvent>().Count() < count)
             {
                 Thread.Sleep(100);
                 if ((DateTime.Now - startTime).TotalSeconds > 5)
@@ -38,31 +36,39 @@ namespace BusybodyTests
 
         public void AssertSingleHostStateReceived(HostState hostState)
         {
-            ReceivedHostStateEvents
+            _GetEventsOfType<HostStateEvent>()
                 .Should()
                 .ContainSingle(x => x.State == hostState);
         }
 
         public void AssertMultipleHostStateReceived(params HostState[] hostStates)
         {
-            ReceivedHostStateEvents
+            _GetEventsOfType<HostStateEvent>()
                 .Select(x => x.State)
                 .Should()
                 .BeEquivalentTo(hostStates);
         }
 
-        public static void Clear()
-        {
-            ReceivedHostStateEvents.Clear();
-        }
-
-        public void AssertEventReceived<T>(Predicate<T> predicate) where T : BusybodyEvent
+        public void AssertSingleEventReceived<T>(Predicate<T> predicate) where T : BusybodyEvent
         {
             ReceivedEvents
                 .Where(x => x.GetType() == typeof (T))
                 .SingleOrDefault(x => predicate((T) x))
                 .Should()
                 .NotBeNull();
+        }
+
+        IEnumerable<T> _GetEventsOfType<T>() where T : BusybodyEvent
+        {
+            var receivedEvents = ReceivedEvents.ToArray();
+            return receivedEvents
+                .Where(x => x.GetType() == typeof (T))
+                .Select(x => (T) x);
+        }
+
+        public static void Clear()
+        {
+            ReceivedEvents.Clear();
         }
     }
 }

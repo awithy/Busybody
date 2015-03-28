@@ -24,7 +24,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_raise_a_host_state_changed_event()
         {
-            _testContext.EventHandler.AssertEventReceived<HostStateEvent>(x => true);
+            _testContext.EventHandler.AssertSingleEventReceived<HostStateEvent>(x => true);
 
         }
     }
