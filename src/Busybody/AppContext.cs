@@ -11,6 +11,7 @@ namespace Busybody
         public ITestFactory TestFactory { get; private set; }
         public IEventBus EventBus { get; private set; }
         public IEmailAlertingInterface EmailAlertingInterface { get; set; }
+        public HostRepository HostRepository { get; set; }
 
         public AppContext()
         {
@@ -18,6 +19,7 @@ namespace Busybody
             TestFactory = new TestFactory();
             EventBus = new EventBus();
             EmailAlertingInterface = new EmailAlertingInterface();
+            HostRepository = new HostRepository();
         }
     }
 
@@ -27,5 +29,6 @@ namespace Busybody
         IEventBus EventBus { get; }
         IEmailAlertingInterface EmailAlertingInterface { get; }
         BusybodyConfig Config { get; set; }
+        HostRepository HostRepository { get; set; }
     }
 }

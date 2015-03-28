@@ -47,27 +47,20 @@ namespace Busybody
                 _log.TraceFormat("Running test {0} on host {1}", hostTest.HostConfig.Nickname, hostTest.TestConfig.Name);
                 var test = AppContext.Instance.TestFactory.Create(hostTest.TestConfig.Name);
                 var testResult = _ExecuteTestWithoutThrowing(test, hostTest.HostConfig, hostTest.TestConfig);
-                var hostCombinedResult = hostResults.GetOrAdd(hostTest.HostConfig.Nickname, name => true);
-                hostCombinedResult = hostCombinedResult && testResult;
-                hostResults.TryUpdate(hostTest.HostConfig.Nickname, hostCombinedResult, false);
-
-                var hostState = hostCombinedResult ? HostState.UP : HostState.DOWN;
-                var host = _hostRepository.GetOrCreateHost(hostTest.HostConfig.Nickname);
-                if (cancellationToken.IsCancellationRequested)
-                    return;
-
-                if (cancellationToken.IsCancellationRequested)
-                    return;
-
-                if (hostState != host.State)
-                {
-                    host.State = hostState;
-                    _log.DebugFormat("Host <{0}> state changed. New state:{1}", hostTest.HostConfig.Nickname, hostState);
-                    _PublishHostStateEvent(hostTest.HostConfig, hostState);
-                    _hostRepository.UpdateHost(host);
-                }
+                _PublishHostTestResult(hostTest.HostConfig.Nickname, hostTest.TestConfig.Name, testResult);
             });
             _log.Trace("Test run complete");
+        }
+
+        void _PublishHostTestResult(string hostNickname, string testName, bool testResult)
+        {
+            var @event = new HostTestResultEvent
+            {
+                HostNickname = hostNickname,
+                TestName = testName,
+                TestResult = testResult,
+            };
+            AppContext.Instance.EventBus.Publish("All", @event);
         }
 
         bool _ExecuteTestWithoutThrowing(IBusybodyTest test, HostConfig hostConfig, HostTestConfig testConfig)
@@ -82,11 +75,13 @@ namespace Busybody
                 return false;
             }
         }
+    }
 
-        static void _PublishHostStateEvent(HostConfig host, HostState hostState)
-        {
-            AppContext.Instance.EventBus.Publish("All", new HostStateEvent(host.Nickname, hostState));
-        }
+    public class HostTestResultEvent : BusybodyEvent
+    {
+        public string TestName { get; set; }
+        public string HostNickname { get; set; }
+        public bool TestResult { get; set; }
     }
 
     public class TestNotFoundException : Exception

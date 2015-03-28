@@ -10,6 +10,7 @@ namespace BusybodyTests.Fakes
         public IEventBus EventBus { get; private set; }
         public IEmailAlertingInterface EmailAlertingInterface { get; private set; }
         public BusybodyConfig Config { get; set; }
+        public HostRepository HostRepository { get; set; }
         public FakeTestFactory FakeTestFactory { get { return (FakeTestFactory)TestFactory;  } }
         public FakeEmailAlertingInterface FakeEmailAlertingInterface { get { return (FakeEmailAlertingInterface) EmailAlertingInterface; }}
 
@@ -19,6 +20,7 @@ namespace BusybodyTests.Fakes
             TestFactory = new FakeTestFactory();
             EventBus = new EventBus();
             EmailAlertingInterface = new FakeEmailAlertingInterface();
+            HostRepository = new HostRepository();
         }
     }
 }

@@ -66,6 +66,7 @@
     <Compile Include="EventLogger.cs" />
     <Compile Include="EventProcessorRoleService.cs" />
     <Compile Include="Host.cs" />
+    <Compile Include="HostEventHandler.cs" />
     <Compile Include="HostRepository.cs" />
     <Compile Include="Events\HostStateEvent.cs" />
     <Compile Include="HostTestRunnerRoleService.cs" />
