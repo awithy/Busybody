@@ -66,9 +66,14 @@ namespace BusybodyTests
                 .Select(x => (T) x);
         }
 
-        public static void Clear()
+        public void Clear()
         {
             ReceivedEvents.Clear();
+        }
+
+        public void AssertNoEventsReceived<T>() where T : BusybodyEvent
+        {
+            _GetEventsOfType<T>().Should().BeEmpty();
         }
     }
 }

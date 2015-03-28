@@ -23,7 +23,7 @@ namespace BusybodyTests
 
             testContext.TestAppContext.EventBus.RegisterHandler("All", typeof(TestEventHandler));
             testContext.FakePingTest = testContext.TestAppContext.FakeTestFactory.GetTest<FakePingTest>("Ping");
-            TestEventHandler.Clear();
+            testContext.EventHandler.Clear();
             AppContext.Instance = testContext.TestAppContext;
             return testContext;
         }
