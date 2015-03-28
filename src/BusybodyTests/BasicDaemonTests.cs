@@ -121,7 +121,7 @@ namespace BusybodyTests
         [SetUp]
         public void BaseSetUp()
         {
-            _testContext = new TestContext();
+            _testContext = TestContext.Setup();
         }
 
         [TearDown]

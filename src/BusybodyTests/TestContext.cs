@@ -10,23 +10,22 @@ namespace BusybodyTests
         public FakeAppContext TestAppContext { get; set; }
         public BusybodyDaemon Daemon { get; set; }
 
-        public TestContext()
+        public static TestContext Setup()
         {
-            EventHandler = new TestEventHandler();
-            TestAppContext = new FakeAppContext();
-            Daemon = new BusybodyDaemon();
+            var testContext = new TestContext
+            {
+                EventHandler = new TestEventHandler(),
+                Daemon = new BusybodyDaemon(),
+                TestAppContext = new FakeAppContextBuilder()
+                    .WithBasicConfiguration()
+                    .Build(),
+            };
 
-            TestAppContext = new FakeAppContextBuilder()
-                .WithBasicConfiguration()
-                .Build();
-
-            TestAppContext.EventBus.RegisterHandler("All", typeof(TestEventHandler));
-
-            FakePingTest = TestAppContext.FakeTestFactory.GetTest<FakePingTest>("Ping");
-
+            testContext.TestAppContext.EventBus.RegisterHandler("All", typeof(TestEventHandler));
+            testContext.FakePingTest = testContext.TestAppContext.FakeTestFactory.GetTest<FakePingTest>("Ping");
             TestEventHandler.Clear();
-
-            AppContext.Instance = TestAppContext;
+            AppContext.Instance = testContext.TestAppContext;
+            return testContext;
         }
     }
 }
