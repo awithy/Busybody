@@ -77,13 +77,6 @@ namespace Busybody
         }
     }
 
-    public class HostTestResultEvent : BusybodyEvent
-    {
-        public string TestName { get; set; }
-        public string HostNickname { get; set; }
-        public bool TestResult { get; set; }
-    }
-
     public class TestNotFoundException : Exception
     {
         public TestNotFoundException(string name) : base(string.Format("Test {0} not found.", name))

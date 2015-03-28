@@ -69,6 +69,7 @@
     <Compile Include="HostEventHandler.cs" />
     <Compile Include="HostRepository.cs" />
     <Compile Include="Events\HostStateEvent.cs" />
+    <Compile Include="Events\HostTestResultEvent.cs" />
     <Compile Include="HostTestRunnerRoleService.cs" />
     <Compile Include="IHandle.cs" />
     <Compile Include="LogSetup.cs" />
