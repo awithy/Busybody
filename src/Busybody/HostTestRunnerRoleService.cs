@@ -9,7 +9,6 @@ namespace Busybody
     public class HostTestRunnerRoleService : PollerBase
     {
         readonly Logger _log = new Logger(typeof(HostTestRunnerRoleService));
-        readonly HostRepository _hostRepository = new HostRepository();
 
         public override string Name
         {

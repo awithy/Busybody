@@ -14,11 +14,6 @@ namespace Busybody
         static DateTime LastSend = DateTime.MinValue;
         public void Alert(EmailAlert emailAlert)
         {
-            if (AppContext.Instance.Config.EmailAlertConfiguration == null)
-            {
-                _log.Debug("E-Mail alerting not configured.");
-                return;
-            }
             _log.DebugFormat("Alerting email subject:" + emailAlert.Subject);
             if ((DateTime.Now - LastSend) < TimeSpan.FromMinutes(5)) //TODO: change to messages sent in last 15
                 return;

@@ -24,13 +24,18 @@ namespace Busybody
         {
             _log.Trace("Starting polling thread");
 
+            _StartPollingTaskLoop();
+
+            _log.Trace("Polling thread started");
+        }
+
+        void _StartPollingTaskLoop()
+        {
             var task = new Task(() => _Poll(_cancellationTokenSource.Token), _cancellationTokenSource.Token, TaskCreationOptions.None);
             task.ContinueWith(t => Task.Delay(Period)
                 .ContinueWith(u => _StartPolling()));
 
             task.Start();
-
-            _log.Trace("Polling thread started");
         }
 
         void _Poll(CancellationToken cancellationToken)

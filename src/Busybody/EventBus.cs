@@ -41,6 +41,7 @@ namespace Busybody
             DispatchPending(CancellationToken.None);
         }
 
+        //This could use a bit of clean up
         public void DispatchPending(CancellationToken cancellationToken)
         {
             _log.Trace("Dispatching events");
@@ -81,14 +82,26 @@ namespace Busybody
                             if(handlerMethod.HandlerRegistration.InstanceMode == InstanceMode.Singleton)
                                 _instanceCache.Add(handlerMethod.Type.Name, instance);
 
-                            try
+                            var tries = 0;
+                            while (true)
                             {
-                                handlerMethod.Method.Invoke(instance, new object[] {@event});
-                            }
-                            catch (Exception ex)
-                            {
-                                _log.ErrorFormat(ex, "Error handling event of type " + @event.GetType().Name + " by event handler " + handlerMethod.Type.Name);
-                                Thread.Sleep(TimeSpan.FromMinutes(5));
+                                try
+                                {
+                                    handlerMethod.Method.Invoke(instance, new object[] {@event});
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    tries++;
+                                    if (tries >= 5)
+                                    {
+                                        _log.ErrorFormat(ex, "Error handling event of type " + @event.GetType().Name + " by event handler " + handlerMethod.Type.Name);
+                                        break;
+                                    }
+                                    _log.WarnFormat("Error handling event of type " + @event.GetType().Name + " by event handler " + handlerMethod.Type.Name);
+                                    _log.Debug(ex.ToString());
+                                    Thread.Sleep(TimeSpan.FromSeconds(15));
+                                }
                             }
                         }
                     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Busybody.Config;
 using Busybody.Events;
 using BusybodyTests.Helpers;
 using FluentAssertions;
@@ -42,6 +43,7 @@ namespace BusybodyTests
             _testContext.FakePingTest.StubResult(false);
             _testContext.Daemon.Start();
             _testContext.FakePingTest.WaitForNumberOfExecutions(1);
+            _testContext.TestAppContext.Config.EmailAlertConfiguration = new EmailAlertConfiguration {Host = "host", FromAddress = "a@a.com", Password = "password", Port = 123, ToEmailAddress = "b@b.com"};
             _emailReceived = _testContext.TestAppContext.FakeEmailAlertingInterface.WaitForEmails(1);
         }
 
