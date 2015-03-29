@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 
 namespace Busybody
@@ -116,16 +115,7 @@ namespace Busybody
                     return l;
                 });
         }
-
-        public class HandlerMethod
-        {
-            Type HandlerType { get; set; }
-            Type EventType { get; set; }
-            MethodInfo MethodInfo { get; set; }
-            InstanceMode InstanceMode { get; set; }
-        }
     }
-
 
     public class HandlerRegistration
     {
