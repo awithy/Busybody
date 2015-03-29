@@ -14,7 +14,7 @@ Busybody is written in C# .NET 4.5.
 
 ## Capabilities ##
 
-Almost none.  It will just run a simple ping test on a number of hosts and write state changes to file.
+Not much yet.  It will just run a ping test on a number of hosts and e-mail alerts on host state changes.
 
 
 ## Building ##
@@ -39,6 +39,7 @@ Uninstalling:
 
 Verbose console logging: `-v`
 
+Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 
 
 ## Tests ##

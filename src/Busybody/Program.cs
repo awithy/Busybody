@@ -14,6 +14,7 @@ namespace Busybody
         //TODO: Figure out how to run with ReSharper shadow-copy DLLs
         //TODO: More rich status from tests than boolean
         //TODO: Configure long running tests
+        //TODO: E-mail report of activity
 
         static Logger _log = new Logger(typeof(Program));
         static bool _verboseLogging;
