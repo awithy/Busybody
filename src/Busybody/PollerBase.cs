@@ -83,11 +83,4 @@ namespace Busybody
         {
         }
     }
-
-    public class FailedWaitingForStopException : Exception
-    {
-        public FailedWaitingForStopException(string name) : base(string.Format("Role service {0} failed waiting to stop.", name))
-        {
-        }
-    }
 }
