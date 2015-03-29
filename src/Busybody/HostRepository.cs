@@ -15,5 +15,10 @@ namespace Busybody
         {
             Hosts.AddOrUpdate(host.Name, n => host, (n, existingHost) => host);
         }
+
+        public bool Exists(string hostNickname)
+        {
+            return Hosts.ContainsKey(hostNickname);
+        }
     }
 }

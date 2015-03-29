@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,7 +11,7 @@ namespace BusybodyTests.Helpers
 {
     public class TestEventHandler : IHandle<HostStateEvent>, IHandle<HostTestResultEvent>
     {
-        public static List<BusybodyEvent> ReceivedEvents = new List<BusybodyEvent>();
+        public static BlockingCollection<BusybodyEvent> ReceivedEvents = new BlockingCollection<BusybodyEvent>();
 
         public void Handle(HostStateEvent @event)
         {
@@ -68,7 +69,7 @@ namespace BusybodyTests.Helpers
 
         public void Clear()
         {
-            ReceivedEvents.Clear();
+            ReceivedEvents = new BlockingCollection<BusybodyEvent>();
         }
 
         public void AssertNoEventsReceived<T>() where T : BusybodyEvent
