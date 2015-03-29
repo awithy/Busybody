@@ -7,7 +7,7 @@ namespace Busybody
     public abstract class PollerBase
     {
         readonly Logger _log = new Logger(typeof(PollerBase));
-        CancellationTokenSource _cancellationTokenSource;
+        readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         public abstract string Name { get; }
 
@@ -24,36 +24,23 @@ namespace Busybody
         {
             _log.Trace("Starting polling thread");
 
-            //This is a bit of a mess
-            _cancellationTokenSource = new CancellationTokenSource();
-            var task = Task.Factory.StartNew(() => _Poll(_cancellationTokenSource.Token).Wait(),
-                _cancellationTokenSource.Token,
-                TaskCreationOptions.None,
-                TaskScheduler.Default);
-            var delayTask = task.ContinueWith(t => Task.Delay(Period),
-                _cancellationTokenSource.Token,
-                TaskContinuationOptions.NotOnFaulted,
-                TaskScheduler.Default);
-            delayTask.ContinueWith(t =>
-            {
-                t.Wait();
-                _StartPolling();
-            },
-            _cancellationTokenSource.Token,
-            TaskContinuationOptions.NotOnFaulted,
-            TaskScheduler.Default);
+            var task = new Task(() => _Poll(_cancellationTokenSource.Token), _cancellationTokenSource.Token, TaskCreationOptions.None);
+            task.ContinueWith(t => Task.Delay(Period)
+                .ContinueWith(u => _StartPolling()));
+
+            task.Start();
 
             _log.Trace("Polling thread started");
         }
 
-        async Task _Poll(CancellationToken cancellationToken)
+        void _Poll(CancellationToken cancellationToken)
         {
             try
             {
                 _log.Trace("PollerBase _Poll");
                 try
                 {
-                    await _OnPoll(cancellationToken);
+                    _OnPoll(cancellationToken);
                 }
                 catch (Exception ex)
                 {
@@ -65,7 +52,7 @@ namespace Busybody
             }
         }
 
-        protected abstract Task _OnPoll(CancellationToken cancellationToken);
+        protected abstract void _OnPoll(CancellationToken cancellationToken);
 
         protected virtual void _OnStarted()
         {

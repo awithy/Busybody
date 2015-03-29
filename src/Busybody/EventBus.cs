@@ -10,7 +10,8 @@ namespace Busybody
     {
         void Publish(string eventStreamName, BusybodyEvent @event);
         void DispatchPending();
-        void RegisterHandler(string streamName, Type handlerType);
+        void DispatchPending(CancellationToken cancellationToken);
+        void RegisterHandler(string streamName, Type handlerType, InstanceMode instanceMode = InstanceMode.PerCall);
     }
 
     public class EventBus : IEventBus
@@ -36,45 +37,51 @@ namespace Busybody
 
         public void DispatchPending()
         {
-            _log.Trace("Dispatching events");
+            DispatchPending(CancellationToken.None);
+        }
 
-            Dictionary<string, List<BusybodyEvent>> pendingCopy;
+        public void DispatchPending(CancellationToken cancellationToken)
+        {
+            _log.Info("Dispatching events");
+
+            Dictionary<string, List<BusybodyEvent>> pendingEvents;
             lock (_pendingSyncLock)
             {
-                pendingCopy = _pendingEvents;
+                pendingEvents = _pendingEvents;
                 _pendingEvents = new Dictionary<string, List<BusybodyEvent>>();
             }
 
             lock (_dispatchLock)
             {
-                foreach (var streamName in pendingCopy.Keys)
+                foreach (var streamName in pendingEvents.Keys)
                 {
-                    if (_handlerRegistrations.ContainsKey(streamName))
+                    if (!_handlerRegistrations.ContainsKey(streamName)) 
+                        continue;
+
+                    if (!pendingEvents.ContainsKey(streamName))
+                        continue;
+
+                    var handlers = _handlerRegistrations[streamName];
+
+                    var eventsInStream = pendingEvents[streamName];
+                    foreach (var @event in eventsInStream)
                     {
-                        var handlers = _handlerRegistrations[streamName];
+                        var handlerMethods = handlers.Select(x =>
+                            new {Type = x.HandlerType, Method = x.HandlerType.GetMethod("Handle", new[] {@event.GetType()})})
+                            .Where(x => x.Method != null)
+                            .ToArray();
 
-                        if (!pendingCopy.ContainsKey(streamName))
-                            continue;
-                        var eventsInStream1 = pendingCopy[streamName];
-                        foreach (var @event in eventsInStream1)
+                        foreach (var handlerMethod in handlerMethods)
                         {
-                            var handlerMethods = handlers.Select(x =>
-                                new {Type = x.HandlerType, Method = x.HandlerType.GetMethod("Handle", new[] {@event.GetType()})})
-                                .Where(x => x.Method != null)
-                                .ToArray();
-
-                            foreach (var handlerMethod in handlerMethods)
+                            var instance = Activator.CreateInstance(handlerMethod.Type);
+                            try
                             {
-                                var instance = Activator.CreateInstance(handlerMethod.Type);
-                                try
-                                {
-                                    handlerMethod.Method.Invoke(instance, new object[] {@event});
-                                }
-                                catch (Exception ex)
-                                {
-                                    _log.ErrorFormat(ex, "Error handling event of type " + @event.GetType().Name + " by event handler " + handlerMethod.Type.Name);
-                                    Thread.Sleep(TimeSpan.FromMinutes(5));
-                                }
+                                handlerMethod.Method.Invoke(instance, new object[] {@event});
+                            }
+                            catch (Exception ex)
+                            {
+                                _log.ErrorFormat(ex, "Error handling event of type " + @event.GetType().Name + " by event handler " + handlerMethod.Type.Name);
+                                Thread.Sleep(TimeSpan.FromMinutes(5));
                             }
                         }
                     }
@@ -84,12 +91,13 @@ namespace Busybody
             _log.Trace("Dispatching events complete");
         }
 
-        public void RegisterHandler(string streamName, Type handlerType)
+        public void RegisterHandler(string streamName, Type handlerType, InstanceMode instanceMode = InstanceMode.PerCall)
         {
             var registration = new HandlerRegistration
             {
                 StreamName = streamName,
                 HandlerType = handlerType,
+                InstanceMode = instanceMode,
             };
 
             _handlerRegistrations.AddOrUpdate(streamName, 
@@ -106,6 +114,7 @@ namespace Busybody
     {
         public string StreamName { get; set; }
         public Type HandlerType { get; set; }
+        public InstanceMode InstanceMode { get; set; }
     }
 
     public class BusybodyEvent

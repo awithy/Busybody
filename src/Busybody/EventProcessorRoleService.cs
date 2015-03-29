@@ -16,9 +16,9 @@ namespace Busybody
             get { return TimeSpan.FromMilliseconds(1000); }
         }
 
-        protected override Task _OnPoll(CancellationToken cancellationToken)
+        protected override void _OnPoll(CancellationToken cancellationToken)
         {
-            return Task.Run(() => AppContext.Instance.EventBus.DispatchPending(), cancellationToken);
+            AppContext.Instance.EventBus.DispatchPending(cancellationToken);
         }
     }
 }

@@ -72,6 +72,7 @@
     <Compile Include="Events\HostTestResultEvent.cs" />
     <Compile Include="HostTestRunnerRoleService.cs" />
     <Compile Include="IHandle.cs" />
+    <Compile Include="InstanceMode.cs" />
     <Compile Include="LogSetup.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="PollerBase.cs" />

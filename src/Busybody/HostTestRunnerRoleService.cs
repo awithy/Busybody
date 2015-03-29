@@ -21,9 +21,9 @@ namespace Busybody
             get { return TimeSpan.FromSeconds(AppContext.Instance.Config.PollingInterval); }
         }
 
-        protected override Task _OnPoll(CancellationToken cancellationToken)
+        protected override void _OnPoll(CancellationToken cancellationToken)
         {
-            return Task.Run(() => _RunHostTests(cancellationToken), cancellationToken);
+            _RunHostTests(cancellationToken);
         }
 
         void _RunHostTests(CancellationToken cancellationToken)

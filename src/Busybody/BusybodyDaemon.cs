@@ -10,7 +10,7 @@ namespace Busybody
 
         public void Start()
         {
-            AppContext.Instance.EventBus.RegisterHandler("All", typeof (AlertingEventHandler));
+            AppContext.Instance.EventBus.RegisterHandler("All", typeof (AlertingEventHandler), InstanceMode.Singleton);
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (HostEventHandler));
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (EventLogger));
 
