@@ -33,7 +33,7 @@ namespace Busybody
         {
             var task = new Task(() => _Poll(_cancellationTokenSource.Token), _cancellationTokenSource.Token, TaskCreationOptions.None);
             task.ContinueWith(t => Task.Delay(Period)
-                .ContinueWith(u => _StartPolling()));
+                .ContinueWith(u => _StartPollingTaskLoop()));
 
             task.Start();
         }
