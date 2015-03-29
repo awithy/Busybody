@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace Busybody
@@ -21,6 +22,7 @@ namespace Busybody
         Dictionary<string, List<BusybodyEvent>> _pendingEvents = new Dictionary<string, List<BusybodyEvent>>(); 
 
         ConcurrentDictionary<string, List<HandlerRegistration>> _handlerRegistrations = new ConcurrentDictionary<string, List<HandlerRegistration>>();
+        Dictionary<string, object> _instanceCache = new Dictionary<string, object>();
 
         static object _dispatchLock = new object();
 
@@ -42,7 +44,7 @@ namespace Busybody
 
         public void DispatchPending(CancellationToken cancellationToken)
         {
-            _log.Info("Dispatching events");
+            _log.Trace("Dispatching events");
 
             Dictionary<string, List<BusybodyEvent>> pendingEvents;
             lock (_pendingSyncLock)
@@ -67,13 +69,19 @@ namespace Busybody
                     foreach (var @event in eventsInStream)
                     {
                         var handlerMethods = handlers.Select(x =>
-                            new {Type = x.HandlerType, Method = x.HandlerType.GetMethod("Handle", new[] {@event.GetType()})})
+                            new {HandlerRegistration = x, Type = x.HandlerType, Method = x.HandlerType.GetMethod("Handle", new[] {@event.GetType()})})
                             .Where(x => x.Method != null)
                             .ToArray();
 
                         foreach (var handlerMethod in handlerMethods)
                         {
-                            var instance = Activator.CreateInstance(handlerMethod.Type);
+                            var instance = _instanceCache.ContainsKey(handlerMethod.Type.Name)
+                                ? _instanceCache[handlerMethod.Type.Name]
+                                : Activator.CreateInstance(handlerMethod.Type);
+
+                            if(handlerMethod.HandlerRegistration.InstanceMode == InstanceMode.Singleton)
+                                _instanceCache.Add(handlerMethod.Type.Name, instance);
+
                             try
                             {
                                 handlerMethod.Method.Invoke(instance, new object[] {@event});
@@ -108,7 +116,16 @@ namespace Busybody
                     return l;
                 });
         }
+
+        public class HandlerMethod
+        {
+            Type HandlerType { get; set; }
+            Type EventType { get; set; }
+            MethodInfo MethodInfo { get; set; }
+            InstanceMode InstanceMode { get; set; }
+        }
     }
+
 
     public class HandlerRegistration
     {
