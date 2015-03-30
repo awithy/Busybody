@@ -67,7 +67,7 @@ namespace Busybody
             }
             catch (Exception ex)
             {
-                _log.ErrorFormat(ex, string.Format("Exception of type {0} thrown during test execution", ex.GetType().Name));
+                new ErrorHandler().Error(ex, string.Format("Exception of type {0} thrown during test execution", ex.GetType().Name));
                 return false;
             }
         }

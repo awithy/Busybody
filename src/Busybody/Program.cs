@@ -7,7 +7,6 @@ namespace Busybody
 {
     class Program
     {
-        //TODO: Error handling/reporting/alerting
         //TODO: Busybody process memory monitoring
         //TODO: Report on average ping latency
         //TODO: Time limit each test to some maximum allowable level then abort
@@ -24,22 +23,6 @@ namespace Busybody
         {
             try
             {
-                _Main();
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Fatal last chance exception");                
-                Console.WriteLine(ex.ToString());
-                Environment.FailFast("Fatal last chance exception " + ex);
-            }
-            return -1;
-        }
-
-        static void _Main()
-        {
-            try
-            {
                 var serviceHost = _CreateHost();
                 _ReadConfigAndSetupAppContext();
                 Directory.CreateDirectory(CommonPaths.BusybodyData());
@@ -47,15 +30,12 @@ namespace Busybody
                 _log.Info("Starting Busybody v0.1");
                 _HandleUnhandledExceptions();
                 serviceHost.Run();
+                return 0;
             }
             catch (Exception ex)
             {
-                var errorMessage = string.Format("Failing fast due to unexpected exception of type: {0}.  Detail: {1}", ex.GetType().Name, ex);
-                if (_log != null)
-                    _log.Critical(errorMessage, ex);
-                else
-                    Console.WriteLine(errorMessage);
-                Environment.FailFast(errorMessage);
+                new ErrorHandler().CriticalFailFast(ex, "Failing fast due to unexpected exception of type: {0}", ex.GetType().Name);
+                return -1;
             }
         }
 
@@ -121,12 +101,10 @@ namespace Busybody
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
-                var detail = "";
+                Exception ex = null;
                 if (args != null && args.ExceptionObject != null)
-                    detail = args.ExceptionObject.ToString();
-                if(_log != null)
-                    _log.CriticalFormat(null, "Unhandled critical {0} occurred.  Detail:{1}", args.ExceptionObject.GetType().Name, detail);
-                Environment.FailFast("Failing fast due to exception of type: " + args.ExceptionObject.GetType().Name  + "  Detail:" + detail);
+                    ex = (Exception)args.ExceptionObject;
+                new ErrorHandler().CriticalFailFast(ex, "Failing fast due to exception of type: {0}", ex.GetType().Name);
             };
         }
     }

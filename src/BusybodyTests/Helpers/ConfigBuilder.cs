@@ -6,7 +6,7 @@ namespace BusybodyTests.Helpers
 {
     public class ConfigBuilder
     {
-        int _pollingInterval;
+        int _pollingInterval = 1;
         public List<HostConfig> Hosts { get; set;  }
 
         public ConfigBuilder()

@@ -8,6 +8,7 @@ namespace Busybody
     {
         readonly Logger _log = new Logger(typeof(PollerBase));
         readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        Timer _timer;
 
         public abstract string Name { get; }
 
@@ -24,28 +25,19 @@ namespace Busybody
         {
             _log.Trace("Starting polling thread");
 
-            _StartPollingTaskLoop();
+            _timer = new Timer(_Callback, null, TimeSpan.Zero, Period);
 
             _log.Trace("Polling thread started");
         }
 
-        void _StartPollingTaskLoop()
-        {
-            var task = new Task(() => _Poll(_cancellationTokenSource.Token), _cancellationTokenSource.Token, TaskCreationOptions.None);
-            task.ContinueWith(t => Task.Delay(Period)
-                .ContinueWith(u => _StartPollingTaskLoop()));
-
-            task.Start();
-        }
-
-        void _Poll(CancellationToken cancellationToken)
+        void _Callback(object state)
         {
             try
             {
                 _log.Trace("PollerBase _Poll");
                 try
                 {
-                    _OnPoll(cancellationToken);
+                    _OnPoll(_cancellationTokenSource.Token);
                 }
                 catch (Exception ex)
                 {
@@ -67,6 +59,7 @@ namespace Busybody
         {
             _log.Debug("Stopping " + Name);
             _OnStopping();
+            _timer.Dispose();
             _cancellationTokenSource.Cancel();
             _log.Debug(Name + " stopped");
         }

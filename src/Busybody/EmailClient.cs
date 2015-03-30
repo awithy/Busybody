@@ -45,10 +45,9 @@ namespace Busybody
                     smtp.Send(message);
                     _logger.DebugFormat("Error alert email sent to {0}.", toAddress);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    var errorMessage = string.Format("Failed to send error alert email to {0}.", toAddress);
-                    _logger.Error(errorMessage, e);
+                    new ErrorHandler().Error(ex, "Failed to send error alert email to {0}.", toAddress);
                 }
             }
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -66,12 +65,11 @@ namespace Busybody
             Error(string.Format(message, formatObjects), exception);
         }
 
-        public void Error(string message, Exception exception)
+        public void Error(string message, Exception exception = null)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("ERROR: " + message);
-            sb.AppendLine("Details: " + exception);
-            _log.Error(sb.ToString());
+            _log.Error(message);
+            if(exception != null)
+                _log.Debug(exception.ToString());
         }
 
         public void CriticalFormat(Exception exception, string message, params object[] formatObjects)
@@ -79,12 +77,11 @@ namespace Busybody
             Critical(string.Format(message, formatObjects), exception);
         }
 
-        public void Critical(string message, Exception exception)
+        public void Critical(string message, Exception exception = null)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("CRITICAL: " + message);
-            sb.AppendLine("Details: " + exception);
-            _log.Logger.Log(_sourceType, Level.Critical, sb.ToString(), null);
+            _log.Logger.Log(_sourceType, Level.Critical, message, null);
+            if(exception != null)
+                _log.Debug(exception.ToString());
         }
     }
 

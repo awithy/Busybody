@@ -98,7 +98,6 @@ Note: Polling interval is in seconds.
 ## Immediate To-Do ##
 
 1. Write simple static html status page
-1. Error handling/reporting/alerting
 1. HTTP/HTTPS test
 1. OpenVPN test
 1. SSH test

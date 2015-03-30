@@ -79,8 +79,11 @@ namespace Busybody
                                 ? _instanceCache[handlerMethod.Type.Name]
                                 : Activator.CreateInstance(handlerMethod.Type);
 
-                            if(handlerMethod.HandlerRegistration.InstanceMode == InstanceMode.Singleton)
-                                _instanceCache.Add(handlerMethod.Type.Name, instance);
+                            if (!_instanceCache.ContainsKey(handlerMethod.Type.Name))
+                            {
+                                if (handlerMethod.HandlerRegistration.InstanceMode == InstanceMode.Singleton)
+                                    _instanceCache.Add(handlerMethod.Type.Name, instance);
+                            }
 
                             var tries = 0;
                             while (true)
@@ -95,7 +98,7 @@ namespace Busybody
                                     tries++;
                                     if (tries >= 5)
                                     {
-                                        _log.ErrorFormat(ex, "Error handling event of type " + @event.GetType().Name + " by event handler " + handlerMethod.Type.Name);
+                                        new ErrorHandler().Error(ex, "Error handling event of type " + @event.GetType().Name + " by event handler " + handlerMethod.Type.Name);
                                         break;
                                     }
                                     _log.WarnFormat("Error handling event of type " + @event.GetType().Name + " by event handler " + handlerMethod.Type.Name);
