@@ -7,6 +7,7 @@ namespace Busybody
 {
     class Program
     {
+        //TODO: Figure out memory leak
         //TODO: Busybody process memory monitoring
         //TODO: Report on average ping latency
         //TODO: Time limit each test to some maximum allowable level then abort
