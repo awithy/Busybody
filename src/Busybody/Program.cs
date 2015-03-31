@@ -7,7 +7,6 @@ namespace Busybody
 {
     class Program
     {
-        //TODO: Figure out memory leak
         //TODO: Busybody process memory monitoring
         //TODO: Report on average ping latency
         //TODO: Time limit each test to some maximum allowable level then abort
@@ -15,6 +14,7 @@ namespace Busybody
         //TODO: More rich status from tests than boolean
         //TODO: Configure long running tests
         //TODO: E-mail report of activity
+		//TODO: Role Service health reporting/alerting
 
         static Logger _log = new Logger(typeof(Program));
         static bool _verboseLogging;
