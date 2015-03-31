@@ -55,6 +55,7 @@
     <Compile Include="AlertingEventHandler.cs" />
     <Compile Include="AppContext.cs" />
     <Compile Include="BusybodyDaemon.cs" />
+    <Compile Include="Events\BusybodyEvent.cs" />
     <Compile Include="CommonPaths.cs" />
     <Compile Include="Config\BusybodyConfig.cs" />
     <Compile Include="Config\HostConfig.cs" />

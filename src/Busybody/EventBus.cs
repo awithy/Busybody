@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
+using Busybody.Events;
 
 namespace Busybody
 {
@@ -28,6 +29,9 @@ namespace Busybody
         public void Publish(string eventStreamName, BusybodyEvent @event)
         {
             _log.Trace("Publishing event " + @event);
+            if (@event.Timestamp == DateTime.MinValue)
+                @event.Timestamp = DateTime.UtcNow;
+
             lock (_pendingSyncLock)
             {
                 if (!_pendingEvents.ContainsKey(eventStreamName))
@@ -41,7 +45,7 @@ namespace Busybody
             DispatchPending(CancellationToken.None);
         }
 
-        //This could use a bit of clean up
+        //This could use a BIT of clean up
         public void DispatchPending(CancellationToken cancellationToken)
         {
             _log.Trace("Dispatching events");
@@ -138,13 +142,5 @@ namespace Busybody
         public string StreamName { get; set; }
         public Type HandlerType { get; set; }
         public InstanceMode InstanceMode { get; set; }
-    }
-
-    public class BusybodyEvent
-    {
-        public virtual string ToLogString()
-        {
-            return "<Not Used>";
-        }
     }
 }

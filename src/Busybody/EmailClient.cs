@@ -21,7 +21,7 @@ namespace Busybody
         public void Send(Email email)
         {
             var toAddress = email.ToAddresses.First();
-            _logger.DebugFormat("Sending error alert email to {0}.", toAddress);
+            _logger.DebugFormat("Sending e-mail to {0}.", toAddress);
             
             var fromMailAddress = new MailAddress(_configuration.FromAddress, "Busybody");
 
@@ -43,11 +43,11 @@ namespace Busybody
                 try
                 {
                     smtp.Send(message);
-                    _logger.DebugFormat("Error alert email sent to {0}.", toAddress);
+                    _logger.DebugFormat("E-mail sent to {0}.", toAddress);
                 }
                 catch (Exception ex)
                 {
-                    new ErrorHandler().Error(ex, "Failed to send error alert email to {0}.", toAddress);
+                    new ErrorHandler().Error(ex, "Failed to send e-mail to {0}.", toAddress);
                 }
             }
         }

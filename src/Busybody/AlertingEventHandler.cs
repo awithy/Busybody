@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Busybody.Events;
 
@@ -7,23 +8,41 @@ namespace Busybody
     public class AlertingEventHandler : IHandle<HostStateEvent>, IHandle<SystemErrorEvent>
     {
         readonly Logger _log = new Logger(typeof(AlertingEventHandler));
-        DateTime _lastHostAlert = DateTime.MinValue;
-        DateTime _lastSystemErrorAlert = DateTime.MinValue;
+        readonly List<string> _downHosts = new List<string>();
+        readonly List<DateTime> _recentAlertTimestamps = new List<DateTime>();
 
         public void Handle(HostStateEvent @event)
         {
             _log.Debug("Handling HostStateEvent");
+
+            if (_downHosts.Contains(@event.HostNickname))
+            {
+                if (@event.State == HostState.UP)
+                    _downHosts.Remove(@event.HostNickname);
+            }
+            else
+            {
+                if (@event.State == HostState.UP)
+                {
+                    _log.Debug("Skipping sending alert for UP host when host not down.");
+                    return;
+                }
+                _downHosts.Add(@event.HostNickname);
+            }
+
             if (!_ValidEmailConfig())
             {
                 _log.Debug("Invalid alerting e-mail configuration");
                 return;
             }
-            if ((DateTime.Now - _lastHostAlert) < TimeSpan.FromMinutes(5))
+
+            if (_ShouldThrottle(@event.Timestamp))
             {
                 _log.Debug("Throttling alerts to no more than 1 every 5 minutes");
                 return;
             }
-            _lastHostAlert = DateTime.Now;
+
+            _recentAlertTimestamps.Add(@event.Timestamp);
 
             var emailInterface = AppContext.Instance.EmailAlertingInterface;
             var subject = string.Format("BB ALERT: {0}:{1}", @event.HostNickname, @event.State);
@@ -31,21 +50,34 @@ namespace Busybody
             emailInterface.Alert(new EmailAlert {Subject = subject, Body = message});
         }
 
+        bool _ShouldThrottle(DateTime newestEvent)
+        {
+            Predicate<DateTime> pred = dt =>
+            {
+                var minutes = (newestEvent - dt).TotalMinutes;
+                return minutes > 30;
+            };
+            _recentAlertTimestamps.RemoveAll(pred);
+            return (_recentAlertTimestamps.Count >= 10);
+        }
+
         public void Handle(SystemErrorEvent @event)
         {
             _log.Debug("Handling SystemErrorEvent");
+
             if (!_ValidEmailConfig())
             {
                 _log.Debug("Invalid alerting e-mail configuration");
                 return;
             }
-            if ((DateTime.Now - _lastSystemErrorAlert) < TimeSpan.FromMinutes(5))
+
+            if (_ShouldThrottle(@event.Timestamp))
             {
                 _log.Debug("Throttling alerts to no more than 1 every 5 minutes");
                 return;
             }
 
-            _lastSystemErrorAlert = DateTime.Now;
+            _recentAlertTimestamps.Add(@event.Timestamp);
 
             var emailInterface = AppContext.Instance.EmailAlertingInterface;
             var subject = "BB ALERT: System Error";
