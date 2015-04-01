@@ -9,7 +9,6 @@ namespace Busybody
     {
         //TODO: Busybody process memory monitoring
         //TODO: Report on average ping latency
-        //TODO: Time limit each test to some maximum allowable level then abort
         //TODO: E-mail report of activity
 
         static Logger _log = new Logger(typeof(Program));

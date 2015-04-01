@@ -42,7 +42,7 @@ namespace Busybody
 
                 _log.TraceFormat("Running test {0} on host {1}", hostTest.HostConfig.Nickname, hostTest.TestConfig.Name);
                 var test = AppContext.Instance.TestFactory.Create(hostTest.TestConfig.Name);
-                var testResult = _ExecuteTestErrorOnException(test, hostTest.HostConfig, hostTest.TestConfig);
+                var testResult = _ExecuteTestErrorOnExceptionOrTimeout(test, hostTest.HostConfig, hostTest.TestConfig);
                 _PublishHostTestResult(hostTest.HostConfig.Nickname, hostTest.TestConfig.Name, testResult);
             });
             _log.Trace("Test run complete");
@@ -59,6 +59,25 @@ namespace Busybody
             AppContext.Instance.EventBus.Publish("All", @event);
         }
 
+        bool _ExecuteTestErrorOnExceptionOrTimeout(IBusybodyTest test, HostConfig hostConfig, HostTestConfig testConfig)
+        {
+            try
+            {
+                var result = false;
+                var thread = new Thread(() => result = _ExecuteTestErrorOnException(test, hostConfig, testConfig));
+                thread.Start();
+                var timedOut = thread.Join(TimeSpan.FromMinutes(5));
+                if (!timedOut)
+                    throw new HostTestTimedOutException(testConfig.Name);
+                return result;
+            }
+            catch (HostTestTimedOutException ex)
+            {
+                new ErrorHandler().Error(ex, string.Format("Exception of type {0} thrown during test execution", ex.GetType().Name));
+                return false;
+            }
+        }
+
         bool _ExecuteTestErrorOnException(IBusybodyTest test, HostConfig hostConfig, HostTestConfig testConfig)
         {
             try
@@ -70,6 +89,13 @@ namespace Busybody
                 new ErrorHandler().Error(ex, string.Format("Exception of type {0} thrown during test execution", ex.GetType().Name));
                 return false;
             }
+        }
+    }
+
+    internal class HostTestTimedOutException : Exception
+    {
+        public HostTestTimedOutException(string name) : base("Host test " + name + " timed out while executing and was aborted.")
+        {
         }
     }
 
