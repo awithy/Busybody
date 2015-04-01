@@ -28,10 +28,6 @@ task Clean {
 
 task default -depends UnitTests
 
-task AllTests -depends Compile {
-	exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow }
-}
-
 task Compile -depends Restore, Clean {
 	exec { msbuild /v:m $solutionPath /p:"Configuration=$buildConfiguration;Platform=Any CPU;TrackFileAccess=false" }
 }
@@ -40,12 +36,19 @@ task Restore -depends Clean {
 	exec { & $nuget restore $solutionPath }
 }
 
+task AllTests -depends Compile {
+	exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow }
+	if($lastExitCode -ne 0) { throw; }	#I don't know why I have to do this stupidness.  Something is wrong.
+}
+
 task EndToEndTests -depends Compile -description "NUnit unit tests" {
- exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow "/include=EndToEnd" }
+	exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow "/include=EndToEnd" }
+	if($lastExitCode -ne 0) { throw; }	
 }
 
 task UnitTests -depends Compile -description "NUnit unit tests" {
- exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow "/exclude=LongRunning" }
+	exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow "/exclude=LongRunning" }
+	if($lastExitCode -ne 0) { throw; }
 }
 
 task Package -depends Compile, Clean {

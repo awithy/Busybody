@@ -17,7 +17,7 @@ if($args.Length -eq 0) {
 }
  
 #invoke-psake $buildFile $taskList $framework $docs $parameters $properties $initialization $nologo
-invoke-psake "$args"
+invoke-psake $args
 
 if($psake.build_success -eq $false) {
     exit 1
