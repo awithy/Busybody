@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Busybody
 {
-    public abstract class PollerBase
+    public abstract class RoleServiceBase
     {
-        readonly Logger _log = new Logger(typeof(PollerBase));
+        readonly Logger _log = new Logger(typeof(RoleServiceBase));
         readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         Timer _timer;
 
@@ -17,6 +17,7 @@ namespace Busybody
         public void Start()
         {
             _log.Debug("Starting " + Name);
+            AppContext.Instance.SystemMonitorData.RoleServiceStarted(Name);
             _StartPolling();
             _OnStarted();
         }
@@ -34,14 +35,24 @@ namespace Busybody
         {
             try
             {
-                _log.Trace("PollerBase _Poll");
+                _log.Trace("RoleServiceBase _Poll");
                 try
                 {
+                    var pollStartTime = DateTime.UtcNow;
+
                     _OnPoll(_cancellationTokenSource.Token);
+
+                    var pollStopTime = DateTime.UtcNow;
+                    var duration = pollStopTime - pollStartTime;
+                    AppContext.Instance.SystemMonitorData.SubmitRoleServiceStatus(Name, pollStopTime, duration);
                 }
                 catch (Exception ex)
                 {
-                    _log.ErrorFormat(ex, "Unexpected {0} exception thrown while polling in {1}", ex.GetType().Name, Name);
+                    var errorMessage = string.Format("Unexpected {0} exception thrown while polling in {1}", ex.GetType().Name, Name);
+                    _log.Error(errorMessage, ex);
+                    _log.Debug("Cooling off from unknown error.");
+                    AppContext.Instance.SystemMonitorData.SubmitError(Name, errorMessage);
+                    Thread.Sleep(TimeSpan.FromMinutes(1));
                 }
             }
             catch (TaskCanceledException)

@@ -7,6 +7,7 @@ namespace Busybody
         readonly Logger _log = new Logger(typeof(BusybodyDaemon));
         readonly HostTestRunnerRoleService _hostTestRunnerRoleService = new HostTestRunnerRoleService();
         readonly EventProcessorRoleService _eventProcessorRoleService = new EventProcessorRoleService();
+        readonly SystemMonitorRoleService _systemMonitorRoleService = new SystemMonitorRoleService();
 
         public void Start()
         {
@@ -14,6 +15,7 @@ namespace Busybody
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (HostEventHandler));
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (EventLogger));
 
+            _systemMonitorRoleService.Start();
             _hostTestRunnerRoleService.Start();
             _eventProcessorRoleService.Start();
 
@@ -27,6 +29,7 @@ namespace Busybody
 
             _hostTestRunnerRoleService.Stop();
             _eventProcessorRoleService.Stop();
+            _systemMonitorRoleService.Stop();
 
             _log.Info("Stopped");
         }

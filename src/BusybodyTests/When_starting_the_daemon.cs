@@ -30,6 +30,12 @@ namespace BusybodyTests
         {
             _testContext.FakePingTest.ExecutedCount.Should().BeGreaterOrEqualTo(2);
         }
+
+        [Test]
+        public void It_should_start_the_system_monitor_role_service()
+        {
+            _testContext.TestAppContext.FakeSystemStatusWriter.LastStatusText.Should().Contain("Busybody");
+        }
     }
 
     [TestFixture]

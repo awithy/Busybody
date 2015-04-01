@@ -6,7 +6,7 @@ using Busybody.Config;
 
 namespace Busybody
 {
-    public class HostTestRunnerRoleService : PollerBase
+    public class HostTestRunnerRoleService : RoleServiceBase
     {
         readonly Logger _log = new Logger(typeof(HostTestRunnerRoleService));
 

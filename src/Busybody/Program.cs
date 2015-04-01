@@ -14,7 +14,6 @@ namespace Busybody
         //TODO: More rich status from tests than boolean
         //TODO: Configure long running tests
         //TODO: E-mail report of activity
-		//TODO: Role Service health reporting/alerting
 
         static Logger _log = new Logger(typeof(Program));
         static bool _verboseLogging;

@@ -77,8 +77,9 @@
     <Compile Include="InstanceMode.cs" />
     <Compile Include="LogSetup.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="PollerBase.cs" />
+    <Compile Include="RoleServiceBase.cs" />
     <Compile Include="Events\SystemErrorEvent.cs" />
+    <Compile Include="SystemMonitorRoleService.cs" />
     <Compile Include="Tests\PingTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

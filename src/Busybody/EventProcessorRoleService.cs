@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace Busybody
 {
-    public class EventProcessorRoleService : PollerBase
+    public class EventProcessorRoleService : RoleServiceBase
     {
         public override string Name
         {
