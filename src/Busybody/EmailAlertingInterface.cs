@@ -11,14 +11,9 @@ namespace Busybody
     public class EmailAlertingInterface : IEmailAlertingInterface
     {
         readonly Logger _log = new Logger(typeof (EmailAlertingInterface));
-        static DateTime LastSend = DateTime.MinValue;
         public void Alert(EmailAlert emailAlert)
         {
-            _log.DebugFormat("Alerting email subject:" + emailAlert.Subject);
-            if ((DateTime.Now - LastSend) < TimeSpan.FromMinutes(5)) //TODO: change to messages sent in last 15
-                return;
-            LastSend = DateTime.Now;
-
+            _log.TraceFormat("Sending e-mail alert with subject:{0}",  emailAlert.Subject);
             var emailConfig = AppContext.Instance.Config.EmailAlertConfiguration;
             emailConfig.Host = emailConfig.Host;
             emailConfig.FromAddress = emailConfig.FromAddress;
@@ -27,6 +22,7 @@ namespace Busybody
             var emailClient = new EmailClient(emailConfig);
             IEnumerable<string> toAddresses = new []{emailConfig.ToEmailAddress};
             var email = new Email(toAddresses, emailAlert.Subject, emailAlert.Body);
+            _log.InfoFormat("Sending e-mail alert to:{0} with subject:{1}",  emailConfig.ToEmailAddress, emailAlert.Subject);
             emailClient.Send(email);
         }
     }

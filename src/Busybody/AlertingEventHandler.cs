@@ -13,7 +13,7 @@ namespace Busybody
 
         public void Handle(HostStateEvent @event)
         {
-            _log.Debug("Handling HostStateEvent");
+            _log.Trace("Handling HostStateEvent");
 
             if (_downHosts.Contains(@event.HostNickname))
             {
