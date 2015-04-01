@@ -10,9 +10,6 @@ namespace Busybody
         //TODO: Busybody process memory monitoring
         //TODO: Report on average ping latency
         //TODO: Time limit each test to some maximum allowable level then abort
-        //TODO: Figure out how to run with ReSharper shadow-copy DLLs
-        //TODO: More rich status from tests than boolean
-        //TODO: Configure long running tests
         //TODO: E-mail report of activity
 
         static Logger _log = new Logger(typeof(Program));
