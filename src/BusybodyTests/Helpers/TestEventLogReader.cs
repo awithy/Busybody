@@ -23,7 +23,6 @@ namespace BusybodyTests.Helpers
         //This crap is just tempoary until I do a proper event store or alerting
         public bool WaitForEvent(string text)
         {
-            //Thread.Sleep(30000);
             var startTime = DateTime.Now;
             while (true)
             {
