@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 namespace BusybodyTests
 {
+    [Category("LongRunning")]
     [TestFixture]
     public class When_starting_the_daemon_and_running_host_tests : Daemon_up_down_tests
     {
@@ -38,6 +39,7 @@ namespace BusybodyTests
         }
     }
 
+    [Category("LongRunning")]
     [TestFixture]
     public class When_starting_the_daemon_and_test_is_configured_and_host_is_down : Daemon_up_down_tests
     {
@@ -67,6 +69,7 @@ namespace BusybodyTests
         }
     }
 
+    [Category("LongRunning")]
     [TestFixture]
     public class When_starting_the_daemon_and_test_is_configured_and_host_is_up : Daemon_up_down_tests
     {
@@ -86,6 +89,7 @@ namespace BusybodyTests
         }
     }
 
+    [Category("LongRunning")]
     [TestFixture]
     public class When_starting_the_daemon_and_test_is_configured_and_host_is_down_then_up : Daemon_up_down_tests
     {
@@ -105,6 +109,7 @@ namespace BusybodyTests
         }
     }
 
+    [Category("LongRunning")]
     [TestFixture]
     public class When_starting_the_daemon_and_test_is_configured_and_host_is_up_and_polled_multiple_times : Daemon_up_down_tests
     {

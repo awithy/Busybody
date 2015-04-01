@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace BusybodyTests
 {
-    [Category("EndToEnd")]
+    [Category("LongRunning")]
     [TestFixture]
     public class Given_an_alive_host_ping_test_when_console_started
     {
@@ -57,7 +57,7 @@ namespace BusybodyTests
         }
     }
 
-    [Category("EndToEnd")]
+    [Category("LongRunning")]
     [TestFixture]
     public class When_starting_the_console_with_a_config_file_location_parameter
     {

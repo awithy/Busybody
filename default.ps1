@@ -28,7 +28,8 @@ task Clean {
 
 task default -depends UnitTests
 
-task AllTests -depends UnitTest, Compile {
+task AllTests -depends Compile {
+	exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow }
 }
 
 task Compile -depends Restore, Clean {

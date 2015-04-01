@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace BusybodyTests.TestTests
 {
+    [Category("LongRunning")]
     [TestFixture]
     public class PingTestTests
     {
@@ -36,7 +37,6 @@ namespace BusybodyTests.TestTests
             var result = _PingHost("abcdefghijklmnop");
             result.Should().BeFalse();
         }
-
 
         static bool _PingHost(string hostname)
         {
