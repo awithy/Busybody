@@ -17,6 +17,13 @@ namespace Busybody
     {
         static Logger _log = new Logger(typeof(ErrorHandler));
 
+        public void Error(string message, string detail)
+        {
+            _log.Error(message);
+            _HandleError(message, "Error", null);
+            AppContext.Instance.EventBus.Publish("All", new SystemErrorEvent(message, detail));
+        }
+
         public void Error(Exception ex, string messageFormat, params object[] formatObjects)
         {
             Error(ex, string.Format(messageFormat, formatObjects));
@@ -52,18 +59,19 @@ namespace Busybody
             Environment.FailFast(message);
         }
 
-        static void _HandleError(string message, string level, Exception ex)
+        static void _HandleError(string message, string level, Exception ex = null)
         {
             var errorReportContents = _BuildErrorMessage(message, level, ex);
             _WriteErrorReportFile(level, errorReportContents);
         }
 
-        static string _BuildErrorMessage(string message, string level, Exception ex)
+        static string _BuildErrorMessage(string message, string level, Exception ex = null)
         {
             var sb = new StringBuilder();
             sb.AppendLine(string.Format("{0} occurred at:{1}", level, DateTime.Now.ToString("yyyy-MM-dd-HH:mm:ss")));
             sb.AppendLine("Message:" + message);
-            sb.AppendLine("Detail:" + ex);
+            if(ex != null)
+                sb.AppendLine("Detail:" + ex);
             var errorReportContents = sb.ToString();
             return errorReportContents;
         }

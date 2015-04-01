@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,12 +26,18 @@ namespace Busybody
 
         protected override void _OnPoll(CancellationToken cancellationToken)
         {
+            _log.Trace("System Monitor Roll Service");
+            var usedMemory = _GetMemoryAndAlertIfNeeded();
+            var cpuUtilization = _GetCpuAndAlertIfNeeded();
+
             _log.Trace("Writing system status");
             var roleServiceStatuses = AppContext.Instance.SystemMonitorData.GetRoleServiceHealthStatus();
             var sb = new StringBuilder();
             sb.AppendLine("# Busybody System Status #");
             sb.AppendLine();
             sb.AppendLine("Started: " + _systemUptime.ToString("yyyy-MM-dd HH:mm:ss"));
+            sb.AppendLine("CPU: " + cpuUtilization);
+            sb.AppendLine("Memory: " + usedMemory + "MB");
             sb.AppendLine();
             sb.AppendLine("Total Role Services: " + roleServiceStatuses.Count());
             sb.AppendLine("Healthy Role Services: " + roleServiceStatuses.Count(x => x.RoleServiceHealth == RoleServiceHealth.Healthy));
@@ -49,6 +56,34 @@ namespace Busybody
                 sb.AppendLine();
             }
             AppContext.Instance.SystemStatusWriter.Write(sb.ToString());
+        }
+
+        static float _GetCpuAndAlertIfNeeded()
+        {
+            var cpuCounter = new PerformanceCounter
+            {
+                CategoryName = "Processor",
+                CounterName = "% Processor Time",
+                InstanceName = "_Total"
+            };
+            cpuCounter.NextValue();
+            Thread.Sleep(2000);
+            var cpuUtilization = cpuCounter.NextValue();
+            return cpuUtilization;
+        }
+
+        long _GetMemoryAndAlertIfNeeded()
+        {
+            var usedMemory = Process.GetCurrentProcess().PrivateMemorySize64/1024/1024;
+            if (usedMemory > 500)
+            {
+                new ErrorHandler().Error("System memory high", usedMemory + "MB");
+            }
+            else if (usedMemory > 150)
+            {
+                _log.Warn("System memory high: " + usedMemory + "MB");
+            }
+            return usedMemory;
         }
     }
 

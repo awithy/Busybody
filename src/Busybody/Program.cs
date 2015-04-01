@@ -7,7 +7,6 @@ namespace Busybody
 {
     class Program
     {
-        //TODO: Busybody process memory monitoring
         //TODO: Report on average ping latency
         //TODO: E-mail report of activity
 
