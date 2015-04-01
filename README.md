@@ -101,7 +101,6 @@ Note: Polling interval is in seconds.
 1. HTTP/HTTPS test
 1. OpenVPN test
 1. SSH test
-1. Busybody process memory monitoring
 1. Multiple e-mail alerting
 
 
