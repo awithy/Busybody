@@ -22,6 +22,7 @@ List of features:
 - Ping test configurable with number of pings, number of failures, and timeout period
 - JSON based configuration
 - E-mail alerts
+- Run as console app or install as Windows service
 - Configurable number of allowable test failures
 - Alerts on host state changes and system errors
 - System status text report
