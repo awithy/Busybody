@@ -25,11 +25,11 @@ namespace Busybody.Tests
                     var result = new Ping().Send(host.Hostname);
                     if(result != null)
                         success = result.Status == IPStatus.Success && result.RoundtripTime <= parameters.TimeoutMs;
-                    _log.TraceFormat("Ping result received. Status:{0}, RoundtripMs:{1}", result.Status, result.RoundtripTime);
+                    _log.TraceFormat("Ping result received for host {0}. Status:{1}, RoundtripMs:{2}", host.Nickname, result.Status, result.RoundtripTime);
                 }
                 catch (PingException ex)
                 {
-                    _log.TraceFormat("PingException occurred while pinging host with detail: " + ex);
+                    _log.TraceFormat("PingException occurred while pinging host {0} with detail: {1}", host.Nickname, ex);
                 }
 
                 if (!success)
