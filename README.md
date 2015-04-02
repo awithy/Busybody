@@ -16,7 +16,7 @@ Busybody is written in C# .NET 4.5.
 
 Not much yet.  It will just run a ping test on a number of hosts and e-mail alerts on host state changes.
 
-List of features:
+Features:
 
 - Periodically ping test any number of hosts
 - Ping test configurable with number of pings, number of failures, and timeout period
