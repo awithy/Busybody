@@ -16,6 +16,19 @@ Busybody is written in C# .NET 4.5.
 
 Not much yet.  It will just run a ping test on a number of hosts and e-mail alerts on host state changes.
 
+List of features:
+
+- Periodically ping test any number of hosts
+- Ping test configurable with number of pings, number of failures, and timeout period
+- JSON based configuration
+- E-mail alerts
+- Configurable number of allowable test failures
+- Alerts on host state changes and system errors
+- System status text report
+- Service host CPU and Busybody process RAM usage monitoring
+- Info, debug, and trace level text logging
+- Text file error reports
+
 
 ## Building ##
 
@@ -80,6 +93,7 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 			"Tests":[
 			{
 				"Name":"Ping",
+				"AllowableFailures":0,
 				"Parameters":{
 					"TimeoutMs":"500",
 					"Count":"5",
@@ -92,7 +106,11 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 
 
 
-Note: Polling interval is in seconds.
+Notes: 
+
+- Polling interval is in seconds
+- Test AllowableFailures property is option
+- Ping test parameters are optional
 
 
 ## Immediate To-Do ##

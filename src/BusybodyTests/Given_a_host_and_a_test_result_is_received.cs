@@ -1,4 +1,5 @@
-﻿using Busybody;
+﻿using System.Linq;
+using Busybody;
 using Busybody.Events;
 using BusybodyTests.Helpers;
 using NUnit.Framework;
@@ -120,6 +121,28 @@ namespace BusybodyTests
     }
 
     [TestFixture]
+    public class Given_a_host_test_configured_with_multiple_allowable_failures_and_a_single_failure_occurs : HostTestResultBase
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            _testContext.TestAppContext.Config.Hosts.First().Tests.First().AllowableFailures = 1;
+            _hostEventHandler.Handle(_successfulTestResult);
+            _ClearEvents();
+
+            //Do
+            _hostEventHandler.Handle(_failedTestResult);
+            _testContext.TestAppContext.EventBus.DispatchPending();
+        }
+
+        [Test]
+        public void It_should_not_raisE_an_event()
+        {
+            _testContext.EventHandler.AssertNoEventsReceived<HostStateEvent>();
+        }
+    }
+
+    [TestFixture]
     public class HostTestResultBase
     {
         protected BusybodyTestContext _testContext;
@@ -132,13 +155,13 @@ namespace BusybodyTests
         {
             _successfulTestResult = new HostTestResultEvent
             {
-                HostNickname = "Nickname",
+                HostNickname = "Local Machine",
                 TestName = "Ping",
                 TestResult = true,
             };
             _failedTestResult = new HostTestResultEvent
             {
-                HostNickname = "Nickname",
+                HostNickname = "Local Machine",
                 TestName = "Ping",
                 TestResult = false,
             };

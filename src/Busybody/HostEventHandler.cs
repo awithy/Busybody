@@ -1,4 +1,5 @@
-﻿using Busybody.Events;
+﻿using System.Linq;
+using Busybody.Events;
 
 namespace Busybody
 {
@@ -10,18 +11,10 @@ namespace Busybody
         {
             _log.Trace("HostTestResultEvent received for host:" + @event.HostNickname + ", result:" + @event.TestResult);
             var hostRepository = AppContext.Instance.HostRepository;
-            var isInitialState = !hostRepository.Exists(@event.HostNickname);
-            var host = hostRepository.GetOrCreateHost(@event.HostNickname);
-            var newState = @event.TestResult ? HostState.UP : HostState.DOWN;
-            if (host.State != newState)
-            {
-                _log.DebugFormat("Host <{0}> state changed. New state:{1}", host.Name, newState);
-                host.State = newState;
-                hostRepository.UpdateHost(host);
-                var hostStateEvent = new HostStateEvent(host.Name, newState, isInitialState);
-                AppContext.Instance.EventBus.Publish("All", hostStateEvent);
-                _log.Trace("HostStateChanged event published");
-            }
+            var hostConfig = AppContext.Instance.Config.Hosts.Single(x => x.Nickname == @event.HostNickname);
+            var host = hostRepository.GetOrCreateHost(hostConfig);
+            host.HandleTestResult(@event);
+            hostRepository.UpdateHost(host);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Busybody.Config;
 
 namespace Busybody
 {
@@ -6,9 +7,9 @@ namespace Busybody
     {
         public ConcurrentDictionary<string, Host> Hosts = new ConcurrentDictionary<string, Host>();
 
-        public Host GetOrCreateHost(string name)
+        public Host GetOrCreateHost(HostConfig hostConfig)
         {
-            return Hosts.AddOrUpdate(name, n => new Host {Name = n}, (n, existingHost) => existingHost);
+            return Hosts.AddOrUpdate(hostConfig.Nickname, n => new Host(hostConfig), (n, existingHost) => existingHost);
         }
 
         public void UpdateHost(Host host)
