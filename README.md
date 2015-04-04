@@ -126,6 +126,7 @@ Notes:
 ## Ideas ##
 
 - Weekly e-mailed status reports
+- PowerShell based test specification
 - Local event store with history
 - Web portal for status
 - Web portal for configuration
