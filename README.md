@@ -19,7 +19,7 @@ Not much yet.  It will just run a ping test on a number of hosts and e-mail aler
 Features:
 
 - Periodically ping test any number of hosts
-- Ping test configurable with number of pings, number of failures, and timeout period
+- Ping test configurable by number of pings, number of failures, and timeout period
 - JSON based configuration
 - E-mail alerts
 - Run as console app or install as Windows service
