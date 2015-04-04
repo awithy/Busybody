@@ -125,6 +125,7 @@ Notes:
 
 ## Ideas ##
 
+- Weekly e-mailed status reports
 - Local event store with history
 - Web portal for status
 - Web portal for configuration
