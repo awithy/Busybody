@@ -46,6 +46,11 @@ task EndToEndTests -depends Compile -description "NUnit unit tests" {
 	if($lastExitCode -ne 0) { throw; }	
 }
 
+task TestMe -depends Compile -description "NUnit unit tests" {
+	exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow "/include=TestMe" }
+	if($lastExitCode -ne 0) { throw; }	
+}
+
 task UnitTests -depends Compile -description "NUnit unit tests" {
 	exec{ & $nunit $nunitTestsNUnitFile /nologo /config:$buildConfiguration /noshadow "/exclude=LongRunning" }
 	if($lastExitCode -ne 0) { throw; }

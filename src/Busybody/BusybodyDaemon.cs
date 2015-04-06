@@ -8,6 +8,7 @@ namespace Busybody
         readonly HostTestRunnerRoleService _hostTestRunnerRoleService = new HostTestRunnerRoleService();
         readonly EventProcessorRoleService _eventProcessorRoleService = new EventProcessorRoleService();
         readonly SystemMonitorRoleService _systemMonitorRoleService = new SystemMonitorRoleService();
+        readonly BusybodyWebServer _busybodyWebServer = new BusybodyWebServer();
 
         public void Start()
         {
@@ -18,6 +19,7 @@ namespace Busybody
             _systemMonitorRoleService.Start();
             _hostTestRunnerRoleService.Start();
             _eventProcessorRoleService.Start();
+            _busybodyWebServer.Start();
 
             AppContext.Instance.EventBus.Publish("All", new StartupCompleteEvent());
             _log.Info("Busybody started");
@@ -27,6 +29,7 @@ namespace Busybody
         {
             _log.Info("Stopping");
 
+            _busybodyWebServer.Stop();
             _hostTestRunnerRoleService.Stop();
             _eventProcessorRoleService.Stop();
             _systemMonitorRoleService.Stop();
