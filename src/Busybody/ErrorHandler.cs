@@ -49,7 +49,9 @@ namespace Busybody
 
         public void CriticalFailFast(Exception ex, string messageFormat, params object[] formatObjects)
         {
-            Error(ex, string.Format(messageFormat, formatObjects));
+            var message = string.Format(messageFormat, formatObjects);
+            Error(ex, message);
+            Environment.FailFast(message);
         }
 
         public void CriticalFailFast(Exception ex, string message)

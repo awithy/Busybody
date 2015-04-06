@@ -26,7 +26,6 @@ namespace BusybodyTests
             _testContext.FakePingTest.ExecutedCount.Should().BeGreaterOrEqualTo(1);
         }
 
-        [Category("TestMe")]
         [Test]
         public void It_should_rerun_the_tests_after_pausing()
         {

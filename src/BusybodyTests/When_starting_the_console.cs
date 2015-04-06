@@ -34,6 +34,7 @@ namespace BusybodyTests
             }
         }
 
+        [Category("TestMe")]
         [Test]
         public void The_log_file_should_not_contain_any_errors()
         {

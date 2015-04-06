@@ -29,6 +29,8 @@ namespace Busybody
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
+                Console.ReadKey();
                 new ErrorHandler().CriticalFailFast(ex, "Failing fast due to unexpected exception of type: {0}", ex.GetType().Name);
                 return -1;
             }

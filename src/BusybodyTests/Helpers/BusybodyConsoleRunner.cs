@@ -14,6 +14,8 @@ namespace BusybodyTests.Helpers
         public BusybodyConsoleRunner(string workingDirectory, string configFilePath = null)
         {
             var assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            if (!File.Exists("Busybody.exe.config"))
+                File.Copy("BusybodyTests.dll.config", "Busybody.exe.config");
             var consoleExePath = Path.Combine(assemblyDirectory, "Busybody.exe");
             _processStartInfo = new ProcessStartInfo(consoleExePath) { WorkingDirectory = workingDirectory, };
             if (configFilePath != null)
