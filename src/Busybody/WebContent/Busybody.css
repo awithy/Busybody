@@ -1,0 +1,28 @@
+﻿body
+{
+}
+.tableData {
+    border-left: solid 1px #D8C3C3;
+    border-top: solid 1px #D8C3C3;
+}
+.tableData tr {
+}
+.tableData td, .tableData th {
+    border-right: solid 1px #D8C3C3;
+    border-bottom: solid 1px #D8C3C3;
+    text-align: left;
+    padding: 5px;
+}
+.tableData td {
+}
+.tableData th {
+    background-color: #FAFAFA;
+    padding: 7px 5px;
+    border-bottom-color: #9C9C9C;
+}
+.odd {
+    background-color: #f3f3f3;
+}
+.even {
+    background-color: #ffffff;
+}

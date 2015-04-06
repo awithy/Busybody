@@ -1,4 +1,6 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using Busybody.Config;
 
 namespace Busybody
@@ -20,6 +22,11 @@ namespace Busybody
         public bool Exists(string hostNickname)
         {
             return Hosts.ContainsKey(hostNickname);
+        }
+
+        public IEnumerable<Host> GetHosts()
+        {
+            return Hosts.Values.ToArray();
         }
     }
 }

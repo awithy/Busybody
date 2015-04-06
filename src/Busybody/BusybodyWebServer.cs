@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Web.Http;
 using Microsoft.Owin;
@@ -44,6 +46,26 @@ namespace Busybody
             });
 
             app.UseWebApi(config);
+        }
+    }
+
+    public class HostModel
+    {
+        public string Name { get; set; }
+        public string State { get; set; }
+    }
+
+    public class HostsController : ApiController
+    {
+        public IEnumerable<HostModel> GetHosts()
+        {
+            var hosts = AppContext.Instance.HostRepository.GetHosts();
+            var hostModels = hosts.Select(x => new HostModel
+            {
+                Name = x.Name,
+                State = x.State.ToString(),
+            });
+            return hostModels;
         }
     }
 }
