@@ -1,6 +1,11 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Web.Http;
+using Microsoft.Owin;
+using Microsoft.Owin.FileSystems;
 using Microsoft.Owin.Hosting;
+using Microsoft.Owin.StaticFiles;
 using Owin;
 
 namespace Busybody
@@ -31,12 +36,12 @@ namespace Busybody
                 defaults: new { id = RouteParameter.Optional } 
             );
 
-            //var webContentPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "webcontent");
-            //app.UseFileServer(new FileServerOptions()
-            //{
-                //RequestPath = PathString.Empty,
-                //FileSystem = new PhysicalFileSystem(webContentPath),
-            //});
+            var webContentPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "webcontent");
+            app.UseFileServer(new FileServerOptions()
+            {
+                RequestPath = PathString.Empty,
+                FileSystem = new PhysicalFileSystem(webContentPath),
+            });
 
             app.UseWebApi(config);
         }
