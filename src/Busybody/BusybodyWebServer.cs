@@ -53,6 +53,8 @@ namespace Busybody
     {
         public string Name { get; set; }
         public string State { get; set; }
+        public string LastUpdate { get; set; }
+        public string LastStateChange { get; set; }
     }
 
     public class HostsController : ApiController
@@ -64,6 +66,8 @@ namespace Busybody
             {
                 Name = x.Name,
                 State = x.State.ToString(),
+                LastUpdate = x.LastUpdate.ToString("yyyy-MM-dd HH:mm:ss"),
+                LastStateChange = x.LastStateChange.ToString("yyyy-MM-dd HH:mm:ss"),
             });
             return hostModels;
         }

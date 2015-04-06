@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Busybody.Config;
 using Busybody.Events;
@@ -11,6 +12,8 @@ namespace Busybody
         public HostState State { get; set; }
         public Dictionary<string,HostTest> Tests { get; set; }
         public bool IsInitialState { get; set; }
+        public DateTime LastUpdate { get; set; }
+        public DateTime LastStateChange { get; set; }
 
         public Host(HostConfig hostConfig)
         {
@@ -36,7 +39,10 @@ namespace Busybody
                 var hostStateEvent = new HostStateEvent(Name, State, IsInitialState);
                 AppContext.Instance.EventBus.Publish("All", hostStateEvent);
                 IsInitialState = false;
+                LastStateChange = @event.Timestamp;
             }
+
+            LastUpdate = @event.Timestamp;
         }
     }
 

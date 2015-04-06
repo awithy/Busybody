@@ -1,28 +1,14 @@
 ﻿body
 {
 }
-.tableData {
-    border-left: solid 1px #D8C3C3;
-    border-top: solid 1px #D8C3C3;
+table, th , td {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
 }
-.tableData tr {
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
 }
-.tableData td, .tableData th {
-    border-right: solid 1px #D8C3C3;
-    border-bottom: solid 1px #D8C3C3;
-    text-align: left;
-    padding: 5px;
-}
-.tableData td {
-}
-.tableData th {
-    background-color: #FAFAFA;
-    padding: 7px 5px;
-    border-bottom-color: #9C9C9C;
-}
-.odd {
-    background-color: #f3f3f3;
-}
-.even {
-    background-color: #ffffff;
+table tr:nth-child(even) {
+  background-color: #ffffff;
 }
