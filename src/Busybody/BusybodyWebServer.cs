@@ -124,18 +124,25 @@ namespace Busybody
     {
         public HttpResponseMessage DoLogin(LoginModel loginModel)
         {
-            var context = Request.GetOwinContext();
-            var authenticationProperties = new AuthenticationProperties()
+            if (loginModel.Username == "admin" && loginModel.Password == "busybody")
             {
-                IsPersistent = true,
-                ExpiresUtc = DateTime.UtcNow.AddDays(1),
-            };
-            context.Authentication.SignIn(authenticationProperties,
-                new ClaimsIdentity(new[] {new Claim(ClaimsIdentity.DefaultNameClaimType, loginModel.Username)}, DefaultAuthenticationTypes.ApplicationCookie));
-            context.Response.Headers.Add("Location", new []{ "/" });
-            CookieManager.Guid = Guid.NewGuid().ToString("N");
-            context.Response.Cookies.Append("authcookie", CookieManager.Guid);
-            return Request.CreateResponse(HttpStatusCode.Found);
+                var context = Request.GetOwinContext();
+                var authenticationProperties = new AuthenticationProperties()
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddDays(1),
+                };
+                context.Authentication.SignIn(authenticationProperties,
+                    new ClaimsIdentity(new[] {new Claim(ClaimsIdentity.DefaultNameClaimType, loginModel.Username)}, DefaultAuthenticationTypes.ApplicationCookie));
+                context.Response.Headers.Add("Location", new[] {"/"});
+                CookieManager.Guid = Guid.NewGuid().ToString("N");
+                context.Response.Cookies.Append("authcookie", CookieManager.Guid);
+                return Request.CreateResponse(HttpStatusCode.Found);
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, new HttpError("Bad username or password"));
+            }
         }
 
         public HttpResponseMessage GetLogin()
