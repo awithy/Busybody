@@ -79,6 +79,7 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
     {
 		"DataDirectory":"C:\\Busybody\\Data",
 		"PollingInterval":300,
+		"ListeningUrls":"http://localhost:9000;http://hostname:9000"
 		"EmailAlertConfiguration":
 		{
 			"FromAddress":"adrian@adrianwithy.com",
@@ -112,7 +113,7 @@ Notes:
 - Polling interval is in seconds
 - Test AllowableFailures property is option
 - Ping test parameters are optional
-
+- If no ListeningUrls specified, defaults to http://localhost:9000
 
 ## Immediate To-Do ##
 

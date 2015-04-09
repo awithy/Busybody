@@ -25,7 +25,10 @@ namespace Busybody
 
         public void Start()
         {
-            _webApp = WebApp.Start<BusybodyWebApp>(new StartOptions("http://localhost:9000"));
+            var startOptions = new StartOptions();
+            foreach(var listeningUrl in AppContext.Instance.Config.GetListeningUrls())
+                startOptions.Urls.Add(listeningUrl);
+            _webApp = WebApp.Start<BusybodyWebApp>(startOptions);
         }
 
         public void Stop()

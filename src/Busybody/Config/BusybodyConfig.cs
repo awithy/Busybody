@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -9,6 +10,7 @@ namespace Busybody.Config
         public int PollingInterval { get; set; }
         public string DataDirectory { get; set; }
         public EmailAlertConfiguration EmailAlertConfiguration { get; set; }
+        public string ListeningUrls { get; set; } 
 
         public List<HostConfig> Hosts;
 
@@ -29,6 +31,13 @@ namespace Busybody.Config
             var config = JsonConvert.DeserializeObject<BusybodyConfig>(configText);
             _SetDefaults(config);
             return config;
+        }
+
+        public IEnumerable<string> GetListeningUrls()
+        {
+            if (ListeningUrls == null)
+                return new[] {"http://localhost:9000"};
+            return ListeningUrls.Split(new []{ ';' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         static void _SetDefaults(BusybodyConfig config)

@@ -34,8 +34,8 @@ namespace Busybody
 
         public static string BusybodyData()
         {
-            if (AppContext.Instance.Config.DataDirectory == null)
-                throw new DataDirectoryNullException();
+            if (AppContext.Instance == null || AppContext.Instance.Config == null)
+                return null;
             return AppContext.Instance.Config.DataDirectory;
         }
 

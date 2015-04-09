@@ -80,11 +80,19 @@ namespace Busybody
 
         static void _WriteErrorReportFile(string level, string errorReportContents)
         {
-            var errorReportDirectory = Path.Combine(CommonPaths.BusybodyData(), "Errors");
-            Directory.CreateDirectory(errorReportDirectory);
-            var fileName = string.Format("{0}-{1}-{2}.log", DateTime.Now.ToString("yyyyMMdd-HHmmss"), level, Guid.NewGuid().ToString("N").Substring(0, 5));
-            var errorReportPath = Path.Combine(errorReportDirectory, fileName);
-            File.WriteAllText(errorReportPath, errorReportContents);
+            if (CommonPaths.BusybodyData() != null)
+            {
+                var errorReportDirectory = Path.Combine(CommonPaths.BusybodyData(), "Errors");
+                Directory.CreateDirectory(errorReportDirectory);
+                var fileName = string.Format("{0}-{1}-{2}.log", DateTime.Now.ToString("yyyyMMdd-HHmmss"), level, Guid.NewGuid().ToString("N").Substring(0, 5));
+                var errorReportPath = Path.Combine(errorReportDirectory, fileName);
+                File.WriteAllText(errorReportPath, errorReportContents);
+            }
+            else
+            {
+                Console.WriteLine("Trying to write error report and config not available");
+                Console.WriteLine(errorReportContents);
+            }
         }
     }
 }
