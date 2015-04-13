@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 using System.Web.Http;
+using Busybody.Events;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.FileSystems;
@@ -80,6 +81,7 @@ namespace Busybody
     {
         public string Name { get; set; }
         public string State { get; set; }
+        public bool IsDanger { get; set; }
         public string LastUpdate { get; set; }
         public string LastStateChange { get; set; }
     }
@@ -96,6 +98,7 @@ namespace Busybody
                 State = x.State.ToString(),
                 LastUpdate = x.LastUpdate.ToString("o"),
                 LastStateChange = x.LastStateChange.ToString("o"),
+                IsDanger = x.State == HostState.DOWN,
             });
             return hostModels;
         }

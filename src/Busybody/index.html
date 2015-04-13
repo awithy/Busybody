@@ -26,9 +26,9 @@
                     <th>Last State Change</th>
                     <th>Last Update</th>
                 </tr>
-                <tr ng-repeat="host in hosts | orderBy:'Name':reverse">
+                <tr ng-repeat="host in hosts | orderBy:'Name':reverse" ng-class="{'danger':host.IsDanger}">
                     <td>{{host.Name}}</td>
-                    <td>{{host.State}}</td>
+                    <td ng-model="host.IsDanger">{{host.State}}</td>
                     <td>{{host.LastStateChange | fromNow}}</td>
                     <td>{{host.LastUpdate | fromNow}}</td>
                 </tr>
