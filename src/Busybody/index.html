@@ -4,6 +4,7 @@
         <script src="/WebContent/angular.min.js"></script>
         <script src="WebContent/jquery.min.js"></script>
         <script src="/WebContent/bootstrap.min.js"></script>
+        <script src="/WebContent/moment.js"></script>
         <link rel="stylesheet" href="/WebContent/bootstrap.min.css"> 
         <link rel="stylesheet" href="/WebContent/bootstrap-theme.min.css"> 
         <!--<link type="text/css" rel="stylesheet" href="/Busybody.css"/>-->
@@ -28,8 +29,8 @@
                 <tr ng-repeat="host in hosts | orderBy:'Name':reverse">
                     <td>{{host.Name}}</td>
                     <td>{{host.State}}</td>
-                    <td>{{host.LastStateChange}}</td>
-                    <td>{{host.LastUpdate}}</td>
+                    <td>{{host.LastStateChange | fromNow}}</td>
+                    <td>{{host.LastUpdate | fromNow}}</td>
                 </tr>
             </table>
         </div>

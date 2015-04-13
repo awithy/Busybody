@@ -94,8 +94,8 @@ namespace Busybody
             {
                 Name = x.Name,
                 State = x.State.ToString(),
-                LastUpdate = x.LastUpdate.ToString("yyyy-MM-dd HH:mm:ss"),
-                LastStateChange = x.LastStateChange.ToString("yyyy-MM-dd HH:mm:ss"),
+                LastUpdate = x.LastUpdate.ToString("o"),
+                LastStateChange = x.LastStateChange.ToString("o"),
             });
             return hostModels;
         }

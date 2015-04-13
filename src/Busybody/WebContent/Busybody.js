@@ -6,3 +6,9 @@ app.controller('testController', function($scope, $http) {
         $scope.hosts = response;
     });
 });
+
+angular.module('testApp').filter('fromNow', function() {
+  return function(date) {
+    return moment(date).fromNow();
+  }
+});
