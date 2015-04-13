@@ -24,7 +24,7 @@
                     <th>Last State Change</th>
                     <th>Last Update</th>
                 </tr>
-                <tr ng-repeat="host in hosts">
+                <tr ng-repeat="host in hosts | orderBy:'Name':reverse">
                     <td>{{host.Name}}</td>
                     <td>{{host.State}}</td>
                     <td>{{host.LastStateChange}}</td>
