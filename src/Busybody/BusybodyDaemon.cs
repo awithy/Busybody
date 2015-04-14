@@ -16,6 +16,7 @@ namespace Busybody
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (AlertingEventHandler), InstanceMode.Singleton);
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (HostEventHandler));
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (EventLogger));
+            AppContext.Instance.EventBus.RegisterHandler("All", typeof (EventLogRepository));
 
             _systemMonitorRoleService.Start();
             _hostTestRunnerRoleService.Start();

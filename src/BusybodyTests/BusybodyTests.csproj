@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Fakes\FakeSystemStatusWriter.cs" />
     <Compile Include="Given_alert_config_and_host_state_changed.cs" />
+    <Compile Include="When_getting_events_from_event_log.cs" />
     <Compile Include="When_starting_the_console.cs" />
     <Compile Include="When_starting_the_daemon.cs" />
     <Compile Include="Helpers\BusybodyConsoleRunner.cs" />

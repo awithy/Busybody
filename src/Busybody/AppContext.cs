@@ -2,6 +2,18 @@
 
 namespace Busybody
 {
+    public interface IAppContext
+    {
+        ITestFactory TestFactory { get; }
+        IEventBus EventBus { get; }
+        IEmailAlertingInterface EmailAlertingInterface { get; }
+        ISystemStatusWriter SystemStatusWriter { get; }
+        BusybodyConfig Config { get; set; }
+        HostRepository HostRepository { get; }
+        SystemMonitorData SystemMonitorData { get; }
+        EventLogRepository EventLogRepository { get; set; }
+    }
+
     public class AppContext : IAppContext
     {
         public static IAppContext Instance;
@@ -14,6 +26,7 @@ namespace Busybody
         public IEmailAlertingInterface EmailAlertingInterface { get; set; }
         public HostRepository HostRepository { get; set; }
         public SystemMonitorData SystemMonitorData { get; set; }
+        public EventLogRepository EventLogRepository { get; set; }
 
         public AppContext()
         {
@@ -24,17 +37,7 @@ namespace Busybody
             HostRepository = new HostRepository();
             SystemMonitorData = new SystemMonitorData();
             SystemStatusWriter = new SystemStatusWriter();
+            EventLogRepository = new EventLogRepository();
         }
-    }
-
-    public interface IAppContext
-    {
-        ITestFactory TestFactory { get; }
-        IEventBus EventBus { get; }
-        IEmailAlertingInterface EmailAlertingInterface { get; }
-        ISystemStatusWriter SystemStatusWriter { get; }
-        BusybodyConfig Config { get; set; }
-        HostRepository HostRepository { get; }
-        SystemMonitorData SystemMonitorData { get; }
     }
 }
