@@ -27,6 +27,11 @@ namespace Busybody
             return Path.Combine(BusybodyData(), "Events.log");
         }
 
+        public static string WebContentPath()
+        {
+            return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "webcontent");
+        }
+
         public static string RandomName()
         {
             return DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Guid.NewGuid().ToString("N").Substring(0, 5);

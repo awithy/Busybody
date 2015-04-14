@@ -95,7 +95,8 @@
     <Compile Include="AlertingEventHandler.cs" />
     <Compile Include="AppContext.cs" />
     <Compile Include="BusybodyDaemon.cs" />
-    <Compile Include="BusybodyWebServer.cs" />
+    <Compile Include="WebServer\BusybodyWebApp.cs" />
+    <Compile Include="WebServer\BusybodyWebServer.cs" />
     <Compile Include="Events\BusybodyEvent.cs" />
     <Compile Include="CommonPaths.cs" />
     <Compile Include="Config\BusybodyConfig.cs" />
@@ -127,6 +128,10 @@
     <Compile Include="SharedConstants.cs" />
     <Compile Include="Events\StartupCompleteEvent.cs" />
     <Compile Include="TestFactory.cs" />
+    <Compile Include="WebServer\HomeController.cs" />
+    <Compile Include="WebServer\HostModel.cs" />
+    <Compile Include="WebServer\HostsController.cs" />
+    <Compile Include="WebServer\LoginModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
