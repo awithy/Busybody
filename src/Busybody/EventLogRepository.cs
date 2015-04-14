@@ -14,6 +14,7 @@ namespace Busybody
         {
             _events.Add(new EventModel
             {
+                Timestamp = @event.Timestamp.ToString("o"),
                 EventType = @event.GetType().Name,
                 EventMessage = @event.ToLogString(),
                 IsDanger = @event.State == HostState.DOWN,
@@ -26,6 +27,7 @@ namespace Busybody
         {
             _events.Add(new EventModel
             {
+                Timestamp = @event.Timestamp.ToString("o"),
                 EventType = @event.GetType().Name,
                 EventMessage = @event.ToLogString(),
                 IsDanger = true,

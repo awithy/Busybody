@@ -14,6 +14,7 @@ namespace Busybody.WebServer
 
     public class EventModel
     {
+        public string Timestamp { get; set; }
         public string EventType { get; set; }
         public string EventMessage { get; set; }
         public bool IsDanger { get; set; }

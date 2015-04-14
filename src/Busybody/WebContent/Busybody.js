@@ -1,13 +1,20 @@
-﻿var app = angular.module('testApp', []);
+﻿var app = angular.module('busybodyApp', []);
 
-app.controller('testController', function($scope, $http) {
+app.controller('hostsController', function($scope, $http) {
     $http.get("/hosts")
     .success(function (response) {
         $scope.hosts = response;
     });
 });
 
-angular.module('testApp').filter('fromNow', function() {
+app.controller('eventLogController', function($scope, $http) {
+    $http.get("/eventLog")
+    .success(function (response) {
+        $scope.events = response;
+    });
+});
+
+app.filter('fromNow', function() {
   return function(date) {
     return moment(date).fromNow();
   }
