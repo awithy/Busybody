@@ -1,10 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Web.Http;
 
 namespace Busybody.WebServer
 {
+    [Authorize]
     public class EventLogController : ApiController
+    {
+        public HttpResponseMessage GetEventLog()
+        {
+            return WebServerHelpers.GetPage("eventLog.html");
+        }
+    }
+
+    [Authorize]
+    public class EventLogApiController : ApiController
     {
         public IEnumerable<EventModel> GetEvents()
         {

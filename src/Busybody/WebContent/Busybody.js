@@ -7,8 +7,8 @@ app.controller('hostsController', function($scope, $http) {
     });
 });
 
-app.controller('eventLogController', function($scope, $http) {
-    $http.get("/eventLog")
+app.controller('eventLogApiController', function($scope, $http) {
+    $http.get("/eventLogApi")
     .success(function (response) {
         $scope.events = response;
     });

@@ -1,9 +1,7 @@
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -36,10 +34,7 @@ namespace Busybody.WebServer
 
         public HttpResponseMessage GetLogin()
         {
-            return new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StringContent(File.ReadAllText(Path.Combine(CommonPaths.WebContentPath(), "..", "login.html")), Encoding.UTF8, "text/html"),
-            };
+            return WebServerHelpers.GetPage("login.html");
         }
     }
 }
