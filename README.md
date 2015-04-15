@@ -55,6 +55,8 @@ Verbose console logging: `-v`
 
 Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 
+Specify alternate web root for development: `-w:C:\AnotherDirectory\DevelopmentWebPages`
+
 
 ## Tests ##
 
