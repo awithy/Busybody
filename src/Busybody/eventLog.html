@@ -5,8 +5,8 @@
         <script src="WebContent/jquery.min.js"></script>
         <script src="/WebContent/bootstrap.min.js"></script>
         <script src="/WebContent/moment.js"></script>
-        <link rel="stylesheet" href="/WebContent/bootstrap.min.css"> 
-        <link rel="stylesheet" href="/WebContent/bootstrap-theme.min.css"> 
+        <link rel="stylesheet" href="/WebContent/bootstrap.min.css">
+        <link rel="stylesheet" href="/WebContent/bootstrap-theme.min.css">
         <!--<link type="text/css" rel="stylesheet" href="/Busybody.css"/>-->
         <script src="/WebContent/busybody.js"></script>
         <meta charset="utf-8" />
@@ -14,25 +14,44 @@
         <title>Busybody | Event Log</title>
     </head>
     <body>
-        <div ng-app="busybodyApp" class="container">
-            <div class="page-header">
-                <h1>Busybody</h1>
+        <div class="container" ng-app="busybodyApp">
+            <div class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">Busybody</a>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="home">Home</a></li>
+                            <li class="active"><a href="eventLog">Event Log</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right"></ul>
+                    </div>
+                </div>
             </div>
             <div ng-controller="eventLogApiController">
-                <h3>Event Log</h3>
-                <table class="table table-striped">
-                    <tr>
-                        <th>Timestamp</th>
-                        <th>Event Type</th>
-                        <th>Message</th>
-                    </tr>
-                    <tr ng-repeat="event in events" ng-class="{'danger':event.IsDanger}">
-                        <td>{{event.Timestamp | fromNow}}</td>
-                        <td>{{event.EventType}}</td>
-                        <td>{{event.EventMessage}}</td>
-                    </tr>
-                </table>
-            </div>
+                <div class="page-header">
+                    <h1>Event Log</h1>
+                </div>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Event Type</th>
+                            <th>Message</th>
+                        </tr>
+                        <tr ng-repeat="event in events" ng-class="{'danger':event.IsDanger}">
+                            <td>{{event.Timestamp | fromNow}}</td>
+                            <td>{{event.EventType}}</td>
+                            <td>{{event.EventMessage}}</td>
+                        </tr>
+                    </table>
+                </div>
         </div>
     </body>
 </html>
