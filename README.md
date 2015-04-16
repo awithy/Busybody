@@ -120,6 +120,7 @@ Notes:
 
 ## Immediate To-Do ##
 
+1. Auto-refresh web portal
 1. Add location to hosts
 1. SPA app
 1. Additional information in web portal
