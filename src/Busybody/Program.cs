@@ -7,6 +7,7 @@ namespace Busybody
 {
     class Program
     {
+        //TODO: Fix package not including web content
         //TODO: Report on average ping latency
         //TODO: E-mail report of activity
 
