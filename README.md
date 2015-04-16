@@ -120,7 +120,8 @@ Notes:
 
 ## Immediate To-Do ##
 
-1. Write simple static html status page
+1. SPA app
+1. Additional information in web portal
 1. HTTP/HTTPS test
 1. OpenVPN test
 1. SSH test
@@ -132,7 +133,6 @@ Notes:
 - Weekly e-mailed status reports
 - PowerShell based test specification
 - Local event store with history
-- Web portal for status
 - Web portal for configuration
 - Command line configuration wizard
 - Automated updates
@@ -148,6 +148,10 @@ Notes:
 - Linux core (Mono)
 - Android app
 - Installer
+
+## Misc. Notes ##
+
+- Must be run with admin rights when run from the command line with externally available web server URL (i.e., anything but localhost)
 
 
 ## License ##
