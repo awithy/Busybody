@@ -22,6 +22,7 @@ Features:
 - Ping test configurable by number of pings, number of failures, and timeout period
 - JSON based configuration
 - E-mail alerts
+- Web monitoring portal self-hosted using OWIN
 - Run as console app or install as Windows service
 - Configurable number of allowable test failures
 - Alerts on host state changes and system errors
