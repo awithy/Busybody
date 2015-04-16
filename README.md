@@ -130,6 +130,9 @@ Notes:
 
 ## Ideas ##
 
+- Gulp Gulp
+- Bower
+- Web portal UI testing (Jasmine?, Karma?)
 - Weekly e-mailed status reports
 - PowerShell based test specification
 - Local event store with history
