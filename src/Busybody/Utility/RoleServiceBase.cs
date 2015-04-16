@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Busybody
+namespace Busybody.Utility
 {
     public abstract class RoleServiceBase
     {

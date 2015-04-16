@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Busybody;
+using Busybody.Utility;
 
 namespace BusybodyTests.Fakes
 {

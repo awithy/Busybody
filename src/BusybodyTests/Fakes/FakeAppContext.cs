@@ -1,5 +1,6 @@
 using Busybody;
 using Busybody.Config;
+using Busybody.Utility;
 
 namespace BusybodyTests.Fakes
 {

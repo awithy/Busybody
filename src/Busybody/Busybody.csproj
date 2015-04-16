@@ -103,8 +103,8 @@
     <Compile Include="Config\BusybodyConfig.cs" />
     <Compile Include="Config\HostConfig.cs" />
     <Compile Include="Config\HostTestConfig.cs" />
-    <Compile Include="EmailAlertingInterface.cs" />
-    <Compile Include="EmailClient.cs" />
+    <Compile Include="Utility\EmailAlertingInterface.cs" />
+    <Compile Include="Utility\EmailClient.cs" />
     <Compile Include="Config\EmailAlertConfiguration.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="EventBus.cs" />
@@ -119,8 +119,8 @@
     <Compile Include="IHandle.cs" />
     <Compile Include="InstanceMode.cs" />
     <Compile Include="LogSetup.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="RoleServiceBase.cs" />
+    <Compile Include="Utility\Extensions.cs" />
+    <Compile Include="Utility\RoleServiceBase.cs" />
     <Compile Include="Events\SystemErrorEvent.cs" />
     <Compile Include="SystemMonitorRoleService.cs" />
     <Compile Include="Tests\PingTest.cs" />

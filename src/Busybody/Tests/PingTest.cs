@@ -4,6 +4,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
 using Busybody.Config;
+using Busybody.Utility;
 
 namespace Busybody.Tests
 {
