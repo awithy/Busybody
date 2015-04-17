@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace Busybody.Config
@@ -11,6 +12,7 @@ namespace Busybody.Config
         public string DataDirectory { get; set; }
         public EmailAlertConfiguration EmailAlertConfiguration { get; set; }
         public string ListeningUrls { get; set; } 
+        public string WebRoot { get; set; } 
 
         public List<HostConfig> Hosts;
 
@@ -46,6 +48,8 @@ namespace Busybody.Config
                 config.PollingInterval = 60;
             if (config.DataDirectory == null)
                 config.DataDirectory = Path.Combine(Path.GetTempPath(), "Busybody");
+            if(config.WebRoot == null)
+                config.WebRoot = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         }
     }
 }

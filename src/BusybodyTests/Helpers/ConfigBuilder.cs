@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Busybody.Config;
 
 namespace BusybodyTests.Helpers
@@ -33,6 +34,7 @@ namespace BusybodyTests.Helpers
                 Hosts = Hosts,
                 PollingInterval = _pollingInterval,
                 DataDirectory = Path.Combine(Path.GetTempPath(), "Busybody"),
+                WebRoot = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "..\\..\\..\\BusybodyWebApp"),
             };
         }
     }

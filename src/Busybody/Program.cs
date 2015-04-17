@@ -14,7 +14,6 @@ namespace Busybody
         static Logger _log = new Logger(typeof(Program));
         static bool _verboseLogging;
         static string _configFilePathParameter;
-        static string _webRootOverrideParameter;
 
         static int Main()
         {
@@ -51,14 +50,6 @@ namespace Busybody
                     }
                     configFilePath = _configFilePathParameter;
                 }
-                if (_webRootOverrideParameter != null)
-                {
-                    if (!Directory.Exists(_webRootOverrideParameter))
-                    {
-                        throw new DirectoryNotFoundException(_webRootOverrideParameter);
-                    }
-                    CommonPaths.WebRootOverride = _webRootOverrideParameter;
-                }
 
                 AppContext.Instance.Config = BusybodyConfig.ReadFromFile(configFilePath);
             }
@@ -81,7 +72,6 @@ namespace Busybody
                 x.SetServiceName("Busybody");
                 x.AddCommandLineSwitch("v", verboseLogging => _verboseLogging = verboseLogging);
                 x.AddCommandLineDefinition("c", configFilePathParameter => _configFilePathParameter = configFilePathParameter);
-                x.AddCommandLineDefinition("w", webRootOverrideParameter => _webRootOverrideParameter = webRootOverrideParameter);
 
                 x.Service<BusybodyDaemon>(s =>
                 {

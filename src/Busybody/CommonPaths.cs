@@ -6,8 +6,6 @@ namespace Busybody
 {
     public static class CommonPaths
     {
-        public static string WebRootOverride { get; set; } //Just for debug
-
         public static string CurrentDirectory()
         {
             return Environment.CurrentDirectory;
@@ -31,7 +29,7 @@ namespace Busybody
 
         public static string WebRoot()
         {
-            return WebRootOverride ?? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            return AppContext.Instance.Config.WebRoot ?? Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "WebRoot");
         }
 
         public static string WebContentPath()

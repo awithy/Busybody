@@ -56,8 +56,6 @@ Verbose console logging: `-v`
 
 Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 
-Specify alternate web root for development: `-w:C:\AnotherDirectory\DevelopmentWebPages`
-
 
 ## Tests ##
 
@@ -82,7 +80,7 @@ Specify alternate web root for development: `-w:C:\AnotherDirectory\DevelopmentW
     {
 		"DataDirectory":"C:\\Busybody\\Data",
 		"PollingInterval":300,
-		"ListeningUrls":"http://localhost:9000;http://hostname:9000"
+		"ListeningUrls":"http://localhost:9000;http://hostname:9000",
 		"EmailAlertConfiguration":
 		{
 			"FromAddress":"adrian@adrianwithy.com",
@@ -117,6 +115,7 @@ Notes:
 - Test AllowableFailures property is option
 - Ping test parameters are optional
 - If no ListeningUrls specified, defaults to http://localhost:9000
+- You can use a root level "WebRoot" property to specify an override for the web app - for development
 
 ## Immediate To-Do ##
 
