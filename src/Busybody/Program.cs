@@ -7,6 +7,9 @@ namespace Busybody
 {
     class Program
     {
+        //TODO: Composite views
+        //TODO: Show host name somewhere
+        //TODO: Show service health page
         //TODO: Fix package not including web content
         //TODO: Report on average ping latency
         //TODO: E-mail report of activity
