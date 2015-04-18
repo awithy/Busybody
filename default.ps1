@@ -60,4 +60,5 @@ task Package -depends Compile, Clean {
 	$solutionBuildDir = Join-Path $srcDir "Busybody/bin/$buildConfiguration"
 	mkdir $buildDir
 	copy "$solutionBuildDir/*.*" "$buildDir/" -rec
+	copy "$srcDir/busybodywebapp" "$buildDir/webroot" -rec
 }
