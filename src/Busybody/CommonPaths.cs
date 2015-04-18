@@ -29,7 +29,7 @@ namespace Busybody
 
         public static string WebRoot()
         {
-            return AppContext.Instance.Config.WebRoot ?? Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "WebRoot");
+            return AppContext.Instance.Config.WebRoot;
         }
 
         public static string WebContentPath()

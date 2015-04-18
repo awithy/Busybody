@@ -22,7 +22,7 @@ task ? -description "Helper to display task info" {
 
 task Clean {
 	if(test-path $buildDir) {
-		rmdir $buildDir -rec
+		rmdir $buildDir -for -rec
 	}
 }
 
@@ -57,9 +57,12 @@ task UnitTests -depends Compile -description "NUnit unit tests" {
 }
 
 task Package -depends Compile, Clean {
-	$solutionBuildDir = Join-Path $srcDir "Busybody/bin/$buildConfiguration"
-	mkdir $buildDir
-	copy "$solutionBuildDir/*.*" "$buildDir/" -rec
-	copy "$srcDir/busybodywebapp" "$buildDir/webroot" -rec
-	rm "$buildDir/*.xml"
+    $solutionBuildDir = Join-Path $srcDir "Busybody/bin/$buildConfiguration"
+    mkdir $buildDir
+    copy "$solutionBuildDir/*.*" "$buildDir/" -rec
+    copy "$srcDir/busybodywebapp" "$buildDir/webroot" -rec
+    rm "$buildDir/*.xml"
+    rm "$buildDir/*.swp"
+    rm "$buildDir/busybody.cfg"
+    mv "$buildDir/sample.cfg" "$buildDir/busybody.cfg"
 }

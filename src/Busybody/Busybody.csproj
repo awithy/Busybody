@@ -139,6 +139,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="sample.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="busybody.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

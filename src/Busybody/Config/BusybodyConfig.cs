@@ -49,7 +49,7 @@ namespace Busybody.Config
             if (config.DataDirectory == null)
                 config.DataDirectory = Path.Combine(Path.GetTempPath(), "Busybody");
             if(config.WebRoot == null)
-                config.WebRoot = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                config.WebRoot = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "WebRoot");
         }
     }
 }

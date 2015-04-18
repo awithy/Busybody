@@ -11,6 +11,8 @@ namespace Busybody.WebServer
 {
     public class BusybodyWebApp
     {
+        static Logger _log = new Logger(typeof(BusybodyWebApp));
+
         public void Configuration(IAppBuilder app)
         {
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
@@ -31,10 +33,11 @@ namespace Busybody.WebServer
                 );
 
             var webContentPath = CommonPaths.WebContentPath();
+            _log.Debug("Starting web app with web content path " + webContentPath);
 
             app.UseFileServer(new FileServerOptions()
             {
-                RequestPath = new PathString("/webcontent"),
+                RequestPath = new PathString("/webroot/webcontent"),
                 FileSystem = new PhysicalFileSystem(webContentPath),
             });
 
