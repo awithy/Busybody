@@ -22,6 +22,14 @@ app.controller('eventLogApiController', function($scope, $http, $interval) {
     update();
 });
 
+app.controller('timeController', function($scope, $http, $interval) {
+    var update = function () {
+        $scope.now = moment().format('HH:mm:ss');
+    };
+    $interval(update, 1000);
+    update();
+});
+
 app.filter('fromNow', function() {
   return function(date) {
     return moment(date).fromNow();

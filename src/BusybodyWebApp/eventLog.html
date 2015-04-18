@@ -29,7 +29,9 @@
                             <li><a href="home">Home</a></li>
                             <li class="active"><a href="eventLog">Event Log</a></li>
                         </ul>
-                        <ul class="nav navbar-nav navbar-right"></ul>
+                        <ul class="nav navbar-nav navbar-right" ng-controller="timeController">
+                            <li><a>{{now}}</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
