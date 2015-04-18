@@ -61,4 +61,5 @@ task Package -depends Compile, Clean {
 	mkdir $buildDir
 	copy "$solutionBuildDir/*.*" "$buildDir/" -rec
 	copy "$srcDir/busybodywebapp" "$buildDir/webroot" -rec
+	rm "$buildDir/*.xml"
 }
