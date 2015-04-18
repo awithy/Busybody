@@ -37,7 +37,7 @@ namespace Busybody.WebServer
 
             app.UseFileServer(new FileServerOptions()
             {
-                RequestPath = new PathString("/webroot/webcontent"),
+                RequestPath = new PathString("/webcontent"),
                 FileSystem = new PhysicalFileSystem(webContentPath),
             });
 
