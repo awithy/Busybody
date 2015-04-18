@@ -5,18 +5,16 @@
     <script src="WebContent/jquery.min.js"></script>
     <script src="/WebContent/bootstrap.min.js"></script>
     <script src="/WebContent/moment.js"></script>
-    <link rel="stylesheet" href="/WebContent/bootstrap.min.css">
-    <link rel="stylesheet" href="/WebContent/bootstrap-theme.min.css">
-    <!--<link type="text/css" rel="stylesheet" href="/Busybody.css"/>-->
+    <link rel="stylesheet" href="/WebContent/bootstrap-spacelab.min.css">
     <script src="/WebContent/busybody.js"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Busybody | Home</title>
 </head>
 <body>
-    <div class="container" ng-app="busybodyApp">
+    <div ng-app="busybodyApp">
         <div class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
+            <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
@@ -35,25 +33,28 @@
                 </div>
             </div>
         </div>
-        <div class="page-header">
-            <h1>Hosts</h1>
+        <div class="container">
+            <div class="page-header">
+                <h1>Hosts</h1>
+            </div>
+            <div ng-controller="hostsController">
+                <table class="table table-striped">
+                    <tr>
+                        <th>Host</th>
+                        <th>State</th>
+                        <th>Last State Change</th>
+                        <th>Last Update</th>
+                    </tr>
+                    <tr ng-repeat="host in hosts | orderBy:'Name':reverse" ng-class="{'danger':host.IsDanger}">
+                        <td>{{host.Name}}</td>
+                            <td ng-model="host.IsDanger">{{host.State}}</td>
+                            <td>{{host.LastStateChange | fromNow}}</td>
+                            <td>{{host.LastUpdate | fromNow}}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
-        <div ng-controller="hostsController">
-            <table class="table table-striped">
-                <tr>
-                    <th>Host</th>
-                    <th>State</th>
-                    <th>Last State Change</th>
-                    <th>Last Update</th>
-                </tr>
-                <tr ng-repeat="host in hosts | orderBy:'Name':reverse" ng-class="{'danger':host.IsDanger}">
-                    <td>{{host.Name}}</td>
-                    <td ng-model="host.IsDanger">{{host.State}}</td>
-                    <td>{{host.LastStateChange | fromNow}}</td>
-                    <td>{{host.LastUpdate | fromNow}}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
 </body>
 </html>
+
+
