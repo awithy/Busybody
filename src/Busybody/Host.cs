@@ -14,10 +14,12 @@ namespace Busybody
         public bool IsInitialState { get; set; }
         public DateTime LastUpdate { get; set; }
         public DateTime LastStateChange { get; set; }
+        public string Location { get; set; }
 
         public Host(HostConfig hostConfig)
         {
             Name = hostConfig.Nickname;
+            Location = hostConfig.Location;
             Tests = new Dictionary<string, HostTest>();
             foreach (var test in hostConfig.Tests)
                 Tests.Add(test.Name, new HostTest(test));

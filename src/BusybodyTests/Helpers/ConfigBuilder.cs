@@ -15,9 +15,9 @@ namespace BusybodyTests.Helpers
             Hosts = new List<HostConfig>();
         }
 
-        public HostConfigBuilder WithHost(string nickname, string hostname)
+        public HostConfigBuilder WithHost(string nickname, string hostname, string location)
         {
-            var hostConfigBuilder = new HostConfigBuilder(this, nickname, hostname);
+            var hostConfigBuilder = new HostConfigBuilder(this, nickname, hostname, location);
             return hostConfigBuilder;
         }
 

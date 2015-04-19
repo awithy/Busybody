@@ -43,15 +43,17 @@
                 <table class="table table-striped">
                     <tr>
                         <th>Host</th>
+                        <th>Location</th>
                         <th>State</th>
                         <th>Last State Change</th>
                         <th>Last Update</th>
                     </tr>
                     <tr ng-repeat="host in hosts | orderBy:'Name':reverse" ng-class="{'danger':host.IsDanger}">
                         <td>{{host.Name}}</td>
-                            <td ng-model="host.IsDanger">{{host.State}}</td>
-                            <td>{{host.LastStateChange | fromNow}}</td>
-                            <td>{{host.LastUpdate | fromNow}}</td>
+                        <td>{{host.Location}}</td>
+                        <td ng-model="host.IsDanger">{{host.State}}</td>
+                        <td>{{host.LastStateChange | fromNow}}</td>
+                        <td>{{host.LastUpdate | fromNow}}</td>
                     </tr>
                 </table>
             </div>

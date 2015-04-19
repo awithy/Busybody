@@ -106,7 +106,7 @@ namespace BusybodyTests
         {
             var config = new ConfigBuilder()
                 .WithPollingInterval(1)
-                .WithHost("Local Machine", "127.0.0.1")
+                .WithHost("Local Machine", "127.0.0.1", "Location 1")
                 .WithTest(new HostTestConfig("Ping"))
                 .BuildHostConfig()
                 .BuildConfig();

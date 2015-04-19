@@ -18,6 +18,7 @@ namespace Busybody.WebServer
                 LastUpdate = x.LastUpdate.ToString("o"),
                 LastStateChange = x.LastStateChange.ToString("o"),
                 IsDanger = x.State == HostState.DOWN,
+                Location = x.Location,
             });
             return hostModels;
         }
