@@ -1,6 +1,8 @@
 ﻿var app = angular.module('busybodyApp', []);
 
 app.controller('hostsController', function($scope, $http, $interval) {
+    $scope.orderByField = 'Name';
+    $scope.reverseSort = false;
     var update = function () {
         $http.get("/hosts")
             .success(function(response) {
