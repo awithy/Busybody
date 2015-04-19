@@ -7,6 +7,8 @@ namespace Busybody
 {
     class Program
     {
+        //TODO: Sorting by columns
+        //TODO: Filtering by columns
         //TODO: Composite views
         //TODO: Show host name somewhere
         //TODO: Show service health page
