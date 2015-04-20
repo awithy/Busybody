@@ -8,7 +8,7 @@ namespace Busybody.WebServer
     {
         public HttpResponseMessage GetHome()
         {
-            return WebServerHelpers.GetPage("index.html");
+            return WebServerHelpers.GetRootPage("eventLog.html");
         }
     }
 }

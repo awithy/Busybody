@@ -34,7 +34,7 @@ namespace Busybody.WebServer
 
         public HttpResponseMessage GetLogin()
         {
-            return WebServerHelpers.GetPage("login.html");
+            return WebServerHelpers.GetRootPage("login.html");
         }
     }
 }

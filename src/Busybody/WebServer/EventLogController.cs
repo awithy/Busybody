@@ -10,7 +10,7 @@ namespace Busybody.WebServer
     {
         public HttpResponseMessage GetEventLog()
         {
-            return WebServerHelpers.GetPage("eventLog.html");
+            return WebServerHelpers.GetRootPage("eventLog.html");
         }
     }
 
