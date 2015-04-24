@@ -28,11 +28,14 @@ namespace Busybody
         protected override void _OnPoll(CancellationToken cancellationToken)
         {
             _log.Trace("System Monitor Roll Service");
+            var systemStatus = AppContext.Instance.SystemStatus;
+            systemStatus.UpdateHealth();
+
             var usedMemory = _GetMemoryAndAlertIfNeeded();
             var cpuUtilization = _GetCpuAndAlertIfNeeded();
 
             _log.Trace("Writing system status");
-            var roleServiceStatuses = AppContext.Instance.SystemMonitorData.GetRoleServiceHealthStatus();
+            var roleServiceStatuses = AppContext.Instance.SystemStatus.GetRoleServiceHealthStatus();
             var sb = new StringBuilder();
             sb.AppendLine("# Busybody System Status #");
             sb.AppendLine();
@@ -88,7 +91,7 @@ namespace Busybody
         }
     }
 
-    public class SystemMonitorData
+    public class SystemStatus
     {
         readonly ConcurrentDictionary<string, RoleServiceHealthStatus> _roleServiceHealth = new ConcurrentDictionary<string, RoleServiceHealthStatus>();
 
@@ -96,6 +99,12 @@ namespace Busybody
         public DateTime GetStartTime()
         {
             return _startTime;
+        }
+
+        SystemHealth _systemHealth;
+        public SystemHealth GetSystemHealth()
+        {
+            return _systemHealth;
         }
 
         public void RoleServiceStarted(string name)
@@ -117,6 +126,21 @@ namespace Busybody
         {
             return _roleServiceHealth.Values.ToArray();
         }
+
+        public void UpdateHealth()
+        {
+            _systemHealth = _roleServiceHealth.Values.All(x => x.RoleServiceHealth == RoleServiceHealth.Healthy) 
+                ? SystemHealth.Healthy
+                : SystemHealth.Error;
+        }
+    }
+
+    public enum SystemHealth
+    {
+        Unknown,
+        Healthy,
+        Warning,
+        Error,
     }
 
     public class RoleServiceHealthStatus

@@ -1,13 +1,15 @@
-    <table class="table table-striped">
-        <tr>
-            <th>Timestamp</th>
-            <th>Event Type</th>
-            <th>Message</th>
-        </tr>
-        <tr ng-repeat="event in events" ng-class="{'danger':event.IsDanger}">
-            <td>{{event.Timestamp | fromNow}}</td>
-            <td>{{event.EventType}}</td>
-            <td>{{event.EventMessage}}</td>
-        </tr>
-    </table>
+<div class="page-header">
+<h1>Event Log</h1>
 </div>
+<table class="table table-striped">
+<tr>
+    <th>Timestamp</th>
+    <th>Event Type</th>
+    <th>Message</th>
+</tr>
+<tr ng-repeat="event in events" ng-class="{'danger':event.IsDanger}">
+    <td>{{event.Timestamp | fromNow}}</td>
+    <td>{{event.EventType}}</td>
+    <td>{{event.EventMessage}}</td>
+</tr>
+</table>

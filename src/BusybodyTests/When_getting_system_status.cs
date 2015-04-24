@@ -1,4 +1,5 @@
 ﻿using System;
+using Busybody;
 using Busybody.WebServer;
 using BusybodyTests.Helpers;
 using FluentAssertions;
@@ -34,6 +35,7 @@ namespace BusybodyTests
         {
             _testContext = BusybodyTestContext.Setup();
             _systemStatusApiController = new SystemStatusApiController();
+            AppContext.Instance.SystemStatus.UpdateHealth();
         }
     }
 }

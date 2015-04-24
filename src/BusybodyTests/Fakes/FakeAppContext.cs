@@ -13,7 +13,7 @@ namespace BusybodyTests.Fakes
         public ISystemStatusWriter SystemStatusWriter { get; private set; }
         public BusybodyConfig Config { get; set; }
         public HostRepository HostRepository { get; set; }
-        public SystemMonitorData SystemMonitorData { get; private set; }
+        public SystemStatus SystemStatus { get; private set; }
         public EventLogRepository EventLogRepository { get; set; }
         public FakeTestFactory FakeTestFactory { get { return (FakeTestFactory)TestFactory;  } }
         public FakeEmailAlertingInterface FakeEmailAlertingInterface { get { return (FakeEmailAlertingInterface) EmailAlertingInterface; }}
@@ -26,7 +26,7 @@ namespace BusybodyTests.Fakes
             EventBus = new EventBus();
             EmailAlertingInterface = new FakeEmailAlertingInterface();
             HostRepository = new HostRepository();
-            SystemMonitorData = new SystemMonitorData();
+            SystemStatus = new SystemStatus();
             SystemStatusWriter = new FakeSystemStatusWriter();
             EventLogRepository = new EventLogRepository();
         }

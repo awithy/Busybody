@@ -30,6 +30,7 @@ app.controller('systemStatusController', function($scope, $http, $interval) {
             .success(function(response) {
                 $scope.startTime = moment(response.StartTime).format('DD MMM YYYY HH:mm:ss');
                 $scope.uptime = response.Uptime;
+                $scope.systemHealth = response.SystemHealth;
             });
     };
     $interval(update, 1000);
@@ -56,7 +57,6 @@ app.controller('viewsController', function($rootScope, $scope, $location, $route
          $scope.page = pathUrl.split('/')[1];
          $location.path(pathUrl);
     }
-    $scope.page = "hosts";
 });
 
 app.config(['$routeProvider', function($routeProvider, viewsController) {
