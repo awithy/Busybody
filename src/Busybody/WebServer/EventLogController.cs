@@ -1,19 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 
 namespace Busybody.WebServer
 {
-    [Authorize]
-    public class EventLogController : ApiController
-    {
-        public HttpResponseMessage GetEventLog()
-        {
-            return WebServerHelpers.GetRootPage("eventLog.html");
-        }
-    }
-
     [Authorize]
     public class EventLogApiController : ApiController
     {

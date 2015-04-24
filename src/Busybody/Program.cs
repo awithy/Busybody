@@ -15,6 +15,7 @@ namespace Busybody
         //TODO: Fix package not including web content
         //TODO: Report on average ping latency
         //TODO: E-mail report of activity
+        //TODO: Add google font
 
         static Logger _log = new Logger(typeof(Program));
         static bool _verboseLogging;

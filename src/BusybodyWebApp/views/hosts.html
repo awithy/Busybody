@@ -4,11 +4,11 @@
 <div ng-controller="hostsController">
 <table class="table table-striped">
     <tr>
-        <th><a href="#" ng-click="orderByField='Name';reverseSort=!reverseSort">Host</a></th>
-        <th><a href="#" ng-click="orderByField='Location';reverseSort=!reverseSort">Location</a></th>
-        <th><a href="#" ng-click="orderByField='State';reverseSort=!reverseSort">State</a></th>
-        <th><a href="#" ng-click="orderByField='LastStateChange';reverseSort=!reverseSort">Last State Change</a></th>
-        <th><a href="#" ng-click="orderByField='LastUpdate';reverseSort=!reverseSort">Last Update</a></th>
+        <th><a href="#/hosts" ng-click="orderByField='Name';reverseSort=!reverseSort">Host</a></th>
+        <th><a href="#/hosts" ng-click="orderByField='Location';reverseSort=!reverseSort">Location</a></th>
+        <th><a href="#/hosts" ng-click="orderByField='State';reverseSort=!reverseSort">State</a></th>
+        <th><a href="#/hosts" ng-click="orderByField='LastStateChange';reverseSort=!reverseSort">Last State Change</a></th>
+        <th><a href="#/hosts" ng-click="orderByField='LastUpdate';reverseSort=!reverseSort">Last Update</a></th>
     </tr>
     <tr ng-repeat="host in hosts | orderBy:orderByField:reverseSort" ng-class="{'danger':host.IsDanger}">
         <td>{{host.Name}}</td>
