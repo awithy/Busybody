@@ -79,6 +79,8 @@ namespace Busybody
             return _startTime;
         }
 
+        public DateTime LastUpdate { get; private set; }
+
         SystemHealth _systemHealth;
         public SystemHealth GetSystemHealth()
         {
@@ -111,8 +113,9 @@ namespace Busybody
                 ? SystemHealth.Healthy
                 : SystemHealth.Error;
 
-            UsedMemory = _GetCpuAndAlertIfNeeded();
+            UsedMemory = _GetMemoryAndAlertIfNeeded();
             Cpu = _GetCpuAndAlertIfNeeded();
+            LastUpdate = DateTime.UtcNow;
         }
 
         static float _GetCpuAndAlertIfNeeded()
