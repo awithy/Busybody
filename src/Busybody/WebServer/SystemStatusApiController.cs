@@ -19,12 +19,12 @@ namespace Busybody.WebServer
         {
             var startTime = systemStatus.GetStartTime();
             var uptime = (DateTime.UtcNow - startTime);
-            return new SystemStatusModel
+            var systemStatusModel = new SystemStatusModel
             {
                 StartTime = startTime.ToString("o"),
                 Uptime = string.Format("{0}d {1:00}:{2:00}:{3:00}", uptime.Days, uptime.Hours, uptime.Minutes, uptime.Seconds),
                 LastUpdate = systemStatus.LastUpdate.ToString("o"),
-                SystemHealth = systemStatus.GetSystemHealth().ToString(),
+                SystemHealth = systemStatus.SystemHealth.ToString(),
                 UsedMemory = systemStatus.UsedMemory.ToString("f1") + " MB",
                 Cpu = systemStatus.Cpu.ToString("f1") + " %",
                 RoleServices = systemStatus.GetRoleServiceHealthStatus()
@@ -37,6 +37,7 @@ namespace Busybody.WebServer
                         LastError = x.LastErrorMessage,
                     }),
             };
+            return systemStatusModel;
         }
     }
 

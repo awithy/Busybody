@@ -29,9 +29,6 @@ namespace Busybody
         {
             _log.Trace("System Monitor Roll Service");
 
-            AppContext.Instance.SystemStatus.SubmitRoleServiceStatus("Error Role Service", DateTime.MinValue, TimeSpan.Zero);
-            AppContext.Instance.SystemStatus.SubmitError("Error Role Service", "My error message");
-
             var systemStatus = AppContext.Instance.SystemStatus;
             systemStatus.UpdateHealth();
             var usedMemory = systemStatus.UsedMemory;
@@ -84,11 +81,7 @@ namespace Busybody
 
         public DateTime LastUpdate { get; private set; }
 
-        SystemHealth _systemHealth;
-        public SystemHealth GetSystemHealth()
-        {
-            return _systemHealth;
-        }
+        public SystemHealth SystemHealth { get; private set; }
 
         public void RoleServiceStarted(string name)
         {
@@ -112,7 +105,7 @@ namespace Busybody
 
         public void UpdateHealth()
         {
-            _systemHealth = _roleServiceHealth.Values.All(x => x.RoleServiceHealth == RoleServiceHealth.Healthy) 
+            SystemHealth = _roleServiceHealth.Values.All(x => x.RoleServiceHealth == RoleServiceHealth.Healthy) 
                 ? SystemHealth.Healthy
                 : SystemHealth.Error;
 
