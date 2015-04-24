@@ -30,7 +30,6 @@ namespace Busybody
             _log.Trace("System Monitor Roll Service");
             var systemStatus = AppContext.Instance.SystemStatus;
             systemStatus.UpdateHealth();
-
             var usedMemory = systemStatus.UsedMemory;
             var cpuUtilization = systemStatus.Cpu;
 
