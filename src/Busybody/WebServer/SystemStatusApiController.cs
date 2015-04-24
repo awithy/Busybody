@@ -20,6 +20,8 @@ namespace Busybody.WebServer
                 StartTime = startTime.ToString("o"),
                 Uptime = string.Format("{0}d {1:00}:{2:00}:{3:00}", uptime.Days, uptime.Hours, uptime.Minutes, uptime.Seconds),
                 SystemHealth = systemStatus.GetSystemHealth().ToString(),
+                UsedMemory = systemStatus.UsedMemory.ToString("f1") + " MB",
+                Cpu = systemStatus.Cpu.ToString("f1") + " %",
             };
         }
     }
@@ -29,5 +31,7 @@ namespace Busybody.WebServer
         public string StartTime { get; set; }
         public string Uptime { get; set; }
         public string SystemHealth { get; set; }
+        public string UsedMemory { get; set; }
+        public string Cpu { get; set; }
     }
 }

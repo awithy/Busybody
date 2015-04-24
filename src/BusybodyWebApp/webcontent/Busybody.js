@@ -31,6 +31,8 @@ app.controller('systemStatusController', function($scope, $http, $interval) {
                 $scope.startTime = moment(response.StartTime).format('DD MMM YYYY HH:mm:ss');
                 $scope.uptime = response.Uptime;
                 $scope.systemHealth = response.SystemHealth;
+                $scope.usedMemory = response.UsedMemory;
+                $scope.cpu = response.Cpu;
             });
     };
     $interval(update, 1000);

@@ -31,8 +31,8 @@ namespace Busybody
             var systemStatus = AppContext.Instance.SystemStatus;
             systemStatus.UpdateHealth();
 
-            var usedMemory = _GetMemoryAndAlertIfNeeded();
-            var cpuUtilization = _GetCpuAndAlertIfNeeded();
+            var usedMemory = systemStatus.UsedMemory;
+            var cpuUtilization = systemStatus.Cpu;
 
             _log.Trace("Writing system status");
             var roleServiceStatuses = AppContext.Instance.SystemStatus.GetRoleServiceHealthStatus();
@@ -61,39 +61,17 @@ namespace Busybody
             }
             AppContext.Instance.SystemStatusWriter.Write(sb.ToString());
         }
-
-        static float _GetCpuAndAlertIfNeeded()
-        {
-            var cpuCounter = new PerformanceCounter
-            {
-                CategoryName = "Processor",
-                CounterName = "% Processor Time",
-                InstanceName = "_Total"
-            };
-            cpuCounter.NextValue();
-            Thread.Sleep(2000);
-            var cpuUtilization = cpuCounter.NextValue();
-            return cpuUtilization;
-        }
-
-        long _GetMemoryAndAlertIfNeeded()
-        {
-            var usedMemory = Process.GetCurrentProcess().PrivateMemorySize64/1024/1024;
-            if (usedMemory > 500)
-            {
-                new ErrorHandler().Error("System memory high", usedMemory + "MB");
-            }
-            else if (usedMemory > 150)
-            {
-                _log.Warn("System memory high: " + usedMemory + "MB");
-            }
-            return usedMemory;
-        }
     }
 
     public class SystemStatus
     {
+        readonly static Logger _log = new Logger(typeof(SystemStatus));
+
         readonly ConcurrentDictionary<string, RoleServiceHealthStatus> _roleServiceHealth = new ConcurrentDictionary<string, RoleServiceHealthStatus>();
+
+        public float UsedMemory { get; private set; }
+
+        public float Cpu { get; private set; }
 
         DateTime _startTime = DateTime.UtcNow;
         public DateTime GetStartTime()
@@ -132,6 +110,37 @@ namespace Busybody
             _systemHealth = _roleServiceHealth.Values.All(x => x.RoleServiceHealth == RoleServiceHealth.Healthy) 
                 ? SystemHealth.Healthy
                 : SystemHealth.Error;
+
+            UsedMemory = _GetCpuAndAlertIfNeeded();
+            Cpu = _GetCpuAndAlertIfNeeded();
+        }
+
+        static float _GetCpuAndAlertIfNeeded()
+        {
+            var cpuCounter = new PerformanceCounter
+            {
+                CategoryName = "Processor",
+                CounterName = "% Processor Time",
+                InstanceName = "_Total"
+            };
+            cpuCounter.NextValue();
+            Thread.Sleep(2000);
+            var cpuUtilization = cpuCounter.NextValue();
+            return cpuUtilization;
+        }
+
+        long _GetMemoryAndAlertIfNeeded()
+        {
+            var usedMemory = Process.GetCurrentProcess().PrivateMemorySize64/1024/1024;
+            if (usedMemory > 500)
+            {
+                new ErrorHandler().Error("System memory high", usedMemory + "MB");
+            }
+            else if (usedMemory > 150)
+            {
+                _log.Warn("System memory high: " + usedMemory + "MB");
+            }
+            return usedMemory;
         }
     }
 
