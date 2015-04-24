@@ -48,8 +48,8 @@ app.controller('viewsController', function($rootScope, $scope, $location, $route
 });
 
 app.config(['$routeProvider', function($routeProvider, viewsController) {
-    $routeProvider.when('/hosts', {templateUrl: 'views/hosts.html', controller:'hostsController'});
-    $routeProvider.when('/eventLog', {templateUrl: 'views/eventLog.html', controller:'viewsController'});
-    $routeProvider.when('/test', {templateUrl: 'views/test.html', controller:'viewsController'});
+    $routeProvider.when('/hosts', {templateUrl: 'templates/hosts.html', controller:'hostsController'});
+    $routeProvider.when('/eventLog', {templateUrl: 'templates/eventLog.html', controller:'viewsController'});
+    $routeProvider.when('/test', {templateUrl: 'templates/test.html', controller:'viewsController'});
     $routeProvider.otherwise({redirectTo: '/hosts'});
 }]);

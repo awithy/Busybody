@@ -5,16 +5,16 @@ using System.Web.Http;
 namespace Busybody.WebServer
 {
     [Authorize]
-    public class ViewsController : ApiController
+    public class TemplatesController : ApiController
     {
-        public HttpResponseMessage GetViews()
+        public HttpResponseMessage GetTemplates()
         {
             return new HttpResponseMessage(HttpStatusCode.NotFound);
         }
 
-        public HttpResponseMessage GetViewById(string id)
+        public HttpResponseMessage GetTemplateById(string id)
         {
-            return WebServerHelpers.GetView(id);
+            return WebServerHelpers.GetTemplate(id);
         }
     }
 }

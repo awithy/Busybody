@@ -129,7 +129,7 @@
     <Compile Include="SharedConstants.cs" />
     <Compile Include="Events\StartupCompleteEvent.cs" />
     <Compile Include="TestFactory.cs" />
-    <Compile Include="WebServer\ViewsController.cs" />
+    <Compile Include="WebServer\TemplatesController.cs" />
     <Compile Include="WebServer\EventLogController.cs" />
     <Compile Include="WebServer\HomeController.cs" />
     <Compile Include="WebServer\HostModel.cs" />

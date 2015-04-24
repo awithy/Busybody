@@ -13,9 +13,9 @@ namespace Busybody.WebServer
             return _GetFile(filePath);
         }
 
-        public static HttpResponseMessage GetView(string viewFileName)
+        public static HttpResponseMessage GetTemplate(string viewFileName)
         {
-            var filePath = Path.Combine(CommonPaths.WebRoot(), "views", viewFileName);
+            var filePath = Path.Combine(CommonPaths.WebRoot(), "templates", viewFileName);
             return _GetFile(filePath);
         }
 
