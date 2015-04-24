@@ -17,7 +17,7 @@ namespace Busybody.Utility
         public void Start()
         {
             _log.Debug("Starting " + Name);
-            AppContext.Instance.SystemMonitorData.RoleServiceStarted(Name);
+            AppContext.Instance.SystemStatus.RoleServiceStarted(Name);
             _StartPolling();
             _OnStarted();
         }
@@ -44,14 +44,14 @@ namespace Busybody.Utility
 
                     var pollStopTime = DateTime.UtcNow;
                     var duration = pollStopTime - pollStartTime;
-                    AppContext.Instance.SystemMonitorData.SubmitRoleServiceStatus(Name, pollStopTime, duration);
+                    AppContext.Instance.SystemStatus.SubmitRoleServiceStatus(Name, pollStopTime, duration);
                 }
                 catch (Exception ex)
                 {
                     var errorMessage = string.Format("Unexpected {0} exception thrown while polling in {1}", ex.GetType().Name, Name);
                     _log.Error(errorMessage, ex);
                     _log.Debug("Cooling off from unknown error.");
-                    AppContext.Instance.SystemMonitorData.SubmitError(Name, errorMessage);
+                    AppContext.Instance.SystemStatus.SubmitError(Name, errorMessage);
                     Thread.Sleep(TimeSpan.FromMinutes(1));
                 }
             }

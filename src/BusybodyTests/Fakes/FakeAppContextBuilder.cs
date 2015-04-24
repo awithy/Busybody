@@ -1,3 +1,4 @@
+using Busybody;
 using Busybody.Config;
 using BusybodyTests.Helpers;
 

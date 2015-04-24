@@ -1,0 +1,42 @@
+    <div class="page-header">
+        <h1>System Status</h1>
+    </div>
+    <div class="panel" ng-class="{'panel-success':systemHealth=='Healthy', 'panel-danger':systemHealth=='Error'}">
+    <div class="panel panel-heading">
+        <h4>Summary</h4>
+    </div>
+    <div class="panel panel-body">
+    <ul>
+        <li><span>System health: {{systemHealth}}</span></li>
+        <li><span>Last update: {{lastUpdate}}</span></li>
+        <li><span>Start time: {{startTime}}</span></li>
+        <li><span>Uptime: {{uptime}}</span></li>
+        <li><span>Memory: {{usedMemory}}</span></li>
+        <li><span>CPU: {{cpu}}</span></li>
+    </ul>
+    </div>
+    </div>
+    
+    <div class="panel" ng-class="{'panel-success':systemHealth=='Healthy', 'panel-danger':systemHealth=='Error'}">
+    <div class="panel panel-heading">
+        <h4>Role Services</h4>
+    </div>
+    <div class="panel panel-body">
+            <div ng-repeat="rs in roleServices">
+            <div class="panel" ng-class="{'panel-success': rs.RoleServiceHealth == 'Healthy', 'panel-danger': rs.RoleServiceHealth == 'Error'}">
+            <div class="panel panel-heading">
+                <strong>{{rs.Name}}</strong>
+            </div>
+            <div class="panel panel-body">
+                    <ul>
+                        <li><span>Role service health: {{rs.RoleServiceHealth}}</span></li>
+                        <li><span>Last poll: {{rs.LastPoll | fromNow}}</span></li>
+                        <li><span>Last duration: {{rs.LastDuration}}</span></li>
+                        <li ng-class="{hidden: rs.LastError == undefined}"><span>Last error: {{rs.LastError}}</span></li>
+                    </ul>
+            </div>
+            </div>
+            </div>
+    </div>
+
+    

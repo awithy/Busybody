@@ -11,7 +11,7 @@ namespace Busybody
         ISystemStatusWriter SystemStatusWriter { get; }
         BusybodyConfig Config { get; set; }
         HostRepository HostRepository { get; }
-        SystemMonitorData SystemMonitorData { get; }
+        SystemStatus SystemStatus { get; }
         EventLogRepository EventLogRepository { get; set; }
     }
 
@@ -26,7 +26,7 @@ namespace Busybody
         public IEventBus EventBus { get; private set; }
         public IEmailAlertingInterface EmailAlertingInterface { get; set; }
         public HostRepository HostRepository { get; set; }
-        public SystemMonitorData SystemMonitorData { get; set; }
+        public SystemStatus SystemStatus { get; set; }
         public EventLogRepository EventLogRepository { get; set; }
 
         public AppContext()
@@ -36,7 +36,7 @@ namespace Busybody
             EventBus = new EventBus();
             EmailAlertingInterface = new EmailAlertingInterface();
             HostRepository = new HostRepository();
-            SystemMonitorData = new SystemMonitorData();
+            SystemStatus = new SystemStatus();
             SystemStatusWriter = new SystemStatusWriter();
             EventLogRepository = new EventLogRepository();
         }

@@ -23,6 +23,7 @@
                     <ul class="nav navbar-nav">
                         <li ng-class="{active: page=='hosts'}"><a class="nav" href="#/hosts" ng-click="showView('#/hosts')">Hosts</a></li>
                         <li ng-class="{active: page=='eventLog'"><a href="#/eventLog" ng-click="showView('#/eventLog')">Event Log</a></li>
+                        <li ng-class="{active: page=='systemStatus'"><a href="#/systemStatus" ng-click="showView('#/systemStatus')">System Status</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right navbar-collapse collapse" ng-controller="timeController">
                         <li><p class="navbar-text">{{now}}</p></li>

@@ -13,11 +13,28 @@ app.controller('hostsController', function($scope, $http, $interval) {
     update();
 });
 
-app.controller('eventLogApiController', function($scope, $http, $interval) {
+app.controller('eventLogController', function($scope, $http, $interval) {
     var update = function () {
         $http.get("/eventLogApi")
             .success(function(response) {
                 $scope.events = response;
+            });
+    };
+    $interval(update, 1000);
+    update();
+});
+
+app.controller('systemStatusController', function($scope, $http, $interval) {
+    var update = function () {
+        $http.get("/systemStatusApi")
+            .success(function(response) {
+                $scope.startTime = moment(response.StartTime).format('DD MMM YYYY HH:mm:ss');
+                $scope.lastUpdate = moment(response.LastUpdate).fromNow();
+                $scope.uptime = response.Uptime;
+                $scope.systemHealth = response.SystemHealth;
+                $scope.usedMemory = response.UsedMemory;
+                $scope.cpu = response.Cpu;
+                $scope.roleServices = response.RoleServices;
             });
     };
     $interval(update, 1000);
@@ -44,12 +61,12 @@ app.controller('viewsController', function($rootScope, $scope, $location, $route
          $scope.page = pathUrl.split('/')[1];
          $location.path(pathUrl);
     }
-    $scope.page = "hosts";
 });
 
 app.config(['$routeProvider', function($routeProvider, viewsController) {
     $routeProvider.when('/hosts', {templateUrl: 'templates/hosts.html', controller:'hostsController'});
-    $routeProvider.when('/eventLog', {templateUrl: 'templates/eventLog.html', controller:'viewsController'});
+    $routeProvider.when('/eventLog', {templateUrl: 'templates/eventLog.html', controller:'eventLogController'});
+    $routeProvider.when('/systemStatus', {templateUrl: 'templates/systemStatus.html', controller:'systemStatusController'});
     $routeProvider.when('/test', {templateUrl: 'templates/test.html', controller:'viewsController'});
     $routeProvider.otherwise({redirectTo: '/hosts'});
 }]);

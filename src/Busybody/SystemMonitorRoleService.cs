@@ -28,11 +28,14 @@ namespace Busybody
         protected override void _OnPoll(CancellationToken cancellationToken)
         {
             _log.Trace("System Monitor Roll Service");
-            var usedMemory = _GetMemoryAndAlertIfNeeded();
-            var cpuUtilization = _GetCpuAndAlertIfNeeded();
+
+            var systemStatus = AppContext.Instance.SystemStatus;
+            systemStatus.UpdateHealth();
+            var usedMemory = systemStatus.UsedMemory;
+            var cpuUtilization = systemStatus.Cpu;
 
             _log.Trace("Writing system status");
-            var roleServiceStatuses = AppContext.Instance.SystemMonitorData.GetRoleServiceHealthStatus();
+            var roleServiceStatuses = AppContext.Instance.SystemStatus.GetRoleServiceHealthStatus();
             var sb = new StringBuilder();
             sb.AppendLine("# Busybody System Status #");
             sb.AppendLine();
@@ -57,6 +60,58 @@ namespace Busybody
                 sb.AppendLine();
             }
             AppContext.Instance.SystemStatusWriter.Write(sb.ToString());
+        }
+    }
+
+    public class SystemStatus
+    {
+        readonly static Logger _log = new Logger(typeof(SystemStatus));
+
+        readonly ConcurrentDictionary<string, RoleServiceHealthStatus> _roleServiceHealth = new ConcurrentDictionary<string, RoleServiceHealthStatus>();
+
+        public float UsedMemory { get; private set; }
+
+        public float Cpu { get; private set; }
+
+        DateTime _startTime = DateTime.UtcNow;
+        public DateTime GetStartTime()
+        {
+            return _startTime;
+        }
+
+        public DateTime LastUpdate { get; private set; }
+
+        public SystemHealth SystemHealth { get; private set; }
+
+        public void RoleServiceStarted(string name)
+        {
+            _roleServiceHealth.AddOrUpdate(name, n => RoleServiceHealthStatus.Started(name), (n, s) => s);
+        }
+        
+        public void SubmitRoleServiceStatus(string name, DateTime lastPoll, TimeSpan lastPollDuration)
+        {
+            _roleServiceHealth.AddOrUpdate(name, n => RoleServiceHealthStatus.Started(name), (n, s) => s.UpdateStatus(lastPoll, lastPollDuration));
+        }
+
+        public void SubmitError(string name, string errorMessage)
+        {
+            _roleServiceHealth.AddOrUpdate(name, n => RoleServiceHealthStatus.Started(name), (n, s) => s.Error(errorMessage));
+        }
+
+        public IEnumerable<RoleServiceHealthStatus> GetRoleServiceHealthStatus()
+        {
+            return _roleServiceHealth.Values.ToArray();
+        }
+
+        public void UpdateHealth()
+        {
+            SystemHealth = _roleServiceHealth.Values.All(x => x.RoleServiceHealth == RoleServiceHealth.Healthy) 
+                ? SystemHealth.Healthy
+                : SystemHealth.Error;
+
+            UsedMemory = _GetMemoryAndAlertIfNeeded();
+            Cpu = _GetCpuAndAlertIfNeeded();
+            LastUpdate = DateTime.UtcNow;
         }
 
         static float _GetCpuAndAlertIfNeeded()
@@ -88,29 +143,12 @@ namespace Busybody
         }
     }
 
-    public class SystemMonitorData
+    public enum SystemHealth
     {
-        readonly ConcurrentDictionary<string, RoleServiceHealthStatus> _roleServiceHealth = new ConcurrentDictionary<string, RoleServiceHealthStatus>();
-
-        public void RoleServiceStarted(string name)
-        {
-            _roleServiceHealth.AddOrUpdate(name, n => RoleServiceHealthStatus.Started(name), (n, s) => s);
-        }
-        
-        public void SubmitRoleServiceStatus(string name, DateTime lastPoll, TimeSpan lastPollDuration)
-        {
-            _roleServiceHealth.AddOrUpdate(name, n => RoleServiceHealthStatus.Started(name), (n, s) => s.UpdateStatus(lastPoll, lastPollDuration));
-        }
-
-        public void SubmitError(string name, string errorMessage)
-        {
-            _roleServiceHealth.AddOrUpdate(name, n => RoleServiceHealthStatus.Started(name), (n, s) => s.Error(errorMessage));
-        }
-
-        public IEnumerable<RoleServiceHealthStatus> GetRoleServiceHealthStatus()
-        {
-            return _roleServiceHealth.Values.ToArray();
-        }
+        Unknown,
+        Healthy,
+        Warning,
+        Error,
     }
 
     public class RoleServiceHealthStatus
