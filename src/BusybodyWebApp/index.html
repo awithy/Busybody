@@ -1,18 +1,13 @@
 ﻿<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <script src="/WebContent/angular.min.js"></script>
-    <script src="WebContent/jquery.min.js"></script>
-    <script src="/WebContent/bootstrap.min.js"></script>
-    <script src="/WebContent/moment.js"></script>
     <link rel="stylesheet" href="/WebContent/bootstrap-spacelab.min.css">
-    <script src="/WebContent/busybody.js"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Busybody | Home</title>
 </head>
-<body>
-    <div ng-app="busybodyApp">
+<body ng-app="busybodyApp">
+    <div ng-controller="viewsController">
         <div class="navbar navbar-default" role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -22,12 +17,12 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="home">Busybody</a>
+                    <a class="navbar-brand" href="#/hosts" ng-click="showView('#/hosts')">Busybody</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="home">Home</a></li>
-                        <li><a href="eventLog">Event Log</a></li>
+                        <li ng-class="{active: page=='hosts'}"><a class="nav" href="#/hosts" ng-click="showView('#/hosts')">Hosts</a></li>
+                        <li ng-class="{active: page=='eventLog'"><a href="#/eventLog" ng-click="showView('#/eventLog')">Event Log</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right navbar-collapse collapse" ng-controller="timeController">
                         <li><p class="navbar-text">{{now}}</p></li>
@@ -36,28 +31,15 @@
             </div>
         </div>
         <div class="container">
-            <div class="page-header">
-                <h1>Hosts</h1>
-            </div>
-            <div ng-controller="hostsController">
-                <table class="table table-striped">
-                    <tr>
-                        <th><a href="#" ng-click="orderByField='Name';reverseSort=!reverseSort">Host</a></th>
-                        <th><a href="#" ng-click="orderByField='Location';reverseSort=!reverseSort">Location</a></th>
-                        <th><a href="#" ng-click="orderByField='State';reverseSort=!reverseSort">State</a></th>
-                        <th><a href="#" ng-click="orderByField='LastStateChange';reverseSort=!reverseSort">Last State Change</a></th>
-                        <th><a href="#" ng-click="orderByField='LastUpdate';reverseSort=!reverseSort">Last Update</a></th>
-                    </tr>
-                    <tr ng-repeat="host in hosts | orderBy:orderByField:reverseSort" ng-class="{'danger':host.IsDanger}">
-                        <td>{{host.Name}}</td>
-                        <td>{{host.Location}}</td>
-                        <td ng-model="host.IsDanger">{{host.State}}</td>
-                        <td>{{host.LastStateChange | fromNow}}</td>
-                        <td>{{host.LastUpdate | fromNow}}</td>
-                    </tr>
-                </table>
-            </div>
+            <div ng-view></div>
         </div>
+</div>
+    <script src="/WebContent/angular.min.js"></script>
+    <script src="/WebContent/angular-route.min.js"></script>
+    <script src="WebContent/jquery.min.js"></script>
+    <script src="/WebContent/bootstrap.min.js"></script>
+    <script src="/WebContent/moment.js"></script>
+    <script src="/WebContent/busybody.js"></script>
 </body>
 </html>
 

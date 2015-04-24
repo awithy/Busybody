@@ -1,4 +1,4 @@
-﻿var app = angular.module('busybodyApp', []);
+﻿var app = angular.module('busybodyApp', ['ngRoute']);
 
 app.controller('hostsController', function($scope, $http, $interval) {
     $scope.orderByField = 'Name';
@@ -37,3 +37,19 @@ app.filter('fromNow', function() {
     return moment(date).fromNow();
   }
 });
+
+app.controller('viewsController', function($rootScope, $scope, $location, $routeParams) {
+    $scope.showView = function(pathUrl) {
+         console.debug('showView:' + pathUrl);
+         $scope.page = pathUrl.split('/')[1];
+         $location.path(pathUrl);
+    }
+    $scope.page = "hosts";
+});
+
+app.config(['$routeProvider', function($routeProvider, viewsController) {
+    $routeProvider.when('/hosts', {templateUrl: 'templates/hosts.html', controller:'hostsController'});
+    $routeProvider.when('/eventLog', {templateUrl: 'templates/eventLog.html', controller:'viewsController'});
+    $routeProvider.when('/test', {templateUrl: 'templates/test.html', controller:'viewsController'});
+    $routeProvider.otherwise({redirectTo: '/hosts'});
+}]);
