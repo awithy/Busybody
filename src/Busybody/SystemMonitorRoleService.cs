@@ -28,6 +28,10 @@ namespace Busybody
         protected override void _OnPoll(CancellationToken cancellationToken)
         {
             _log.Trace("System Monitor Roll Service");
+
+            AppContext.Instance.SystemStatus.SubmitRoleServiceStatus("Error Role Service", DateTime.MinValue, TimeSpan.Zero);
+            AppContext.Instance.SystemStatus.SubmitError("Error Role Service", "My error message");
+
             var systemStatus = AppContext.Instance.SystemStatus;
             systemStatus.UpdateHealth();
             var usedMemory = systemStatus.UsedMemory;

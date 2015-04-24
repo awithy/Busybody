@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Web.Http;
 
 namespace Busybody.WebServer
@@ -23,6 +27,15 @@ namespace Busybody.WebServer
                 SystemHealth = systemStatus.GetSystemHealth().ToString(),
                 UsedMemory = systemStatus.UsedMemory.ToString("f1") + " MB",
                 Cpu = systemStatus.Cpu.ToString("f1") + " %",
+                RoleServices = systemStatus.GetRoleServiceHealthStatus()
+                    .Select(x => new SystemStatusRoleServiceModel
+                    {
+                        Name = x.Name,
+                        RoleServiceHealth = x.RoleServiceHealth.ToString(),
+                        LastPoll = x.LastPoll.ToString("o"),
+                        LastDuration = x.LastPollDuration.TotalSeconds.ToString("f1") + "s",
+                        LastError = x.LastErrorMessage,
+                    }),
             };
         }
     }
@@ -35,5 +48,20 @@ namespace Busybody.WebServer
         public string SystemHealth { get; set; }
         public string UsedMemory { get; set; }
         public string Cpu { get; set; }
+        public IEnumerable<SystemStatusRoleServiceModel> RoleServices { get; set; }
+
+        public SystemStatusModel()
+        {
+            RoleServices = new SystemStatusRoleServiceModel[0];
+        }
+    }
+
+    public class SystemStatusRoleServiceModel
+    {
+        public string Name { get; set; }
+        public string RoleServiceHealth { get; set; }
+        public string LastPoll { get; set; }
+        public string LastError { get; set; }
+        public string LastDuration { get; set; }
     }
 }

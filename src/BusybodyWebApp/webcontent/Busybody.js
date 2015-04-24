@@ -34,6 +34,7 @@ app.controller('systemStatusController', function($scope, $http, $interval) {
                 $scope.systemHealth = response.SystemHealth;
                 $scope.usedMemory = response.UsedMemory;
                 $scope.cpu = response.Cpu;
+                $scope.roleServices = response.RoleServices;
             });
     };
     $interval(update, 1000);
