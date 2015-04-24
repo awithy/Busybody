@@ -92,6 +92,12 @@ namespace Busybody
     {
         readonly ConcurrentDictionary<string, RoleServiceHealthStatus> _roleServiceHealth = new ConcurrentDictionary<string, RoleServiceHealthStatus>();
 
+        DateTime _startTime = DateTime.UtcNow;
+        public DateTime GetStartTime()
+        {
+            return _startTime;
+        }
+
         public void RoleServiceStarted(string name)
         {
             _roleServiceHealth.AddOrUpdate(name, n => RoleServiceHealthStatus.Started(name), (n, s) => s);
