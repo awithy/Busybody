@@ -39,12 +39,14 @@ app.filter('fromNow', function() {
 });
 
 app.controller('viewsController', function($rootScope, $scope, $location, $routeParams) {
-    //$scope.showView = function(pathUrl) {
-         $location.path("/view");
-    //}
+    $scope.showView = function(pathUrl) {
+         $location.path(pathUrl);
+    }
 });
 
 app.config(['$routeProvider', function($routeProvider, viewsController) {
-    $routeProvider.when('/view', {templateUrl: 'views/test.html', controller:'viewsController'});
-    $routeProvider.otherwise({redirectTo: '/'});
+    $routeProvider.when('/hosts', {templateUrl: 'views/hosts.html', controller:'viewsController'});
+    $routeProvider.when('/eventLog', {templateUrl: 'views/eventLog.html', controller:'viewsController'});
+    $routeProvider.when('/test', {templateUrl: 'views/test.html', controller:'viewsController'});
+    $routeProvider.otherwise({redirectTo: '/hosts'});
 }]);
