@@ -65,4 +65,6 @@ task Package -depends Compile, Clean {
     rm "$buildDir/*.swp"
     rm "$buildDir/busybody.cfg"
     mv "$buildDir/sample.cfg" "$buildDir/busybody.cfg"
+	rm "$buildDir/webroot/*.swp"
+	rm "$buildDir/webroot/webcontent/*.swp"
 }
