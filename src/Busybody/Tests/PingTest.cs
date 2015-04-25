@@ -20,6 +20,7 @@ namespace Busybody.Tests
             var failures = 0;
             for (var cnt = 0; cnt < parameters.Count; cnt++)
             {
+                _log.TraceFormat("Executing ping test {0} of {1}.  Current failures:{2}.  Max failures:{3}", cnt, parameters.Count, failures, parameters.MaxFailures);
                 var success = false;
                 try
                 {
@@ -36,10 +37,14 @@ namespace Busybody.Tests
                 if (!success)
                     failures++;
                 if (failures > parameters.MaxFailures)
+                {
+                    _log.TraceFormat("Failing ping text because failures > max failures");
                     return false;
+                }
 
                 Thread.Sleep(parameters.DelayMs);
             }
+            _log.TraceFormat("Ping test successful");
             return true;
         }
 
@@ -53,7 +58,7 @@ namespace Busybody.Tests
             public PingTestParameters(Dictionary<string,string> parameters)
             {
                 TimeoutMs = _ParseIntFromDictionary(parameters, "TimeoutMs", 2000);
-                Count = _ParseIntFromDictionary(parameters, "Count", 1);
+                Count = _ParseIntFromDictionary(parameters, "Count", 5);
                 MaxFailures = _ParseIntFromDictionary(parameters, "MaxFailures", 1);
                 DelayMs = _ParseIntFromDictionary(parameters, "DelayMs", 500);
             }

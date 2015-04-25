@@ -99,9 +99,9 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 				"Name":"Ping",
 				"AllowableFailures":0,
 				"Parameters":{
-					"TimeoutMs":"500",
+					"TimeoutMs":"2000",
 					"Count":"5",
-					"MaxFailures":"0",
+					"MaxFailures":"1",
 					"DelayMs":"500",
 				}
 			}]
