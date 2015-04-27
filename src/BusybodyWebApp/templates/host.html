@@ -1,0 +1,19 @@
+<div class="page-header">
+    <h1>Hosts > {{host.Name}}</h1>
+</div>
+<div class="panel" ng-class="{'panel-success':!host.IsDanger, 'panel-danger':host.IsDanger}">
+    <div class="panel panel-heading">
+        <h4>Host Summary</h4>
+    </div>
+    <div class="panel panel-body">
+        <ul>
+            <li><span>Nickname: {{host.Name}}</span></li>
+            <li><span>Hostname/IP: {{host.Hostname}}</span></li>
+            <li><span>Location: {{host.Location}}</span></li>
+            <li><span>State: {{host.State}}</span></li>
+            <li><span>Last update: {{host.LastUpdate | fromNow}}</span></li>
+            <li><span>Last state change: {{host.LastStateChange | fromNow}}</span></li>
+        </ul>
+    </div>
+</div>
+

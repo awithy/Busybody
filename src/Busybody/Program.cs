@@ -7,6 +7,7 @@ namespace Busybody
 {
     class Program
     {
+        //TODO: Consolidate Name vs Nickname
         //TODO: Show host name somewhere
         //TODO: Show service health page
         //TODO: Report on average ping latency
