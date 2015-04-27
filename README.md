@@ -26,7 +26,7 @@ Features:
 - Run as console app or install as Windows service
 - Configurable number of allowable test failures
 - Alerts on host state changes and system errors
-- System status text report
+- System status web and text report
 - Service host CPU and Busybody process RAM usage monitoring
 - Info, debug, and trace level text logging
 - Text file error reports
@@ -120,10 +120,6 @@ Notes:
 
 ## Immediate To-Do ##
 
-1. Auto-refresh web portal
-1. Add location to hosts
-1. SPA app
-1. Additional information in web portal
 1. HTTP/HTTPS test
 1. OpenVPN test
 1. SSH test
