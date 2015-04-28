@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Busybody.Config;
 using Busybody.Events;
 using BusybodyTests.Helpers;
@@ -35,7 +36,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_start_the_system_monitor_role_service()
         {
-            _testContext.TestAppContext.FakeSystemStatusWriter.LastStatusText.Should().Contain("Busybody");
+            _testContext.TestAppContext.FakeSystemStatusWriter.WaitForString("Busybody", TimeSpan.FromSeconds(5));
         }
     }
 
