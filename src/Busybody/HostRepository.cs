@@ -28,5 +28,15 @@ namespace Busybody
         {
             return Hosts.Values.ToArray();
         }
+
+        public Host GetHostById(string id)
+        {
+            return Hosts.Values.Single(x => x.Id == id);
+        }
+
+        public bool ExistsById(string id)
+        {
+            return Hosts.Values.Any(x => x.Id == id);
+        }
     }
 }

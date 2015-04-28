@@ -8,6 +8,7 @@ namespace Busybody
 {
     public class Host
     {
+        public string Id { get; private set; }
         public string Name { get; set; }
         public HostState State { get; set; }
         public Dictionary<string,HostTest> Tests { get; set; }
@@ -18,6 +19,7 @@ namespace Busybody
 
         public Host(HostConfig hostConfig)
         {
+            Id = Guid.NewGuid().ToString("N");
             Name = hostConfig.Nickname;
             Location = hostConfig.Location;
             Tests = new Dictionary<string, HostTest>();
