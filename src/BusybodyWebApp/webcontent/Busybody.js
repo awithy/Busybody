@@ -11,14 +11,10 @@ app.controller('hostsController', function($rootScope, $scope, $http, $interval)
     };
     $interval(update, 1000);
     update();
-    $scope.goToView = function($pathUrl, $hostId) {
-        $rootScope.hostId = $hostId;
-        showView($pathUrl);
-    };
 });
 
-app.controller('hostController', function($rootScope, $scope, $http, $interval) {
-    $scope.test = $rootScope.hostId;
+app.controller('hostController', function($rootScope, $scope, $http, $interval, $routeParams) {
+    $scope.hostId = $routeParams.hostId;
     var update = function () {
         if($scope.hostId) {
             $http.get("/hosts/" + $scope.hostId)
@@ -83,7 +79,7 @@ app.controller('viewsController', function($rootScope, $scope, $location, $route
 
 app.config(['$routeProvider', function($routeProvider, viewsController) {
     $routeProvider.when('/hosts', {templateUrl: 'templates/hosts.html', controller:'hostsController'});
-    $routeProvider.when('/host', {templateUrl: 'templates/host.html', controller:'hostController'});
+    $routeProvider.when('/hosts/:hostId', {templateUrl: 'templates/host.html', controller:'hostController'});
     $routeProvider.when('/eventLog', {templateUrl: 'templates/eventLog.html', controller:'eventLogController'});
     $routeProvider.when('/systemStatus', {templateUrl: 'templates/systemStatus.html', controller:'systemStatusController'});
     $routeProvider.when('/test', {templateUrl: 'templates/test.html', controller:'viewsController'});

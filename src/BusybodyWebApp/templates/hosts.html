@@ -11,7 +11,7 @@
         <th><a href="#/hosts" ng-click="orderByField='LastUpdate';reverseSort=!reverseSort">Last Update</a></th>
     </tr>
     <tr ng-repeat="host in hosts | orderBy:orderByField:reverseSort" ng-class="{'danger':host.IsDanger}">
-        <td><a href="#/host" ng-click="goToView('#/host', host.Id)">{{host.Name}}</a></td>
+        <td><a href="#/hosts/{{host.Id}}">{{host.Name}}</a></td>
         <td>{{host.Location}}</td>
         <td ng-model="host.IsDanger">{{host.State}}</td>
         <td>{{host.LastStateChange | fromNow}}</td>
