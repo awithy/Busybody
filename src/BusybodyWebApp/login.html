@@ -11,18 +11,37 @@
         <title>Login</title>
     </head>
     <body>
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#/hosts" ng-click="showView('#/hosts')">Busybody</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <div class="container">
             <div class="page-header">
-                <h1>Busybody</h1>
+                <h1>Login</h1>
             </div>
-            <h3>Login</h3>
+            <div style="width:180px;margin-left:10px">
             <form method="POST" action="/login/dologin">
             <div>Username: </div>
-            <div><input type="text" name="username"/></div>
+            <div style="margin-bottom:10px"><input style="width:180px" type="text" name="username"/></div>
             <div>Password: </div>
-            <div><input type="password" name="password"/></div>
-            <input type="submit" value="Login"/>
+            <div style="margin-bottom:10px"><input style="width:180px" type="password" name="password"/></div>
+            <input width="100%" style="float:right" type="submit" value="Login"/>
             </form> 
+            </div>
         </div>
     </body>
 </html>
