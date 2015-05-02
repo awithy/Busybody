@@ -15,10 +15,9 @@ namespace Busybody.WebServer
             {
                 Id = x.Id,
                 Name = x.Name,
-                State = x.State.ToString(),
+                State = _CalculateUiState(x),
                 LastUpdate = x.LastUpdate.ToString("o"),
                 LastStateChange = x.LastStateChange.ToString("o"),
-                IsDanger = x.State == HostState.DOWN,
                 Location = x.Location,
             });
             return hostModels;
@@ -37,13 +36,25 @@ namespace Busybody.WebServer
                 Id = host.Id,
                 Name = host.Name,
                 Hostname = hostConfig.Hostname,
-                State = host.State.ToString(),
+                State = _CalculateUiState(host),
                 LastUpdate = host.LastUpdate.ToString("o"),
                 LastStateChange = host.LastStateChange.ToString("o"),
-                IsDanger = host.State == HostState.DOWN,
                 Location = host.Location,
             };
             return hostModel;
+        }
+
+        string _CalculateUiState(Host host)
+        {
+            if (host.State == HostState.DOWN)
+                return "DOWN";
+
+            var differenceBetweenStartTimeAndHostLastStateChange = host.LastStateChange - AppContext.Instance.StartTime;
+            var didTheHostLastChangeStateAtStart = differenceBetweenStartTimeAndHostLastStateChange.TotalMinutes < 5;
+            if (didTheHostLastChangeStateAtStart)
+                return "UP";
+            
+            return "WARN";
         }
     }
 }

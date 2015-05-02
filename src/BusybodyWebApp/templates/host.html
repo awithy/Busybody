@@ -1,7 +1,7 @@
 <div class="page-header">
     <h1><a href="#/hosts">Hosts</a> > {{host.Name}}</h1>
 </div>
-<div class="panel" ng-class="{'panel-success':!host.IsDanger, 'panel-danger':host.IsDanger}">
+<div class="panel" ng-class="{'panel-success':host.State === 'UP', 'panel-danger':host.State === 'DOWN', 'panel-warning':host.State === 'WARN'}">
     <div class="panel panel-heading">
         <h4>Host Summary</h4>
     </div>
