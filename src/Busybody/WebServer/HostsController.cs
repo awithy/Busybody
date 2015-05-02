@@ -18,7 +18,6 @@ namespace Busybody.WebServer
                 State = _CalculateUiState(x),
                 LastUpdate = x.LastUpdate.ToString("o"),
                 LastStateChange = x.LastStateChange.ToString("o"),
-                IsDanger = x.State == HostState.DOWN,
                 Location = x.Location,
             });
             return hostModels;
@@ -40,7 +39,6 @@ namespace Busybody.WebServer
                 State = _CalculateUiState(host),
                 LastUpdate = host.LastUpdate.ToString("o"),
                 LastStateChange = host.LastStateChange.ToString("o"),
-                IsDanger = host.State == HostState.DOWN,
                 Location = host.Location,
             };
             return hostModel;
