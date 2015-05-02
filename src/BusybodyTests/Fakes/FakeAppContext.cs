@@ -1,3 +1,4 @@
+using System;
 using Busybody;
 using Busybody.Config;
 using Busybody.Utility;
@@ -11,16 +12,18 @@ namespace BusybodyTests.Fakes
         public IEventBus EventBus { get; private set; }
         public IEmailAlertingInterface EmailAlertingInterface { get; private set; }
         public ISystemStatusWriter SystemStatusWriter { get; private set; }
+        public SystemStatus SystemStatus { get; private set; }
         public BusybodyConfig Config { get; set; }
         public HostRepository HostRepository { get; set; }
-        public SystemStatus SystemStatus { get; private set; }
         public EventLogRepository EventLogRepository { get; set; }
+        public DateTime StartTime { get; set; }
         public FakeTestFactory FakeTestFactory { get { return (FakeTestFactory)TestFactory;  } }
         public FakeEmailAlertingInterface FakeEmailAlertingInterface { get { return (FakeEmailAlertingInterface) EmailAlertingInterface; }}
         public FakeSystemStatusWriter FakeSystemStatusWriter { get { return (FakeSystemStatusWriter) SystemStatusWriter; } }
 
         public FakeAppContext()
         {
+            StartTime = DateTime.UtcNow;
             EventLogger = new FakeEventLogger();
             TestFactory = new FakeTestFactory();
             EventBus = new EventBus();

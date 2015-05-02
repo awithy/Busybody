@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Busybody;
 using Busybody.Events;
+using Busybody.WebServer;
 using BusybodyTests.Helpers;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace BusybodyTests
@@ -136,9 +139,59 @@ namespace BusybodyTests
         }
 
         [Test]
-        public void It_should_not_raisE_an_event()
+        public void It_should_not_raise_an_event()
         {
             _testContext.EventHandler.AssertNoEventsReceived<HostStateEvent>();
+        }
+    }
+
+    [TestFixture]
+    public class When_a_host_has_been_down_in_the_last_24_hours_but_system_has_been_up_longer : HostTestResultBase
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            var startTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1).Add(TimeSpan.FromSeconds(1)));
+            _testContext.TestAppContext.StartTime = startTime;
+            _failedTestResult.Timestamp = DateTime.UtcNow;
+            _successfulTestResult.Timestamp = DateTime.UtcNow;
+
+            //Do
+            _hostEventHandler.Handle(_failedTestResult);
+            _hostEventHandler.Handle(_successfulTestResult);
+            _testContext.TestAppContext.EventBus.DispatchPending();
+        }
+
+        [Test]
+        public void It_should_be_in_state_warning()
+        {
+            var hostController = new HostsController();
+            var hosts = hostController.GetHosts();
+            hosts.First().State.Should().Be("WARN");
+        }
+    }
+
+    [TestFixture]
+    public class When_a_host_has_been_down_in_the_last_24_hours_but_last_state_change_was_when_system_started : HostTestResultBase
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            var startTime = DateTime.UtcNow.Subtract(TimeSpan.FromHours(1));
+            _testContext.TestAppContext.StartTime = startTime;
+            _successfulTestResult.Timestamp = startTime.Add(TimeSpan.FromMinutes(1)); //Give it a bit to do the first state change.
+
+            //Do
+            _hostEventHandler.Handle(_successfulTestResult);
+            _testContext.TestAppContext.EventBus.DispatchPending();
+        }
+
+        [Test]
+        public void It_should_be_in_state_up()
+        {
+            var hostController = new HostsController();
+            var hosts = hostController.GetHosts();
+            hosts.First().State.Should().Be("UP");
         }
     }
 

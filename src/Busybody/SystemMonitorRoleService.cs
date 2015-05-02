@@ -73,10 +73,9 @@ namespace Busybody
 
         public float Cpu { get; private set; }
 
-        DateTime _startTime = DateTime.UtcNow;
         public DateTime GetStartTime()
         {
-            return _startTime;
+            return AppContext.Instance.StartTime;
         }
 
         public DateTime LastUpdate { get; private set; }

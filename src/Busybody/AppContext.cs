@@ -1,4 +1,5 @@
-﻿using Busybody.Config;
+﻿using System;
+using Busybody.Config;
 using Busybody.Utility;
 
 namespace Busybody
@@ -13,24 +14,26 @@ namespace Busybody
         HostRepository HostRepository { get; }
         SystemStatus SystemStatus { get; }
         EventLogRepository EventLogRepository { get; set; }
+        DateTime StartTime { get; }
     }
 
     public class AppContext : IAppContext
     {
+        public DateTime StartTime { get; private set; }
         public static IAppContext Instance;
-
         public BusybodyConfig Config { get; set; }
         public ISystemStatusWriter SystemStatusWriter { get; private set; }
         public IEventLogger EventLogger { get; private set; }
         public ITestFactory TestFactory { get; private set; }
         public IEventBus EventBus { get; private set; }
         public IEmailAlertingInterface EmailAlertingInterface { get; set; }
-        public HostRepository HostRepository { get; set; }
         public SystemStatus SystemStatus { get; set; }
+        public HostRepository HostRepository { get; set; }
         public EventLogRepository EventLogRepository { get; set; }
 
         public AppContext()
         {
+            StartTime = DateTime.UtcNow;
             EventLogger = new EventLogger();
             TestFactory = new TestFactory();
             EventBus = new EventBus();

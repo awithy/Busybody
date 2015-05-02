@@ -1,11 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Busybody.Events;
 
 namespace Busybody
 {
     public class HostEventHandler : IHandle<HostTestResultEvent>
     {
-        static Logger _log = new Logger(typeof(HostEventHandler));
+        static readonly Logger _log = new Logger(typeof(HostEventHandler));
 
         public void Handle(HostTestResultEvent @event)
         {

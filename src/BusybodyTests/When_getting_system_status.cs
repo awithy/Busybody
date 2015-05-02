@@ -21,7 +21,7 @@ namespace BusybodyTests
         [Test]
         public void It_should_include_the_start_time()
         {
-            DateTime.Parse(_systemStatus.StartTime).Day.Should().Be(DateTime.UtcNow.Day);
+            DateTime.Parse(_systemStatus.StartTime).ToUniversalTime().Day.Should().Be(DateTime.UtcNow.Day);
         }
     }
 
