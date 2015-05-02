@@ -28,6 +28,7 @@ app.controller('hostController', function($rootScope, $scope, $http, $interval, 
 });
 
 app.controller('eventLogController', function($rootScope, $scope, $http, $interval) {
+    $scope.reverseSort = false;
     var update = function () {
         $http.get("/eventLogApi")
             .success(function(response) {

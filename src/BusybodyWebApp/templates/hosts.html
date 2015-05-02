@@ -13,7 +13,7 @@
     <tr ng-repeat="host in hosts | orderBy:orderByField:reverseSort" ng-class="{'danger':host.State === 'DOWN', 'warning':host.State === 'WARN'}">
         <td><a href="#/hosts/{{host.Id}}">{{host.Name}}</a></td>
         <td>{{host.Location}}</td>
-        <td ng-model="host.IsDanger">{{host.State}}</td>
+        <td>{{host.State}}</td>
         <td>{{host.LastStateChange | fromNow}}</td>
         <td>{{host.LastUpdate | fromNow}}</td>
     </tr>
