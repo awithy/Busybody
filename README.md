@@ -83,6 +83,7 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 		"ListeningUrls":"http://localhost:9000;http://hostname:9000",
 		"EmailAlertConfiguration":
 		{
+			"Enabled":true,
 			"FromAddress":"adrian@adrianwithy.com",
 			"ToEmailAddress":"adrian@adrianwithy.com",
 			"Host":"%SMTP_HOSTNAME%",
