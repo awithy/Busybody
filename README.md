@@ -9,7 +9,7 @@ Busybody is the beginnings of a distributed network monitoring system in the lik
 
 Why another network monitor?  Because I need one for a few personal network projects, and I felt like building one for fun.
 
-Busybody is written in C# .NET 4.5.
+The Busybody service is written in C# .NET 4.5, and uses Angular for it's web portal.
 
 
 ## Capabilities ##
