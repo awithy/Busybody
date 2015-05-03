@@ -1,0 +1,18 @@
+<div class="page-header">
+    <h1>Config</h1>
+</div>
+<div class="panel panel-info">
+    <div class="panel panel-heading">
+        <h4>E-Mail Alerting Configuration</h4>
+    </div>
+    <div class="panel panel-body">
+        <ul>
+            <li><span>Is enabled? {{response.EmailAlertingConfig.Enabled}}</span></li>
+            <li><span>From: {{response.EmailAlertingConfig.From}}</span></li>
+            <li><span>Recipients: {{response.EmailAlertingConfig.Recipients}}</span></li>
+            <li><span>SMTP Hostname: {{response.EmailAlertingConfig.SmtpHostname}}</span></li>
+            <li><span>SMTP Port: {{response.EmailAlertingConfig.SmtpPort}}</span></li>
+            <li><span>Is Password Set? {{response.EmailAlertingConfig.IsPasswordSet}}</span></li>
+        </ul>
+    </div>
+</div>

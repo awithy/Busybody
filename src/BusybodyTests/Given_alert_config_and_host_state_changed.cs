@@ -133,6 +133,23 @@ namespace BusybodyTests
     }
 
     [TestFixture]
+    public class Given_alert_config_and_alerting_is_disabled_in_config : AlertingTestsBase
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            _testContext.TestAppContext.Config.EmailAlertConfiguration.Enabled = false;
+            _alertingEventHandler.Handle(_hostStateEvent);
+        }
+
+        [Test]
+        public void It_should_not_alert()
+        {
+            _fakeEmailInterface.EmailAlerts.Should().BeEmpty();
+        }
+    }
+
+    [TestFixture]
     public class AlertingTestsBase
     {
         protected AlertingEventHandler _alertingEventHandler;
@@ -148,19 +165,7 @@ namespace BusybodyTests
             _alertingEventHandler = new AlertingEventHandler();
             _testContext = BusybodyTestContext.Setup();
             _fakeEmailInterface = _testContext.TestAppContext.FakeEmailAlertingInterface;
-            _testContext.TestAppContext.Config.EmailAlertConfiguration = _DummyEmailConfiguration();
-        }
-
-        EmailAlertConfiguration _DummyEmailConfiguration()
-        {
-            return new EmailAlertConfiguration
-            {
-                Host = "host",
-                Port = 123,
-                FromAddress = "a@a.com",
-                ToEmailAddress = "b@b.com",
-                Password = "password",
-            };
+            _testContext.TestAppContext.Config.EmailAlertConfiguration.Enabled = true;
         }
     }
 }

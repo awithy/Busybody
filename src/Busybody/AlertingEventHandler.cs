@@ -16,6 +16,12 @@ namespace Busybody
         {
             _log.Trace("Handling HostStateEvent");
 
+            if (!_ValidEmailConfig() || !AppContext.Instance.Config.EmailAlertConfiguration.Enabled)
+            {
+                _log.Trace("Alerting disabled or e-mail config invalid");
+                return;
+            }
+
             if (_downHosts.Contains(@event.HostNickname))
             {
                 if (@event.State == HostState.UP)
@@ -29,12 +35,6 @@ namespace Busybody
                     return;
                 }
                 _downHosts.Add(@event.HostNickname);
-            }
-
-            if (!_ValidEmailConfig())
-            {
-                _log.Debug("Invalid alerting e-mail configuration");
-                return;
             }
 
             if (_ShouldThrottle(@event.Timestamp))

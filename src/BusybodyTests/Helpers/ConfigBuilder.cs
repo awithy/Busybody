@@ -31,6 +31,15 @@ namespace BusybodyTests.Helpers
         {
             return new BusybodyConfig
             {
+                EmailAlertConfiguration = new EmailAlertConfiguration
+                {
+                    Enabled = false,
+                    FromAddress = "a@a.com",
+                    Host = "smtp.doesnotexist",
+                    Password = "ABCD",
+                    Port = 1234,
+                    ToEmailAddress = "b@b.com",
+                },
                 Hosts = Hosts,
                 PollingInterval = _pollingInterval,
                 DataDirectory = Path.Combine(Path.GetTempPath(), "Busybody"),

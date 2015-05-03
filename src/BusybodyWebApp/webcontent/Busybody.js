@@ -56,6 +56,17 @@ app.controller('systemStatusController', function($scope, $http, $interval) {
     update();
 });
 
+app.controller('configController', function($scope, $http, $interval) {
+    var update = function () {
+        $http.get("/config")
+            .success(function(response) {
+                $scope.response = response;
+            });
+    };
+    $interval(update, 1000);
+    update();
+});
+
 app.controller('timeController', function($scope, $http, $interval) {
     var update = function () {
         $scope.now = moment().format('HH:mm:ss');
@@ -83,6 +94,7 @@ app.config(['$routeProvider', function($routeProvider, viewsController) {
     $routeProvider.when('/hosts/:hostId', {templateUrl: 'templates/host.html', controller:'hostController'});
     $routeProvider.when('/eventLog', {templateUrl: 'templates/eventLog.html', controller:'eventLogController'});
     $routeProvider.when('/systemStatus', {templateUrl: 'templates/systemStatus.html', controller:'systemStatusController'});
+    $routeProvider.when('/config', {templateUrl: 'templates/config.html', controller:'configController'});
     $routeProvider.when('/test', {templateUrl: 'templates/test.html', controller:'viewsController'});
     $routeProvider.otherwise({redirectTo: '/hosts'});
 }]);
