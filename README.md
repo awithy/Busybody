@@ -129,7 +129,7 @@ Notes:
 
 ## Ideas ##
 
-- Gulp Gulp
+- Gulp
 - Bower
 - Web portal UI testing (Jasmine?, Karma?)
 - Weekly e-mailed status reports
