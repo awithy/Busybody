@@ -11,11 +11,21 @@ namespace BusybodyTests
     public class When_getting_config_report : ConfigReportTests
     {
         EmailAlertingConfigModel _emailConfig;
+        ConfigModel _actualConfig;
 
         [SetUp]
         public void SetUp()
         {
-            _emailConfig = _configController.GetConfig().EmailAlertingConfig;
+            _actualConfig = _configController.GetConfig();
+            _emailConfig = _actualConfig.EmailAlertingConfig;
+        }
+
+        [Test]
+        public void It_should_return_the_basic_configuration()
+        {
+            _actualConfig.DataDirectory.Should().Be(_config.DataDirectory);
+            _actualConfig.ListeningUris.Should().Be(_config.ListeningUrls);
+            _actualConfig.PollingInterval.Should().Be(_config.PollingInterval);
         }
 
         [Test]

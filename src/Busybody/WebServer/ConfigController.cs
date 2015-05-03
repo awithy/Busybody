@@ -10,6 +10,9 @@ namespace Busybody.WebServer
             var config = AppContext.Instance.Config;
             var configModel = new ConfigModel
             {
+                PollingInterval = config.PollingInterval,
+                DataDirectory = config.DataDirectory,
+                ListeningUris = config.ListeningUrls,
                 EmailAlertingConfig = _MapEmailAlertingConfig(config.EmailAlertConfiguration),
             };
             return configModel;
@@ -33,6 +36,9 @@ namespace Busybody.WebServer
     public class ConfigModel
     {
         public EmailAlertingConfigModel EmailAlertingConfig { get; set; }
+        public int PollingInterval { get; set; }
+        public string DataDirectory { get; set; }
+        public string ListeningUris { get; set; }
     }
 
     public class EmailAlertingConfigModel
