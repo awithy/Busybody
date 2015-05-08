@@ -2,11 +2,11 @@
 
 namespace Busybody.Events
 {
-    public class SystemStartedEvent : BusybodyEvent
+    public class BusybodyStartedEvent : BusybodyEvent
     {
         public DateTime StartedDateTime { get; private set; }
 
-        public SystemStartedEvent(DateTime startedDateTime)
+        public BusybodyStartedEvent(DateTime startedDateTime)
         {
             StartedDateTime = startedDateTime;
         }
