@@ -10,5 +10,10 @@ namespace Busybody.Events
         {
             StartedDateTime = startedDateTime;
         }
+
+        public override string ToLogString()
+        {
+            return string.Format("Busybody started");
+        }
     }
 }

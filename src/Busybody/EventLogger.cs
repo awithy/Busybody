@@ -6,7 +6,8 @@ namespace Busybody
 {
     public interface IEventLogger :
         IHandle<HostStateEvent>,
-        IHandle<StartupCompleteEvent>
+        IHandle<BusybodyStartedEvent>,
+        IHandle<EmailAlertSentEvent>
     {
     }
 
@@ -33,10 +34,20 @@ namespace Busybody
 
         public void Handle(HostStateEvent @event)
         {
-            Publish(@event.ToLogString());
+            _Handle(@event);
         }
 
-        public void Handle(StartupCompleteEvent @event)
+        public void Handle(BusybodyStartedEvent @event)
+        {
+            _Handle(@event);
+        }
+
+        public void Handle(EmailAlertSentEvent @event)
+        {
+            _Handle(@event);
+        }
+
+        void _Handle(BusybodyEvent @event)
         {
             Publish(@event.ToLogString());
         }

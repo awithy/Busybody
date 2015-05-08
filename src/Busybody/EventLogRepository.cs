@@ -5,25 +5,41 @@ using Busybody.WebServer;
 
 namespace Busybody
 {
-    public class EventLogRepository : IHandle<HostStateEvent>,
-        IHandle<SystemErrorEvent>
+    public class EventLogRepository : 
+        IHandle<HostStateEvent>,
+        IHandle<SystemErrorEvent>,
+        IHandle<EmailAlertSentEvent>,
+        IHandle<BusybodyStartedEvent>
     {
         static BlockingCollection<EventModel> _events = new BlockingCollection<EventModel>(new ConcurrentQueue<EventModel>());
 
         public void Handle(HostStateEvent @event)
         {
-            _events.Add(new EventModel
+            if (@event.State == HostState.DOWN)
             {
-                Timestamp = @event.Timestamp.ToString("o"),
-                EventType = @event.GetType().Name,
-                EventMessage = @event.ToLogString(),
-                IsDanger = @event.State == HostState.DOWN,
-            });
-
-            _ClearOldEvents();
+                _AddDanger(@event);
+            }
+            else
+            {
+                _Add(@event);
+            }
         }
 
         public void Handle(SystemErrorEvent @event)
+        {
+            _AddDanger(@event);
+        }
+
+        public void Handle(EmailAlertSentEvent @event)
+        {
+            _Add(@event);
+        }
+        public void Handle(BusybodyStartedEvent @event)
+        {
+            _Add(@event);
+        }
+
+        void _AddDanger(BusybodyEvent @event)
         {
             _events.Add(new EventModel
             {
@@ -35,6 +51,19 @@ namespace Busybody
 
             _ClearOldEvents();
         }
+
+        static void _Add(BusybodyEvent @event)
+        {
+            _events.Add(new EventModel
+            {
+                Timestamp = @event.Timestamp.ToString("o"),
+                EventType = @event.GetType().Name,
+                EventMessage = @event.ToLogString(),
+            });
+
+            _ClearOldEvents();
+        }
+
 
         public IEnumerable<EventModel> GetEvents()
         {

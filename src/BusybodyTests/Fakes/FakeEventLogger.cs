@@ -13,7 +13,12 @@ namespace BusybodyTests.Fakes
             Events.Add(@event.ToLogString());
         }
 
-        public void Handle(StartupCompleteEvent @event)
+        public void Handle(BusybodyStartedEvent @event)
+        {
+            Events.Add(@event.ToLogString());
+        }
+
+        public void Handle(EmailAlertSentEvent @event)
         {
             Events.Add(@event.ToLogString());
         }

@@ -1,4 +1,5 @@
-﻿using Busybody.Events;
+﻿using System;
+using Busybody.Events;
 using Busybody.WebServer;
 
 namespace Busybody
@@ -23,7 +24,7 @@ namespace Busybody
             _eventProcessorRoleService.Start();
             _busybodyWebServer.Start();
 
-            AppContext.Instance.EventBus.Publish("All", new StartupCompleteEvent());
+            AppContext.Instance.EventBus.Publish("All", new BusybodyStartedEvent(DateTime.UtcNow));
             _log.Info("Busybody started");
         }
 

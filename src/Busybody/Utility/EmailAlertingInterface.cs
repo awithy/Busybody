@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Busybody.Events;
 
 namespace Busybody.Utility
 {
@@ -23,6 +24,7 @@ namespace Busybody.Utility
             var email = new Email(toAddresses, emailAlert.Subject, emailAlert.Body);
             _log.InfoFormat("Sending e-mail alert to:{0} with subject:{1}",  emailConfig.ToEmailAddress, emailAlert.Subject);
             emailClient.Send(email);
+            AppContext.Instance.EventBus.Publish("All", new EmailAlertSentEvent(emailConfig.ToEmailAddress, emailAlert.Subject));
         }
     }
 
