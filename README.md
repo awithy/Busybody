@@ -159,6 +159,8 @@ Notes:
 
 ![Hosts Screenshot](https://github.com/awithy/Busybody/blob/master/screenshots/hosts.png)
 
+![Event Log Screenshot](https://github.com/awithy/Busybody/blob/master/screenshots/eventLog.png)
+
 ## License ##
 
 Apache 2.0 - See LICENSE.txt
