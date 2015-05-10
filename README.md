@@ -124,7 +124,6 @@ Notes:
 1. HTTP/HTTPS test
 1. OpenVPN test
 1. SSH test
-1. Multiple e-mail alerting
 
 
 ## Ideas ##
