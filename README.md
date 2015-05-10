@@ -114,7 +114,7 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 Notes: 
 
 - Polling interval is in seconds
-- Test AllowableFailures property is option
+- Test AllowableFailures property is optional
 - Ping test parameters are optional
 - If no ListeningUrls specified, defaults to http://localhost:9000
 - You can use a root level "WebRoot" property to specify an override for the web app - for development
