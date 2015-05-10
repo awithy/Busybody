@@ -155,6 +155,9 @@ Notes:
 
 - Must be run with admin rights when run from the command line with externally available web server URL (i.e., anything but localhost)
 
+## Screenshots ##
+
+![Hosts Screenshot](https://github.com/awithy/Busybody/blob/master/screenshots/hosts.png)
 
 ## License ##
 
