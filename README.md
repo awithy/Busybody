@@ -85,7 +85,7 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 		{
 			"Enabled":true,
 			"FromAddress":"adrian@adrianwithy.com",
-			"ToEmailAddress":"adrian@adrianwithy.com",
+			"ToAddress":"adrian@adrianwithy.com",
 			"Host":"%SMTP_HOSTNAME%",
 			"Port":587,
 			"Password":"%PASSWORD%",

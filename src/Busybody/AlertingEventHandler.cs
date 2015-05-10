@@ -100,7 +100,7 @@ namespace Busybody
                 return false;
             if (string.IsNullOrEmpty(config.FromAddress))
                 return false;
-            if (string.IsNullOrEmpty(config.ToEmailAddress))
+            if (string.IsNullOrEmpty(config.ToAddress))
                 return false;
             if (string.IsNullOrEmpty(config.Password))
                 return false;

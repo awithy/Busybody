@@ -38,7 +38,7 @@ namespace BusybodyTests.Helpers
                     Host = "smtp.doesnotexist",
                     Password = "ABCD",
                     Port = 1234,
-                    ToEmailAddress = "b@b.com",
+                    ToAddress = "b@b.com",
                 },
                 Hosts = Hosts,
                 PollingInterval = _pollingInterval,
