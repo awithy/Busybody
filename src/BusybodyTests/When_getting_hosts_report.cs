@@ -35,6 +35,39 @@ namespace BusybodyTests
         }
     }
 
+    [TestFixture]
+    public class When_getting_host_by_id_from_hosts_controller : HostsReportTests
+    {
+        HostModel _host;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _hostEventHandler.Handle(_failedTestResult);
+            _testContext.TestAppContext.EventBus.DispatchPending();
+            var hosts = _hostsController.GetHosts();
+            _host = _hostsController.GetHostById(hosts.First().Id);
+        }
+
+        [Test]
+        public void It_should_get_the_host()
+        {
+            _host.Should().NotBeNull();
+        }
+
+        [Test]
+        public void It_should_list_the_host_tests()
+        {
+            _host.Tests.First().Name.Should().Be("Ping");
+        }
+
+        [Test]
+        public void It_should_list_the_host_test_state()
+        {
+            _host.Tests.First().State.Should().Be("Fail");
+        }
+    }
+
     public class HostsReportTests
     {
         protected BusybodyTestContext _testContext;

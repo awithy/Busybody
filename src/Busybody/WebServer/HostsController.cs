@@ -40,6 +40,12 @@ namespace Busybody.WebServer
                 LastUpdate = host.LastUpdate.ToString("o"),
                 LastStateChange = host.LastStateChange.ToString("o"),
                 Location = host.Location,
+                Tests = host.Tests.Select(x => new HostTestModel
+                {
+                    Name = x.Value.Name,
+                    State = x.Value.State.ToString(),
+                    LastTest = x.Value.LastTest.ToString("o"),
+                }),
             };
             return hostModel;
         }

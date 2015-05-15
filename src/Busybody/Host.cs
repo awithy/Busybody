@@ -56,6 +56,7 @@ namespace Busybody
         public int NumberOfFailures { get; set; }
         public int AllowableFailures { get; set; }
         public HostTestState State { get; set; }
+        public DateTime LastTest { get; set; }
 
         public HostTest(HostTestConfig test)
         {
@@ -76,6 +77,7 @@ namespace Busybody
                 if (NumberOfFailures > AllowableFailures)
                     State = HostTestState.Fail;
             }
+            LastTest = @event.Timestamp;
         }
     }
 
