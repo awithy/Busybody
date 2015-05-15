@@ -8,7 +8,7 @@ namespace Busybody.Config
         public string FromAddress { get; set; }
         public string Password { get; set; }
         public string Host { get; set; }
-        public string ToEmailAddress { get; set; }
+        public string ToAddress { get; set; }
         public int Port { get; set; }
     }
 }

@@ -85,7 +85,7 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 		{
 			"Enabled":true,
 			"FromAddress":"adrian@adrianwithy.com",
-			"ToEmailAddress":"adrian@adrianwithy.com",
+			"ToAddress":"adrian@adrianwithy.com",
 			"Host":"%SMTP_HOSTNAME%",
 			"Port":587,
 			"Password":"%PASSWORD%",
@@ -114,7 +114,7 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 Notes: 
 
 - Polling interval is in seconds
-- Test AllowableFailures property is option
+- Test AllowableFailures property is optional
 - Ping test parameters are optional
 - If no ListeningUrls specified, defaults to http://localhost:9000
 - You can use a root level "WebRoot" property to specify an override for the web app - for development
@@ -124,7 +124,6 @@ Notes:
 1. HTTP/HTTPS test
 1. OpenVPN test
 1. SSH test
-1. Multiple e-mail alerting
 
 
 ## Ideas ##
@@ -155,6 +154,11 @@ Notes:
 
 - Must be run with admin rights when run from the command line with externally available web server URL (i.e., anything but localhost)
 
+## Screenshots ##
+
+![Hosts Screenshot](https://github.com/awithy/Busybody/blob/master/screenshots/hosts.png)
+
+![Event Log Screenshot](https://github.com/awithy/Busybody/blob/master/screenshots/eventLog.png)
 
 ## License ##
 

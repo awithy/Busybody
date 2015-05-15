@@ -23,7 +23,7 @@ namespace Busybody.WebServer
             var emailAlertConfigModel = new EmailAlertingConfigModel
             {
                 From = emailAlertConfiguration.FromAddress,
-                Recipients = emailAlertConfiguration.ToEmailAddress,
+                Recipients = emailAlertConfiguration.ToAddress,
                 Enabled = emailAlertConfiguration.Enabled,
                 SmtpHostname = emailAlertConfiguration.Host,
                 IsPasswordSet = !string.IsNullOrEmpty(emailAlertConfiguration.Password),

@@ -32,7 +32,7 @@ namespace BusybodyTests
         public void It_should_return_the_email_configuration()
         {
             _emailConfig.From.Should().Be(_config.EmailAlertConfiguration.FromAddress);
-            _emailConfig.Recipients.Should().Be(_config.EmailAlertConfiguration.ToEmailAddress);
+            _emailConfig.Recipients.Should().Be(_config.EmailAlertConfiguration.ToAddress);
             _emailConfig.IsPasswordSet.Should().Be(true);
             _emailConfig.SmtpHostname.Should().Be(_config.EmailAlertConfiguration.Host);
             _emailConfig.SmtpPort.Should().Be(_config.EmailAlertConfiguration.Port);

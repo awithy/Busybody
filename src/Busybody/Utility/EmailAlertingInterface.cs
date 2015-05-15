@@ -20,9 +20,9 @@ namespace Busybody.Utility
             emailConfig.Port = emailConfig.Port;
             emailConfig.Password = emailConfig.Password;
             var emailClient = new EmailClient(emailConfig);
-            IEnumerable<string> toAddresses = new []{emailConfig.ToEmailAddress};
+            IEnumerable<string> toAddresses = new []{emailConfig.ToAddress};
             var email = new Email(toAddresses, emailAlert.Subject, emailAlert.Body);
-            _log.InfoFormat("Sending e-mail alert to:{0} with subject:{1}",  emailConfig.ToEmailAddress, emailAlert.Subject);
+            _log.InfoFormat("Sending e-mail alert to:{0} with subject:{1}",  emailConfig.ToAddress, emailAlert.Subject);
             emailClient.Send(email);
             AppContext.Instance.EventBus.Publish("All", new EmailAlertSentEvent(emailConfig.ToEmailAddress, emailAlert.Subject));
         }
