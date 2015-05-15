@@ -24,7 +24,7 @@ namespace Busybody.Utility
             var email = new Email(toAddresses, emailAlert.Subject, emailAlert.Body);
             _log.InfoFormat("Sending e-mail alert to:{0} with subject:{1}",  emailConfig.ToAddress, emailAlert.Subject);
             emailClient.Send(email);
-            AppContext.Instance.EventBus.Publish("All", new EmailAlertSentEvent(emailConfig.ToEmailAddress, emailAlert.Subject));
+            AppContext.Instance.EventBus.Publish("All", new EmailAlertSentEvent(emailConfig.ToAddress, emailAlert.Subject));
         }
     }
 
