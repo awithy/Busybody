@@ -122,6 +122,7 @@
     <Compile Include="AlertingEventHandler.cs" />
     <Compile Include="AppContext.cs" />
     <Compile Include="BusybodyDaemon.cs" />
+    <Compile Include="ErrorHandler.cs" />
     <Compile Include="EventLogRepository.cs" />
     <Compile Include="Events\BusybodyStartedEvent.cs" />
     <Compile Include="Events\EmailAlertSentEvent.cs" />
@@ -135,7 +136,6 @@
     <Compile Include="Utility\EmailAlertingInterface.cs" />
     <Compile Include="Utility\EmailClient.cs" />
     <Compile Include="Config\EmailAlertConfiguration.cs" />
-    <Compile Include="ErrorHandler.cs" />
     <Compile Include="EventBus.cs" />
     <Compile Include="EventLogger.cs" />
     <Compile Include="EventProcessorRoleService.cs" />
@@ -148,7 +148,6 @@
     <Compile Include="IHandle.cs" />
     <Compile Include="InstanceMode.cs" />
     <Compile Include="LogSetup.cs" />
-    <Compile Include="Utility\Extensions.cs" />
     <Compile Include="Utility\RoleServiceBase.cs" />
     <Compile Include="Events\SystemErrorEvent.cs" />
     <Compile Include="SystemMonitorRoleService.cs" />
@@ -178,7 +177,12 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\BusybodyShared\BusybodyShared.csproj">
+      <Project>{ae9f2ed5-59da-41a1-8a8e-c85578364f86}</Project>
+      <Name>BusybodyShared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

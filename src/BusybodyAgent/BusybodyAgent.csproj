@@ -71,12 +71,26 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppContext.cs" />
+    <Compile Include="BusybodyAgentDaemon.cs" />
+    <Compile Include="BusybodyConfig.cs" />
+    <Compile Include="CommonPaths.cs" />
+    <Compile Include="ErrorHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="busybodyagent.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BusybodyShared\BusybodyShared.csproj">
+      <Project>{ae9f2ed5-59da-41a1-8a8e-c85578364f86}</Project>
+      <Name>BusybodyShared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

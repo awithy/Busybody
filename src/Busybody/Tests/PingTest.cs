@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using Busybody.Config;
 using Busybody.Utility;
+using BusybodyShared;
 
 namespace Busybody.Tests
 {

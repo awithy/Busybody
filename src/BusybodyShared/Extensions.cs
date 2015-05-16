@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Busybody.Utility
+namespace BusybodyShared
 {
     public static class DictionaryExtensions
     {
