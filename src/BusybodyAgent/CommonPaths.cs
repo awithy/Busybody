@@ -13,18 +13,17 @@ namespace BusybodyAgent
 
         public static string CurrentConfigFilePath()
         {
-            var currentConfigFilePath = Path.Combine(CurrentDirectory(), "BusybodyAgent.cfg");
+            var configFileName = "BusybodyAgent.cfg";
+            var currentConfigFilePath = Path.Combine(CurrentDirectory(), configFileName);
             if(File.Exists(currentConfigFilePath))
                 return currentConfigFilePath;
-            currentConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "busybodyAgent.cfg");
+            currentConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), configFileName);
+            if(File.Exists(currentConfigFilePath))
+                return currentConfigFilePath;
+            currentConfigFilePath = Path.Combine(BusybodyData(), configFileName);
             if(File.Exists(currentConfigFilePath))
                 return currentConfigFilePath;
             throw new ConfigurationFileNotFoundException();
-        }
-
-        public static string EventLogFilePath()
-        {
-            return Path.Combine(BusybodyData(), "Events.log");
         }
 
         public static string RandomName()
@@ -43,10 +42,6 @@ namespace BusybodyAgent
         {
             return Path.Combine(BusybodyData(), "Logs");
         }
-    }
-
-    public class DataDirectoryNullException : Exception
-    {
     }
 
     public class ConfigurationFileNotFoundException : Exception

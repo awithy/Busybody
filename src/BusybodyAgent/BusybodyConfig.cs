@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -31,7 +32,7 @@ namespace BusybodyAgent
             if (config.PollingInterval == 0)
                 config.PollingInterval = 60;
             if (config.DataDirectory == null)
-                config.DataDirectory = Path.Combine(Path.GetTempPath(), "Busybody");
+                config.DataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Busybody");
         }
     }
 }
