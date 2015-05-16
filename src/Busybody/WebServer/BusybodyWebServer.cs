@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Microsoft.Owin.Hosting;
 
 namespace Busybody.WebServer
@@ -9,15 +10,32 @@ namespace Busybody.WebServer
 
         public void Start()
         {
-            var startOptions = new StartOptions();
-            foreach(var listeningUrl in AppContext.Instance.Config.GetListeningUrls())
-                startOptions.Urls.Add(listeningUrl);
-            _webApp = WebApp.Start<BusybodyWebApp>(startOptions);
+            try
+            {
+                var startOptions = new StartOptions();
+                foreach(var listeningUrl in AppContext.Instance.Config.GetListeningUrls())
+                    startOptions.Urls.Add(listeningUrl);
+                _webApp = WebApp.Start<BusybodyWebApp>(startOptions);
+            }
+            catch (Exception ex)
+            {
+                new ErrorHandler().Critical(ex, "Exception thrown while starting web server");
+                throw;
+            }
         }
 
         public void Stop()
         {
-            _webApp.Dispose();
+            try
+            {
+                if(_webApp != null)
+                    _webApp.Dispose();
+            }
+            catch (Exception ex)
+            {
+                new ErrorHandler().Critical(ex, "Exception thrown while stopping web server");
+                throw;
+            }
         }
     }
 }
