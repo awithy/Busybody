@@ -166,7 +166,7 @@ namespace BusybodyTests
         public void It_should_be_in_state_warning()
         {
             var hostController = new HostsController();
-            var hosts = hostController.GetHosts();
+            var hosts = hostController.GetHosts().HostGroups.SelectMany(x => x.Hosts);
             hosts.First().State.Should().Be("WARN");
         }
     }
@@ -190,7 +190,7 @@ namespace BusybodyTests
         public void It_should_be_in_state_up()
         {
             var hostController = new HostsController();
-            var hosts = hostController.GetHosts();
+            var hosts = hostController.GetHosts().HostGroups.SelectMany(x => x.Hosts);
             hosts.First().State.Should().Be("UP");
         }
     }

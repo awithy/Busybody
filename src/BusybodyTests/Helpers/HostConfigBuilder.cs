@@ -28,6 +28,7 @@ namespace BusybodyTests.Helpers
                 Hostname = _hostname,
                 Location = _location,
                 Tests = Tests,
+                Group = "Host Group",
             };
             _configBuilder.Hosts.Add(hostConfig);
             return _configBuilder;

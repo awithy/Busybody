@@ -95,6 +95,7 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 			"Nickname":"Local Machine",
 			"Hostname":"127.0.0.1",
 			"Location":"Server Room",
+			"Group":"Host Group",
 			"Tests":[
 			{
 				"Name":"Ping",

@@ -8,19 +8,39 @@ namespace Busybody.WebServer
     public class HostsController : ApiController
     {
         [Authorize]
-        public IEnumerable<HostModel> GetHosts()
+        public HostsByGroupModel GetHosts()
         {
-            var hosts = AppContext.Instance.HostRepository.GetHosts();
-            var hostModels = hosts.Select(x => new HostModel
+            var hostGroups = new List<HostGroupModel>();
+            var hosts = AppContext.Instance.HostRepository.GetHosts().ToArray();
+            var groups = hosts.Select(x => x.Group).Distinct().OrderBy(x => x);
+            foreach (var group in groups)
             {
-                Id = x.Id,
-                Name = x.Name,
-                State = _CalculateUiState(x),
-                LastUpdate = x.LastUpdate.ToString("o"),
-                LastStateChange = x.LastStateChange.ToString("o"),
-                Location = x.Location,
-            });
-            return hostModels;
+                var hostsInGroup = hosts
+                    .Where(x => x.Group == group)
+                    .ToArray();
+                var hostModelsInGroup = hostsInGroup.Select(_ConvertToHostModel);
+                hostGroups.Add(new HostGroupModel
+                {
+                    Name = group,
+                    Hosts = hostModelsInGroup,
+                    State = hostsInGroup.All(x => x.State == HostState.UP) ? "UP" : hostsInGroup.Any(x => x.State == HostState.DOWN) ? "DOWN" : "WARN",
+                });
+            }
+            return new HostsByGroupModel{ HostGroups = hostGroups };
+        }
+
+        HostModel _ConvertToHostModel(Host host)
+        {
+            return new HostModel
+            {
+                Id = host.Id,
+                Name = host.Name,
+                State = _CalculateUiState(host),
+                LastUpdate = host.LastUpdate.ToString("o"),
+                LastStateChange = host.LastStateChange.ToString("o"),
+                Location = host.Location,
+                Group = host.Group,
+            };
         }
 
         [Authorize]
@@ -40,6 +60,7 @@ namespace Busybody.WebServer
                 LastUpdate = host.LastUpdate.ToString("o"),
                 LastStateChange = host.LastStateChange.ToString("o"),
                 Location = host.Location,
+                Group = host.Group,
                 Tests = host.Tests.Select(x => new HostTestModel
                 {
                     Name = x.Value.Name,
