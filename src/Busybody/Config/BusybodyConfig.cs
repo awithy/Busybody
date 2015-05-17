@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using BusybodyShared;
 using Newtonsoft.Json;
 
 namespace Busybody.Config
@@ -12,7 +13,9 @@ namespace Busybody.Config
         public string DataDirectory { get; set; }
         public EmailAlertConfiguration EmailAlertConfiguration { get; set; }
         public string ListeningUrls { get; set; } 
-        public string WebRoot { get; set; } 
+        public string WebRoot { get; set; }
+        public FileAgentChannelConfig FileAgentChannelConfig { get; set; }
+        public AzureAgentChannelConfig AzureAgentChannelConfig { get; set; }
 
         public List<HostConfig> Hosts;
 

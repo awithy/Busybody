@@ -9,6 +9,7 @@ namespace Busybody.Config
         public string Hostname { get; set; }
         public string Location { get; set; }
         public string Group { get; set; }
+        public string AgentId { get; set; }
 
         public List<HostTestConfig> Tests { get; set; }
 

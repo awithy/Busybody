@@ -1,6 +1,7 @@
 ﻿using System;
 using Busybody.Config;
 using Busybody.Utility;
+using BusybodyShared;
 
 namespace Busybody
 {
@@ -10,6 +11,8 @@ namespace Busybody
         IEventBus EventBus { get; }
         IEmailAlertingInterface EmailAlertingInterface { get; }
         ISystemStatusWriter SystemStatusWriter { get; }
+        IAgentChannel AzureAgentChannel { get; }
+        IAgentChannel FileAgentChannel { get; }
         BusybodyConfig Config { get; set; }
         HostRepository HostRepository { get; }
         SystemStatus SystemStatus { get; }
@@ -21,8 +24,10 @@ namespace Busybody
     {
         public DateTime StartTime { get; private set; }
         public static IAppContext Instance;
+        public IAgentChannel FileAgentChannel { get; private set; }
         public BusybodyConfig Config { get; set; }
         public ISystemStatusWriter SystemStatusWriter { get; private set; }
+        public IAgentChannel AzureAgentChannel { get; private set; }
         public IEventLogger EventLogger { get; private set; }
         public ITestFactory TestFactory { get; private set; }
         public IEventBus EventBus { get; private set; }
@@ -31,8 +36,9 @@ namespace Busybody
         public HostRepository HostRepository { get; set; }
         public EventLogRepository EventLogRepository { get; set; }
 
-        public AppContext()
+        public AppContext(BusybodyConfig config)
         {
+            Config = config;
             StartTime = DateTime.UtcNow;
             EventLogger = new EventLogger();
             TestFactory = new TestFactory();
@@ -42,6 +48,16 @@ namespace Busybody
             SystemStatus = new SystemStatus();
             SystemStatusWriter = new SystemStatusWriter();
             EventLogRepository = new EventLogRepository();
+
+            if (Config.AzureAgentChannelConfig != null)
+                AzureAgentChannel = new AzureAgentChannel(Config.AzureAgentChannelConfig);
+            else
+                AzureAgentChannel = new NullAgentChannel();
+
+            if (Config.FileAgentChannelConfig != null)
+                FileAgentChannel = new FileAgentChannel(Config.FileAgentChannelConfig);
+            else
+                FileAgentChannel = new NullAgentChannel();
         }
     }
 }

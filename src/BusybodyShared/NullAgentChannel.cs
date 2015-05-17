@@ -1,7 +1,6 @@
 using System;
-using BusybodyShared;
 
-namespace BusybodyAgent
+namespace BusybodyShared
 {
     public class NullAgentChannel : IAgentChannel
     {

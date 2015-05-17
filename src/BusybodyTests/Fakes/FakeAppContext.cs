@@ -2,6 +2,7 @@ using System;
 using Busybody;
 using Busybody.Config;
 using Busybody.Utility;
+using BusybodyShared;
 
 namespace BusybodyTests.Fakes
 {
@@ -12,6 +13,8 @@ namespace BusybodyTests.Fakes
         public IEventBus EventBus { get; private set; }
         public IEmailAlertingInterface EmailAlertingInterface { get; private set; }
         public ISystemStatusWriter SystemStatusWriter { get; private set; }
+        public IAgentChannel AzureAgentChannel { get; private set; }
+        public IAgentChannel FileAgentChannel { get; private set; }
         public SystemStatus SystemStatus { get; private set; }
         public BusybodyConfig Config { get; set; }
         public HostRepository HostRepository { get; set; }
@@ -32,6 +35,8 @@ namespace BusybodyTests.Fakes
             SystemStatus = new SystemStatus();
             SystemStatusWriter = new FakeSystemStatusWriter();
             EventLogRepository = new EventLogRepository();
+            AzureAgentChannel = new NullAgentChannel();
+            FileAgentChannel = new NullAgentChannel();
         }
     }
 }

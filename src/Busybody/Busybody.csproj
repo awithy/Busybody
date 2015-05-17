@@ -126,7 +126,8 @@
     <Compile Include="EventLogRepository.cs" />
     <Compile Include="Events\BusybodyStartedEvent.cs" />
     <Compile Include="Events\EmailAlertSentEvent.cs" />
-    <Compile Include="Tests\AgentTest.cs" />
+    <Compile Include="Tests\AzureAgentHeartbeatTest.cs" />
+    <Compile Include="Tests\FileAgentHeartbeatTest.cs" />
     <Compile Include="WebServer\BusybodyWebApp.cs" />
     <Compile Include="WebServer\BusybodyWebServer.cs" />
     <Compile Include="Events\BusybodyEvent.cs" />

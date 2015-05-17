@@ -111,8 +111,7 @@ namespace BusybodyTests
                 .BuildHostConfig()
                 .BuildConfig();
 
-            AppContext.Instance = new AppContext();
-            AppContext.Instance.Config = config;
+            AppContext.Instance = new AppContext(config);
             config.WriteToFile(configFilePath);
         }
     }

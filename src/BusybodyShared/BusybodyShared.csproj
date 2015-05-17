@@ -75,6 +75,7 @@
     <Compile Include="FileAgentChannelConfig.cs" />
     <Compile Include="IAgentChannel.cs" />
     <Compile Include="LogSetup.cs" />
+    <Compile Include="NullAgentChannel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
