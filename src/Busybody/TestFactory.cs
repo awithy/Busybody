@@ -23,8 +23,9 @@ namespace Busybody
             switch (name)
             {
                 case "Ping":
-                    var result = new PingTest();
-                    return result;
+                    return new PingTest();
+                case "Agent":
+                    return new AgentTest();
                 default:
                     throw new TestNotFoundException(name);
             }

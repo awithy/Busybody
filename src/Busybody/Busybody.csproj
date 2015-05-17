@@ -126,6 +126,7 @@
     <Compile Include="EventLogRepository.cs" />
     <Compile Include="Events\BusybodyStartedEvent.cs" />
     <Compile Include="Events\EmailAlertSentEvent.cs" />
+    <Compile Include="Tests\AgentTest.cs" />
     <Compile Include="WebServer\BusybodyWebApp.cs" />
     <Compile Include="WebServer\BusybodyWebServer.cs" />
     <Compile Include="Events\BusybodyEvent.cs" />
@@ -169,9 +170,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="sample.cfg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="busybody.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

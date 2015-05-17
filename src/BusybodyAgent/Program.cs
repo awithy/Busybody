@@ -36,7 +36,6 @@ namespace BusybodyAgent
         {
             try
             {
-                AppContext.Instance = new AppContext();
                 var configFilePath = CommonPaths.CurrentConfigFilePath();
 
                 if (_configFilePathParameter != null)
@@ -48,7 +47,8 @@ namespace BusybodyAgent
                     configFilePath = _configFilePathParameter;
                 }
 
-                AppContext.Instance.Config = BusybodyConfig.ReadFromFile(configFilePath);
+                var busybodyAgentConfig = BusybodyAgentConfig.ReadFromFile(configFilePath);
+                AppContext.Instance = new AppContext(busybodyAgentConfig);
             }
             catch (Exception ex)
             {

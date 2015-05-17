@@ -1,17 +1,18 @@
 using System;
 using System.IO;
+using BusybodyShared;
 using Newtonsoft.Json;
 
 namespace BusybodyAgent
 {
-    public class BusybodyConfig
+    public class BusybodyAgentConfig
     {
+        public string AgentId { get; set; }
         public int PollingInterval { get; set; }
         public string DataDirectory { get; set; }
-
-        public BusybodyConfig()
-        {
-        }
+        public string AgentChannelType { get; set; }
+        public AzureAgentChannelConfig AzureAgentChannelConfig { get; set; }
+        public FileAgentChannelConfig FileAgentChannelConfig { get; set; }
 
         public void WriteToFile(string filePath)
         {
@@ -19,15 +20,15 @@ namespace BusybodyAgent
             File.WriteAllText(filePath, configText);
         }
 
-        public static BusybodyConfig ReadFromFile(string filePath)
+        public static BusybodyAgentConfig ReadFromFile(string filePath)
         {
             var configText = File.ReadAllText(filePath);
-            var config = JsonConvert.DeserializeObject<BusybodyConfig>(configText);
+            var config = JsonConvert.DeserializeObject<BusybodyAgentConfig>(configText);
             _SetDefaults(config);
             return config;
         }
 
-        static void _SetDefaults(BusybodyConfig config)
+        static void _SetDefaults(BusybodyAgentConfig config)
         {
             if (config.PollingInterval == 0)
                 config.PollingInterval = 60;

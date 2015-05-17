@@ -124,6 +124,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BusybodyAgent\BusybodyAgent.csproj">
+      <Project>{223a91c5-77c9-4506-94fe-1373f7536101}</Project>
+      <Name>BusybodyAgent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BusybodyShared\BusybodyShared.csproj">
+      <Project>{ae9f2ed5-59da-41a1-8a8e-c85578364f86}</Project>
+      <Name>BusybodyShared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Busybody\Busybody.csproj">
       <Project>{7275fa56-0b74-4a9b-bef9-bb45860eaeb8}</Project>
       <Name>Busybody</Name>
