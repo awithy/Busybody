@@ -7,7 +7,8 @@ namespace BusybodyAgent
     {
         DateTime StartTime { get; }
         BusybodyAgentConfig Config { get; set;  }
-        IAgentChannel AgentChannel { get; set; }
+        IAgentChannel FileAgentChannel { get; set; }
+        IAgentChannel AzureAgentChannel { get; set; }
     }
 
     public class AppContext : IAppContext
@@ -15,25 +16,23 @@ namespace BusybodyAgent
         public DateTime StartTime { get; private set; }
         public static IAppContext Instance;
         public BusybodyAgentConfig Config { get; set; }
-        public IAgentChannel AgentChannel { get; set; }
+        public IAgentChannel FileAgentChannel { get; set; }
+        public IAgentChannel AzureAgentChannel { get; set; }
 
         public AppContext(BusybodyAgentConfig config)
         {
             Config = config;
             StartTime = DateTime.UtcNow;
 
-            switch (config.AgentChannelType)
-            {
-                case "File":
-                    AgentChannel = new FileAgentChannel(config.FileAgentChannelConfig);
-                    break;
-                case "Azure":
-                    AgentChannel = new AzureAgentChannel(config.AzureAgentChannelConfig);
-                    break;
-                default:
-                    AgentChannel = new NullAgentChannel();
-                    break;
-            }
+            if (Config.FileAgentChannelConfig != null)
+                FileAgentChannel = new FileAgentChannel(Config.FileAgentChannelConfig);
+            else
+                FileAgentChannel = new NullAgentChannel();
+
+            if (Config.AzureAgentChannelConfig != null)
+                AzureAgentChannel = new AzureAgentChannel(Config.AzureAgentChannelConfig);
+            else
+                AzureAgentChannel = new NullAgentChannel();
         }
     }
 }

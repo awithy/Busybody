@@ -74,7 +74,7 @@
     <Compile Include="AgentCore.cs" />
     <Compile Include="AppContext.cs" />
     <Compile Include="BusybodyAgentDaemon.cs" />
-    <Compile Include="BusybodyAzureConfig.cs" />
+    <Compile Include="BusybodyAgentConfig.cs" />
     <Compile Include="CommonPaths.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="Program.cs" />

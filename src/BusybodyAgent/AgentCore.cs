@@ -1,14 +1,18 @@
 ﻿using System;
+using BusybodyShared;
 
 namespace BusybodyAgent
 {
     public class AgentCore
     {
+        Logger _log = new Logger(typeof(AgentCore));
+
         public void Poll(DateTime timestamp)
         {
-            var agentChannel = AppContext.Instance.AgentChannel;
+            _log.Debug("Polling");
             var agentId = AppContext.Instance.Config.AgentId;
-            agentChannel.Heartbeat(agentId, timestamp);
+            AppContext.Instance.FileAgentChannel.Heartbeat(agentId, timestamp);
+            AppContext.Instance.AzureAgentChannel.Heartbeat(agentId, timestamp);
         }
     }
 }

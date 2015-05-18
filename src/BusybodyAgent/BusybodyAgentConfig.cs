@@ -10,7 +10,6 @@ namespace BusybodyAgent
         public string AgentId { get; set; }
         public int PollingInterval { get; set; }
         public string DataDirectory { get; set; }
-        public string AgentChannelType { get; set; }
         public AzureAgentChannelConfig AzureAgentChannelConfig { get; set; }
         public FileAgentChannelConfig FileAgentChannelConfig { get; set; }
 
