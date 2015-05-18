@@ -28,6 +28,8 @@ namespace BusybodyShared
             var heartbeatFilePath = Path.Combine(_config.DirectoryPath, "bb-agent-heartbeat");
             if (!Directory.Exists(_config.DirectoryPath))
                 Directory.CreateDirectory(_config.DirectoryPath);
+            if (!File.Exists(heartbeatFilePath))
+                return default(DateTime);
             var fileContents = File.ReadAllText(heartbeatFilePath);
             var timestamp = DateTime.Parse(fileContents);
             _log.Debug("Heartbeat timestamp for " + agentId + " " + timestamp);
