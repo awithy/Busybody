@@ -25,6 +25,12 @@ namespace BusybodyTests.Fakes
             return this;
         }
 
+        public FakeAppContextBuilder WithConfig(BusybodyConfig config)
+        {
+            _appContext.Config = config;
+            return this;
+        }
+
         public FakeAppContext Build()
         {
             return _appContext;

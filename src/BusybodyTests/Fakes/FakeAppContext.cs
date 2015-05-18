@@ -13,8 +13,8 @@ namespace BusybodyTests.Fakes
         public IEventBus EventBus { get; private set; }
         public IEmailAlertingInterface EmailAlertingInterface { get; private set; }
         public ISystemStatusWriter SystemStatusWriter { get; private set; }
-        public IAgentChannel AzureAgentChannel { get; private set; }
-        public IAgentChannel FileAgentChannel { get; private set; }
+        public IAgentChannel AzureAgentChannel { get; set; }
+        public IAgentChannel FileAgentChannel { get; set; }
         public SystemStatus SystemStatus { get; private set; }
         public BusybodyConfig Config { get; set; }
         public HostRepository HostRepository { get; set; }
