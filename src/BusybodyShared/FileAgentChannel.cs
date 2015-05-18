@@ -16,18 +16,20 @@ namespace BusybodyShared
         public void Heartbeat(string agentId, DateTime timestamp)
         {
             _log.Debug("Heartbeating " + agentId + " " + timestamp);
-            var heartbeatFilePath = Path.Combine(_config.DirectoryPath, "bb-agent-heartbeat");
-            if (!Directory.Exists(_config.DirectoryPath))
-                Directory.CreateDirectory(_config.DirectoryPath);
+            var heartbeatDirectory = Path.Combine(_config.DirectoryPath, "bb-agent-heartbeat");
+            if (!Directory.Exists(heartbeatDirectory))
+                Directory.CreateDirectory(heartbeatDirectory);
+            var heartbeatFilePath = Path.Combine(heartbeatDirectory, agentId);
             File.WriteAllText(heartbeatFilePath, timestamp.ToString("o"));
         }
 
         public DateTime ReadHeartbeat(string agentId)
         {
             _log.Debug("Reading heartbeat for " + agentId);
-            var heartbeatFilePath = Path.Combine(_config.DirectoryPath, "bb-agent-heartbeat");
-            if (!Directory.Exists(_config.DirectoryPath))
-                Directory.CreateDirectory(_config.DirectoryPath);
+            var heartbeatDirectory = Path.Combine(_config.DirectoryPath, "bb-agent-heartbeat");
+            if (!Directory.Exists(heartbeatDirectory))
+                Directory.CreateDirectory(heartbeatDirectory);
+            var heartbeatFilePath = Path.Combine(heartbeatDirectory, agentId);
             if (!File.Exists(heartbeatFilePath))
                 return default(DateTime);
             var fileContents = File.ReadAllText(heartbeatFilePath);
