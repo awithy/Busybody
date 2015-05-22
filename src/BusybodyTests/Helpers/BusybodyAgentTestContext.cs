@@ -8,8 +8,8 @@ namespace BusybodyTests.Helpers
     {
         public AgentCore AgentCore { get; set; }
         public TestAgentAppContext AppContext { get; set; }
-        public AzureAgentChannel FakeAzureAgentChannel { get { return (AzureAgentChannel) AppContext.AzureAgentChannel; } }
-        public FileAgentChannel FakeFileAgentChannel { get { return (FileAgentChannel) AppContext.FileAgentChannel; } }
+        public FakeAgentChannel FakeAzureAgentChannel { get { return (FakeAgentChannel) AppContext.AzureAgentChannel; } }
+        public FakeAgentChannel FakeFileAgentChannel { get { return (FakeAgentChannel) AppContext.FileAgentChannel; } }
 
         public static BusybodyAgentTestContext Setup()
         {
@@ -20,6 +20,7 @@ namespace BusybodyTests.Helpers
                 FileAgentChannelConfig = new FileAgentChannelConfig(),
             };
             var appContext = new TestAgentAppContext(config);
+            BusybodyAgent.AppContext.Instance = appContext;
             return new BusybodyAgentTestContext
             {
                 AgentCore = new AgentCore(),

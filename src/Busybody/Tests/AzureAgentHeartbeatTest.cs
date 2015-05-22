@@ -9,7 +9,9 @@ namespace Busybody.Tests
         {
             var agentChannel = AppContext.Instance.AzureAgentChannel;
             var heartbeatTimestamp = agentChannel.ReadHeartbeat(host.AgentId);
-            var timeoutSeconds = int.Parse(test.Parameters["Timeout"]);
+            var timeoutSeconds = 15;
+            if (test.Parameters.ContainsKey("Timeout"))
+                timeoutSeconds = int.Parse(test.Parameters["Timeout"]);
             if ((DateTime.UtcNow - heartbeatTimestamp.ToUniversalTime()).TotalSeconds > timeoutSeconds)
                 return false;
             return true;

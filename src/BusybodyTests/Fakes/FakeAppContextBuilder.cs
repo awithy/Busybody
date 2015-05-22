@@ -1,5 +1,5 @@
-using Busybody;
 using Busybody.Config;
+using Busybody.Tests;
 using BusybodyTests.Helpers;
 
 namespace BusybodyTests.Fakes
@@ -28,6 +28,8 @@ namespace BusybodyTests.Fakes
         public FakeAppContextBuilder WithConfig(BusybodyConfig config)
         {
             _appContext.Config = config;
+            _appContext.FakeTestFactory.Tests.Add("Ping", new FakePingTest());
+            _appContext.FakeTestFactory.Tests.Add("AzureAgentHeartbeat", new AzureAgentHeartbeatTest());
             return this;
         }
 

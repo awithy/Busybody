@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
+using System.Linq;
+using System.Threading;
+using Busybody;
 using Busybody.Config;
+using Busybody.Events;
 using Busybody.WebServer;
-using BusybodyTests.Fakes;
 using BusybodyTests.Helpers;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace BusybodyTests
@@ -17,13 +20,48 @@ namespace BusybodyTests
         {
             var timestamp = DateTime.UtcNow;
             _agentTestContext.AgentCore.Heartbeat(timestamp);
-            //_testContext.RunTests();
-            //_testContext.ProcessEvents();
-            //var hosts = new HostsController().GetHosts();
+            new HostTestRunnerCore().RunHostTests(new CancellationToken());
+            _testContext.TestAppContext.EventBus.DispatchPending();
         }
 
-        //[Test]
-        //public void The_
+        [Test]
+        public void A_successful_host_test_result_event_should_be_raised()
+        {
+            _testContext.EventHandler.AssertSingleEventReceived<HostTestResultEvent>(x => x.TestResult);
+        }
+
+        [Test]
+        public void The_host_should_be_up_in_the_UI()
+        {
+            var host = new HostsController().GetHosts().HostGroups.First().Hosts.First();
+            host.State.Should().Be(HostState.UP.ToString());
+        }
+    }
+
+    [TestFixture]
+    public class When_testing_agent_heartbeat_and_the_heartbeat_is_outside_timeout_period : AgentHeartbeatTests
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            var timestamp = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(15));
+            _agentTestContext.AgentCore.Heartbeat(timestamp);
+            new HostTestRunnerCore().RunHostTests(new CancellationToken());
+            _testContext.TestAppContext.EventBus.DispatchPending();
+        }
+
+        [Test]
+        public void A_failed_host_test_result_event_should_be_raised()
+        {
+            _testContext.EventHandler.AssertSingleEventReceived<HostTestResultEvent>(x => x.TestResult == false);
+        }
+
+        [Test]
+        public void The_host_should_be_down_in_the_UI()
+        {
+            var host = new HostsController().GetHosts().HostGroups.First().Hosts.First();
+            host.State.Should().Be(HostState.DOWN.ToString());
+        }
     }
 
     public class AgentHeartbeatTests
@@ -49,10 +87,7 @@ namespace BusybodyTests
                     },   
                 },
             };
-            //var fakeAppContext = new FakeAppContextBuilder()
-                //.WithConfig()
-                //.Build();
-            _testContext = BusybodyTestContext.Setup();
+            _testContext = BusybodyTestContext.Setup(busybodyConfig);
             _agentTestContext = BusybodyAgentTestContext.Setup();
             _testContext.TestAppContext.AzureAgentChannel = _agentTestContext.FakeAzureAgentChannel;
             _testContext.TestAppContext.FileAgentChannel = _agentTestContext.FakeFileAgentChannel;

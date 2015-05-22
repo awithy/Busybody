@@ -1,4 +1,5 @@
 using Busybody;
+using Busybody.Config;
 using BusybodyTests.Fakes;
 
 namespace BusybodyTests.Helpers
@@ -18,6 +19,14 @@ namespace BusybodyTests.Helpers
             return Setup(fakeAppContext);
         }
 
+        public static BusybodyTestContext Setup(BusybodyConfig busybodyConfig)
+        {
+            var fakeAppContext = new FakeAppContextBuilder()
+                .WithConfig(busybodyConfig)
+                .Build();
+            return Setup(fakeAppContext);
+        }
+
         public static BusybodyTestContext Setup(FakeAppContext fakeAppContext)
         {
             var testContext = new BusybodyTestContext
@@ -28,6 +37,7 @@ namespace BusybodyTests.Helpers
             };
 
             testContext.TestAppContext.EventBus.RegisterHandler("All", typeof (TestEventHandler));
+            testContext.TestAppContext.EventBus.RegisterHandler("All", typeof (HostEventHandler));
             testContext.TestAppContext.EventBus.RegisterHandler("All", typeof (EventLogRepository));
             testContext.FakePingTest = testContext.TestAppContext.FakeTestFactory.GetTest<FakePingTest>("Ping");
             testContext.TestAppContext.EventLogRepository.ClearEvents();
