@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentCore.cs" />
+    <Compile Include="AgentCoreRoleService.cs" />
     <Compile Include="AppContext.cs" />
     <Compile Include="BusybodyAgentDaemon.cs" />
     <Compile Include="BusybodyAgentConfig.cs" />

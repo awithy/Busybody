@@ -7,7 +7,7 @@ namespace BusybodyAgent
     {
         Logger _log = new Logger(typeof(AgentCore));
 
-        public void Poll(DateTime timestamp)
+        public void Heartbeat(DateTime timestamp)
         {
             _log.Debug("Polling");
             var agentId = AppContext.Instance.Config.AgentId;

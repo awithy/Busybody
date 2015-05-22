@@ -16,7 +16,7 @@ namespace BusybodyTests
         public void SetUp()
         {
             var timestamp = DateTime.UtcNow;
-            _agentTestContext.AgentCore.Poll(timestamp);
+            _agentTestContext.AgentCore.Heartbeat(timestamp);
             //_testContext.RunTests();
             //_testContext.ProcessEvents();
             //var hosts = new HostsController().GetHosts();
