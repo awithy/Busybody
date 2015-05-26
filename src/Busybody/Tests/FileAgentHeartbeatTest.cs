@@ -9,7 +9,9 @@ namespace Busybody.Tests
         {
             var fileChannel = AppContext.Instance.FileAgentChannel;
             var heartbeatTimestamp = fileChannel.ReadHeartbeat(host.AgentId);
-            var timeoutSeconds = int.Parse(test.Parameters["Timeout"]);
+            var timeoutSeconds = 900;
+            if (test.Parameters.ContainsKey("Timeout"))
+                timeoutSeconds = int.Parse(test.Parameters["Timeout"]);
             if ((DateTime.UtcNow - heartbeatTimestamp.ToUniversalTime()).TotalSeconds > timeoutSeconds)
                 return false;
             return true;
