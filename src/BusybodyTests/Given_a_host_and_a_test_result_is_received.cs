@@ -172,6 +172,32 @@ namespace BusybodyTests
     }
 
     [TestFixture]
+    public class When_a_host_has_been_down_more_than_24_hours_ago_but_has_been_up_for_more_than_24_hours : HostTestResultBase
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            var startTime = DateTime.UtcNow.Subtract(TimeSpan.FromDays(2).Add(TimeSpan.FromSeconds(1)));
+            _testContext.TestAppContext.StartTime = startTime;
+            _failedTestResult.Timestamp = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1).Add(TimeSpan.FromMinutes(5)));
+            _successfulTestResult.Timestamp = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1).Add(TimeSpan.FromMinutes(1)));
+
+            //Do
+            _hostEventHandler.Handle(_failedTestResult);
+            _hostEventHandler.Handle(_successfulTestResult);
+            _testContext.TestAppContext.EventBus.DispatchPending();
+        }
+
+        [Test]
+        public void It_should_be_in_state_UP()
+        {
+            var hostController = new HostsController();
+            var hosts = hostController.GetHosts().HostGroups.SelectMany(x => x.Hosts);
+            hosts.First().State.Should().Be("UP");
+        }
+    }
+
+    [TestFixture]
     public class When_a_host_has_been_down_in_the_last_24_hours_but_last_state_change_was_when_system_started : HostTestResultBase
     {
         [SetUp]

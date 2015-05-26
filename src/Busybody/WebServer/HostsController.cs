@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -76,11 +77,17 @@ namespace Busybody.WebServer
             if (host.State == HostState.DOWN)
                 return "DOWN";
 
+            //If host last state change was near the system starting, return UP and don't warn
             var differenceBetweenStartTimeAndHostLastStateChange = host.LastStateChange - AppContext.Instance.StartTime;
             var didTheHostLastChangeStateAtStart = differenceBetweenStartTimeAndHostLastStateChange.TotalMinutes < 5;
             if (didTheHostLastChangeStateAtStart)
                 return "UP";
+
+            //If host went down > 1 day ago, don't warn
+            if (host.State == HostState.UP && DateTime.UtcNow.Subtract(host.LastStateChange).TotalDays >= 1)
+                return "UP";
             
+            //This means host was down in the alst day -> warn
             return "WARN";
         }
     }
