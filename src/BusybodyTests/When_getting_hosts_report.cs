@@ -19,7 +19,7 @@ namespace BusybodyTests
         {
             _hostEventHandler.Handle(_failedTestResult);
             _testContext.TestAppContext.EventBus.DispatchPending();
-            _hosts = _hostsController.GetHosts();
+            _hosts = _hostsController.GetHosts().HostGroups.SelectMany(x => x.Hosts);
         }
 
         [Test]
@@ -33,6 +33,12 @@ namespace BusybodyTests
         {
             _hosts.Should().ContainSingle(x => x.Location == "Location 1");
         }
+
+        [Test]
+        public void It_should_have_the_host_group()
+        {
+            _hosts.Should().ContainSingle(x => x.Group == "Host Group");
+        }
     }
 
     [TestFixture]
@@ -45,7 +51,7 @@ namespace BusybodyTests
         {
             _hostEventHandler.Handle(_failedTestResult);
             _testContext.TestAppContext.EventBus.DispatchPending();
-            var hosts = _hostsController.GetHosts();
+            var hosts = _hostsController.GetHosts().HostGroups.SelectMany(x => x.Hosts);
             _host = _hostsController.GetHostById(hosts.First().Id);
         }
 

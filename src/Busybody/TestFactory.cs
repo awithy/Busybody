@@ -20,11 +20,14 @@ namespace Busybody
         public IBusybodyTest Create(string name)
         {
             _log.Trace("Creating test " + name);
-            switch (name)
+            switch (name.ToLower())
             {
-                case "Ping":
-                    var result = new PingTest();
-                    return result;
+                case "ping":
+                    return new PingTest();
+                case "azureagentheartbeat":
+                    return new AzureAgentHeartbeatTest();
+                case "fileagentheartbeat":
+                    return new FileAgentHeartbeatTest();
                 default:
                     throw new TestNotFoundException(name);
             }

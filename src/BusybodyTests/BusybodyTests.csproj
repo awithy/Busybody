@@ -44,12 +44,13 @@
     <Reference Include="Microsoft.Owin.FileSystems">
       <HintPath>..\..\packages\Microsoft.Owin.FileSystems.3.0.1\lib\net45\Microsoft.Owin.FileSystems.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.HttpListener">
-      <HintPath>..\..\packages\Microsoft.Owin.Host.HttpListener.2.0.2\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Hosting, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.Owin.Hosting.2.0.2\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Owin.Host.HttpListener.3.0.1\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Hosting, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.Owin.Hosting.3.0.1\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin.StaticFiles">
       <HintPath>..\..\packages\Microsoft.Owin.StaticFiles.3.0.1\lib\net45\Microsoft.Owin.StaticFiles.dll</HintPath>
@@ -92,10 +93,13 @@
   <ItemGroup>
     <Compile Include="Fakes\FakeSystemStatusWriter.cs" />
     <Compile Include="Given_alert_config_and_host_state_changed.cs" />
+    <Compile Include="Helpers\BusybodyAgentTestContext.cs" />
+    <Compile Include="Helpers\FakeAgentChannel.cs" />
     <Compile Include="When_getting_config_report.cs" />
     <Compile Include="When_getting_events_from_event_log.cs" />
     <Compile Include="When_getting_hosts_report.cs" />
     <Compile Include="When_getting_system_status.cs" />
+    <Compile Include="When_testing_agent_heartbeat.cs" />
     <Compile Include="When_starting_the_console.cs" />
     <Compile Include="When_starting_the_daemon.cs" />
     <Compile Include="Helpers\BusybodyConsoleRunner.cs" />
@@ -117,10 +121,20 @@
     <Compile Include="Helpers\TestUtility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BusybodyAgent\BusybodyAgent.csproj">
+      <Project>{223a91c5-77c9-4506-94fe-1373f7536101}</Project>
+      <Name>BusybodyAgent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BusybodyShared\BusybodyShared.csproj">
+      <Project>{ae9f2ed5-59da-41a1-8a8e-c85578364f86}</Project>
+      <Name>BusybodyShared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Busybody\Busybody.csproj">
       <Project>{7275fa56-0b74-4a9b-bef9-bb45860eaeb8}</Project>
       <Name>Busybody</Name>

@@ -33,6 +33,11 @@ namespace Busybody
         {
             _log.Error(message, ex);
             _HandleError(message, "Error", ex);
+            if (AppContext.Instance == null)
+            {
+                CriticalFailFast(new Exception("Failed to initialize correctly.  AppContext null", ex), "Filaed to initialize correctly.  Inner message:" + message);
+                return;
+            }
             AppContext.Instance.EventBus.Publish("All", new SystemErrorEvent(message, ex.ToString()));
         }
 

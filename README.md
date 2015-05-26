@@ -90,11 +90,19 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 			"Port":587,
 			"Password":"%PASSWORD%",
 		},
+        "FileAgentChannelConfig":{
+            "DirectoryPath":"C:\\busybody\\agent",
+        },
+        "AzureAgentChannelConfig":{
+            "AccountName":"%ACCOUNT_NAME%",
+            "AccountKey":"%ACCOUNT_KEY%",	
+        },        
 		"Hosts":[
 		{
 			"Nickname":"Local Machine",
 			"Hostname":"127.0.0.1",
 			"Location":"Server Room",
+			"Group":"Host Group",
 			"Tests":[
 			{
 				"Name":"Ping",
@@ -104,6 +112,18 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 					"Count":"5",
 					"MaxFailures":"1",
 					"DelayMs":"500",
+				}
+			},
+            {
+				"Name":"FileAgentHeartbeat", 
+				"Parameters":{
+					"Timeout":15,
+				}
+			},
+            {
+				"Name":"AzureAgentHeartbeat", 
+				"Parameters":{
+					"Timeout":15,
 				}
 			}]
 		}]
@@ -118,6 +138,7 @@ Notes:
 - Ping test parameters are optional
 - If no ListeningUrls specified, defaults to http://localhost:9000
 - You can use a root level "WebRoot" property to specify an override for the web app - for development
+- Agent channel configuration sections are optional
 
 ## Immediate To-Do ##
 

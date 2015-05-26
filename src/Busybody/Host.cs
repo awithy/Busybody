@@ -16,12 +16,14 @@ namespace Busybody
         public DateTime LastUpdate { get; set; }
         public DateTime LastStateChange { get; set; }
         public string Location { get; set; }
+        public string Group { get; set; }
 
         public Host(HostConfig hostConfig)
         {
             Id = Guid.NewGuid().ToString("N");
             Name = hostConfig.Nickname;
             Location = hostConfig.Location;
+            Group = hostConfig.Group ?? "Default";
             Tests = new Dictionary<string, HostTest>();
             foreach (var test in hostConfig.Tests)
                 Tests.Add(test.Name, new HostTest(test));

@@ -55,10 +55,6 @@ namespace Busybody
         }
     }
 
-    public class DataDirectoryNullException : Exception
-    {
-    }
-
     public class ConfigurationFileNotFoundException : Exception
     {
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
@@ -15,33 +16,41 @@ namespace Busybody.WebServer
 
         public void Configuration(IAppBuilder app)
         {
-            app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            try
             {
-                LoginPath = new PathString("/login"),
-                AuthenticationMode = AuthenticationMode.Active,
-                AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
-                CookieHttpOnly = true,
-                CookieSecure = CookieSecureOption.SameAsRequest,
-                CookiePath = "/",
-            });
+                app.UseCookieAuthentication(new CookieAuthenticationOptions()
+                {
+                    LoginPath = new PathString("/login"),
+                    AuthenticationMode = AuthenticationMode.Active,
+                    AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+                    CookieHttpOnly = true,
+                    CookieSecure = CookieSecureOption.SameAsRequest,
+                    CookiePath = "/",
+                });
 
-            var config = new HttpConfiguration(); 
-            config.Routes.MapHttpRoute( 
-                name: "DefaultApi", 
-                routeTemplate: "{controller}/{id}",
-                defaults: new { controller="home", id = RouteParameter.Optional } 
-                );
+                var config = new HttpConfiguration(); 
+                config.Routes.MapHttpRoute( 
+                    name: "DefaultApi", 
+                    routeTemplate: "{controller}/{id}",
+                    defaults: new { controller="home", id = RouteParameter.Optional } 
+                    );
 
-            var webContentPath = CommonPaths.WebContentPath();
-            _log.Debug("Starting web app with web content path " + webContentPath);
+                var webContentPath = CommonPaths.WebContentPath();
+                _log.Debug("Starting web app with web content path " + webContentPath);
 
-            app.UseFileServer(new FileServerOptions()
+                app.UseFileServer(new FileServerOptions()
+                {
+                    RequestPath = new PathString("/webcontent"),
+                    FileSystem = new PhysicalFileSystem(webContentPath),
+                });
+
+                app.UseWebApi(config);
+            }
+            catch (Exception ex)
             {
-                RequestPath = new PathString("/webcontent"),
-                FileSystem = new PhysicalFileSystem(webContentPath),
-            });
-
-            app.UseWebApi(config);
+                _log.Critical("Exception thrown while starting Busybody web app", ex);
+                throw;
+            }
         }
     }
 }

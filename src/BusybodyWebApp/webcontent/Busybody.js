@@ -6,7 +6,7 @@ app.controller('hostsController', function($rootScope, $scope, $http, $interval)
     var update = function () {
         $http.get("/hosts")
             .success(function(response) {
-                $scope.hosts = response;
+                $scope.hostGroups = response;
             });
     };
     $interval(update, 1000);
