@@ -10,5 +10,10 @@ namespace Busybody.Events
             Message = message;
             Detail = detail;
         }
+
+        public override string ToLogString()
+        {
+            return Message;
+        }
     }
 }
