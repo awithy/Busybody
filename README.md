@@ -26,6 +26,8 @@ Features:
 - Run as console app or install as Windows service
 - Configurable number of allowable test failures
 - Alerts on host state changes and system errors
+- Windows heartbeat agent
+- Azure and file heartbeat channels
 - System status web and text report
 - Service host CPU and Busybody process RAM usage monitoring
 - Info, debug, and trace level text logging
