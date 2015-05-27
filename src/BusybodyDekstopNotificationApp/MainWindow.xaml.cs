@@ -45,6 +45,7 @@ namespace BusybodyDekstopNotificationApp
 
         protected void _OnExitMenuItemClick(object sender, EventArgs eventArgs)
         {
+            _notifyIcon.Visible = false;
             Environment.Exit(0);
         }
 
