@@ -93,7 +93,7 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 			"Password":"%PASSWORD%",
 		},
         "FileAgentChannelConfig":{
-            "DirectoryPath":"C:\\busybody\\agent",
+            "DirectoryPath":"C:\\busybody\\agent-channel",
         },
         "AzureAgentChannelConfig":{
             "AccountName":"%ACCOUNT_NAME%",
@@ -115,19 +115,26 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 					"MaxFailures":"1",
 					"DelayMs":"500",
 				}
-			},
+			}
+        },
+		{
+			"Nickname":"Remote Machine",
+			"Location":"California",
+			"Group":"Remote Hosts",
+            "AgentId":"RemoteAgentId",
+			"Tests":[
             {
-				"Name":"FileAgentHeartbeat", 
-				"Parameters":{
-					"Timeout":15,
-				}
-			},
+                "Name":"FileAgentHeartbeat", 
+                "Parameters":{
+                    "Timeout":15,
+                }
+            },
             {
-				"Name":"AzureAgentHeartbeat", 
-				"Parameters":{
-					"Timeout":15,
-				}
-			}]
+                "Name":"AzureAgentHeartbeat", 
+                "Parameters":{
+                    "Timeout":15,
+                }
+            }]
 		}]
 	}
 
