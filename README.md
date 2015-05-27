@@ -80,6 +80,7 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 ## Sample Config File ##
 
     {
+        "SystemId":"home",
 		"DataDirectory":"C:\\Busybody\\Data",
 		"PollingInterval":300,
 		"ListeningUrls":"http://localhost:9000;http://hostname:9000",

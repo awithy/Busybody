@@ -19,7 +19,7 @@ namespace Busybody
         protected override void _OnPoll(CancellationToken cancellationToken)
         {
             var azureStatusWriter = new AzureStatusWriter();
-            azureStatusWriter.Write();
+            azureStatusWriter.Write(DateTime.UtcNow);
         }
     }
 }
