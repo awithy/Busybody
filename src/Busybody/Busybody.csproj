@@ -121,6 +121,8 @@
   <ItemGroup>
     <Compile Include="AlertingEventHandler.cs" />
     <Compile Include="AppContext.cs" />
+    <Compile Include="AzureStatusRoleService.cs" />
+    <Compile Include="AzureStatusWriter.cs" />
     <Compile Include="BusybodyDaemon.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="EventLogRepository.cs" />

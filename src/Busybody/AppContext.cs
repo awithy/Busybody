@@ -50,7 +50,7 @@ namespace Busybody
             EventLogRepository = new EventLogRepository();
 
             if (Config.AzureAgentChannelConfig != null)
-                AzureAgentChannel = new AzureAgentChannel(Config.AzureAgentChannelConfig);
+                AzureAgentChannel = new AzureAgentChannel(Config.AzureStorageConfig);
             else
                 AzureAgentChannel = new NullAgentChannel();
 

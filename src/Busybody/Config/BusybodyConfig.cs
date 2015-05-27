@@ -14,6 +14,7 @@ namespace Busybody.Config
         public EmailAlertConfiguration EmailAlertConfiguration { get; set; }
         public string ListeningUrls { get; set; } 
         public string WebRoot { get; set; }
+        public AzureStorageConfig AzureStorageConfig { get; set; }
         public FileAgentChannelConfig FileAgentChannelConfig { get; set; }
         public AzureAgentChannelConfig AzureAgentChannelConfig { get; set; }
 

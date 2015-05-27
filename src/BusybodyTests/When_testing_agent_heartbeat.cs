@@ -44,7 +44,7 @@ namespace BusybodyTests
         [SetUp]
         public void SetUp()
         {
-            var timestamp = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(15));
+            var timestamp = DateTime.UtcNow.Subtract(TimeSpan.FromMinutes(20));
             _agentTestContext.AgentCore.Heartbeat(timestamp);
             new HostTestRunnerCore().RunHostTests(new CancellationToken());
             _testContext.TestAppContext.EventBus.DispatchPending();

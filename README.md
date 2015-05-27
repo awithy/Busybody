@@ -92,12 +92,16 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 			"Port":587,
 			"Password":"%PASSWORD%",
 		},
+        "AzureStorageConfig":{
+            "Name":"AzureStorage",
+            "AccountName":"azurestorageaccount",
+            "AccountKey":"azureaccountkey",
+        },
         "FileAgentChannelConfig":{
             "DirectoryPath":"C:\\busybody\\agent-channel",
         },
         "AzureAgentChannelConfig":{
-            "AccountName":"%ACCOUNT_NAME%",
-            "AccountKey":"%ACCOUNT_KEY%",	
+            "AzureStorageConfig":"AzureStorage"
         },        
 		"Hosts":[
 		{

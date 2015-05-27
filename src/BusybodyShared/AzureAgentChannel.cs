@@ -6,14 +6,14 @@ namespace BusybodyShared
 {
     public class AzureAgentChannel : IAgentChannel
     {
-        AzureAgentChannelConfig _config;
+        AzureStorageConfig _config;
         Uri _storageUri;
         readonly StorageCredentials _storageCredentials;
         readonly Uri _containerAddress;
         readonly Logger _log = new Logger(typeof(AzureAgentChannel));
         string _containerName;
 
-        public AzureAgentChannel(AzureAgentChannelConfig config)
+        public AzureAgentChannel(AzureStorageConfig config)
         {
             _config = config;
             _storageUri = new Uri(string.Format("https://{0}.blob.core.windows.net/", _config.AccountName));

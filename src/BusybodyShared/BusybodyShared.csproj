@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="AzureAgentChannel.cs" />
     <Compile Include="AzureAgentChannelConfig.cs" />
+    <Compile Include="AzureStorageConfig.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FileAgentChannel.cs" />
     <Compile Include="FileAgentChannelConfig.cs" />
