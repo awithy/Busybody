@@ -55,7 +55,8 @@ namespace BusybodyShared
     {
         public string SystemId { get; set; }
         public string Timestamp { get; set; }
-        public string State { get; set; }
+        public int UpHosts { get; set; }
+        public int DownHosts { get; set; }
     }
 
     public enum AzureStatusState

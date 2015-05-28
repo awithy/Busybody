@@ -10,6 +10,7 @@ using BusybodyShared;
 
 namespace BusybodyDekstopNotificationApp
 {
+    //bit ugly, but I don't mind ;)
     public partial class MainWindow : Window
     {
         NotifyIcon _notifyIcon;
@@ -85,6 +86,13 @@ namespace BusybodyDekstopNotificationApp
                 correspondingMenuItem.Image = systemStatus.State == AzureStatusState.UP
                     ? _upArrowImage
                     : _downArrowImage;
+                var newStatusText = string.Format("{0} {1}", systemStatus.Name, systemStatus.StatusString);
+                if (correspondingMenuItem.Text != newStatusText)
+                {
+                    correspondingMenuItem.Text = newStatusText;
+                    var toolTipIcon = systemStatus.State == AzureStatusState.UP ? ToolTipIcon.Info : ToolTipIcon.Error;
+                    _notifyIcon.ShowBalloonTip(1000, "Busybody Status", newStatusText, toolTipIcon);
+                }
             }
             _notifyIcon.Icon = systemStatuses.All(x => x.State == AzureStatusState.UP)
                 ? _upIcon

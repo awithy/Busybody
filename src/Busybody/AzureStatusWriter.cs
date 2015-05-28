@@ -18,20 +18,21 @@ namespace Busybody
             _log.Trace("Writing Azure Status");
 
             var systemId = AppContext.Instance.Config.SystemId;
-            var state = AppContext.Instance.HostRepository.GetHosts().All(x => x.State == HostState.UP)
-                ? AzureStatusState.UP
-                : AzureStatusState.DOWN;
+            var hosts = AppContext.Instance.HostRepository.GetHosts().ToArray();
+            var upHosts = hosts.Count(x => x.State == HostState.UP);
+            var downHosts = hosts.Count(x => x.State == HostState.DOWN);
 
             var timestampString = timestamp.ToString("o");
             var azureStatus = new AzureStatus
             {
                 SystemId = systemId,
                 Timestamp = timestampString,
-                State = state.ToString(),
+                UpHosts = upHosts,
+                DownHosts = downHosts,
             };
 
             var azureStatusRepository = new AzureStatusRepository();
-            _log.TraceFormat("Azure status systemId:{0}, state:{1}, timestamp:{2}", systemId, state.ToString(), timestampString);
+            _log.TraceFormat("Azure status systemId:{0}, up hosts:{1}, down hosts:{2}, timestamp:{3}", systemId, upHosts, downHosts, timestampString);
             azureStatusRepository.Write(config, azureStatus);
         }
     }

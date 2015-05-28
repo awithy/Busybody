@@ -38,9 +38,16 @@ namespace BusybodyDekstopNotificationApp
                 var azureStatus = azureStatusRepository.GetStatus(config, system.SystemId);
                 var timestamp = DateTime.Parse(azureStatus.Timestamp).ToUniversalTime();
                 if (DateTime.UtcNow.Subtract(timestamp).TotalMinutes >= 5)
+                {
                     newStatus.State = AzureStatusState.DOWN;
+                    newStatus.StatusString = "(System down)";
+                }
                 else
-                    newStatus.State = (AzureStatusState) Enum.Parse(typeof (AzureStatusState), azureStatus.State);
+                {
+                    newStatus.State = azureStatus.DownHosts == 0 ? AzureStatusState.UP : AzureStatusState.DOWN;
+                    var totalHosts = azureStatus.UpHosts + azureStatus.DownHosts;
+                    newStatus.StatusString = string.Format("({0}/{1} hosts up)", azureStatus.UpHosts, totalHosts);
+                }
             }
             catch (Exception ex)
             {
@@ -56,5 +63,6 @@ namespace BusybodyDekstopNotificationApp
         public string Name { get; set; }
         public AzureStatusState State { get; set; }
         public string Url { get; set; }
+        public string StatusString { get; set; }
     }
 }
