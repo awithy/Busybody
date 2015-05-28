@@ -59,9 +59,11 @@ task UnitTests -depends Compile -description "NUnit unit tests" {
 task Package -depends Compile, Clean {
     $solutionBuildDir = Join-Path $srcDir "Busybody/bin/$buildConfiguration"
     $agentBuildDir = Join-Path $srcDir "BusybodyAgent/bin/$buildConfiguration"
+    $winNotifyApp = Join-Path $srcDir "BusybodyWinNotifyApp/bin/$buildConfiguration"    
     mkdir $buildDir
     copy "$solutionBuildDir/*.*" "$buildDir/" -rec
 	copy "$agentBuildDir/*.*" "$buildDir/" -rec
+	copy "$winNotifyApp/*" "$buildDir/" -rec    
     copy "$srcDir/busybodywebapp" "$buildDir/webroot" -rec
     rm "$buildDir/*.xml"
     rm "$buildDir/*.swp"

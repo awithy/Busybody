@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusybodyAgent", "src\Busybo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusybodyShared", "src\BusybodyShared\BusybodyShared.csproj", "{AE9F2ED5-59DA-41A1-8A8E-C85578364F86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusybodyDekstopNotificationApp", "src\BusybodyDekstopNotificationApp\BusybodyDekstopNotificationApp.csproj", "{62CDC6B9-1FD4-4F5A-9C76-1E3C1323A74F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusybodyWinNotifyApp", "src\BusybodyWinNotifyApp\BusybodyWinNotifyApp.csproj", "{62CDC6B9-1FD4-4F5A-9C76-1E3C1323A74F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
