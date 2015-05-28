@@ -26,7 +26,7 @@ namespace Busybody.Tests
             }
             catch (Exception ex)
             {
-                _log.TraceFormat("Exception thrown while executing http test on {0}.", hostUri);
+                _log.TraceFormat("Exception thrown while executing http test on {0}.  Detail:{1}", hostUri, ex);
                 return false;
             }
         }
