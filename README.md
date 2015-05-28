@@ -9,7 +9,7 @@ Busybody is the beginnings of a distributed network monitoring system in the lik
 
 Why another network monitor?  Because I need one for a few personal network projects, and I felt like building one for fun.
 
-The Busybody service is written in C# .NET 4.5, and uses Angular for it's web portal.
+The Busybody service is written in C# .NET 4.5.2, and uses Angular for it's web portal.
 
 
 ## Capabilities ##
@@ -21,13 +21,14 @@ Features:
 - Periodically ping test any number of hosts
 - Ping test configurable by number of pings, number of failures, and timeout period
 - JSON based configuration
+- Azure and file heartbeat channels
+- Windows heartbeat agent
 - E-mail alerts
+- Windows taskbar notification app
 - Web monitoring portal self-hosted using OWIN
 - Run as console app or install as Windows service
 - Configurable number of allowable test failures
 - Alerts on host state changes and system errors
-- Windows heartbeat agent
-- Azure and file heartbeat channels
 - System status web and text report
 - Service host CPU and Busybody process RAM usage monitoring
 - Info, debug, and trace level text logging
@@ -167,21 +168,18 @@ Notes:
 - Bower
 - Web portal UI testing (Jasmine?, Karma?)
 - Weekly e-mailed status reports
-- PowerShell based test specification
 - Local event store with history
-- Web portal for configuration
+- Change configuration via web portal
 - Command line configuration wizard
 - Automated updates
-- Windows agent
 - Availability (distributed)
-- Windows system tray monitoring app
 - Azure hosted service extension
 - Azure storage event store
 - Amazon S3 event store
 - Sites/network namespacing
-- Pingdom integration
+- PagerDuty integration
 - Linux agent
-- Linux core (Mono)
+- Linux core
 - Android app
 - Installer
 
