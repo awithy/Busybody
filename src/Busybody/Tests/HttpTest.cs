@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using Busybody.Config;
 using BusybodyShared;
 
@@ -22,7 +23,19 @@ namespace Busybody.Tests
             try
             {
                 using (var response = (HttpWebResponse) request.GetResponse())
-                    return response.StatusCode == HttpStatusCode.OK;
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                        return false;
+
+                    if (parameters.SearchString == null)
+                        return true;
+
+                    var responseString = _GetResponseString(response);
+
+                    if (responseString.Contains(parameters.SearchString))
+                        return true;
+                    return false;
+                }
             }
             catch (Exception ex)
             {
@@ -31,13 +44,36 @@ namespace Busybody.Tests
             }
         }
 
+        static string _GetResponseString(HttpWebResponse response)
+        {
+            var sb = new StringBuilder();
+            int count;
+            var buf = new byte[8192];
+            var responseStream = response.GetResponseStream();
+            do
+            {
+                count = responseStream.Read(buf, 0, buf.Length);
+                if (count != 0)
+                {
+                    var tempString = Encoding.ASCII.GetString(buf, 0, count);
+                    sb.Append(tempString);
+                }
+            } while (count > 0);
+
+            var responseString = sb.ToString();
+            return responseString;
+        }
+
         private class HttpTestParameters
         {
             public int TimeoutMs { get; set; }
+            public string SearchString { get; set; }
 
             public HttpTestParameters(Dictionary<string,string> parameters)
             {
                 TimeoutMs = _ParseIntFromDictionary(parameters, "TimeoutMs", 2000);
+                if(parameters.ContainsKey("SearchString"))
+                    SearchString = parameters["SearchString"];
             }
 
             public string ToLogString()
