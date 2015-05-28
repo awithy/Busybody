@@ -4,7 +4,7 @@ By Adrian Withy
 
 ## Summary ##
 
-Busybody is the beginnings of a distributed network monitoring system in the likes of SCOM and Nagios.  In it's current form, Busybody runs as a Console Application or Windows Service.
+Busybody is the a distributed network monitoring system in the likes of SCOM and Nagios.  In it's current form, Busybody runs as a Console Application or Windows Service.
 
 
 Why another network monitor?  Because I need one for a few personal network projects, and I felt like building one for fun.
@@ -13,8 +13,6 @@ The Busybody service is written in C# .NET 4.5.2, and uses Angular for it's web 
 
 
 ## Capabilities ##
-
-Not much yet.  It will just run a ping test on a number of hosts and e-mail alerts on host state changes.
 
 Features:
 
