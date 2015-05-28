@@ -24,6 +24,8 @@ namespace Busybody
             {
                 case "ping":
                     return new PingTest();
+                case "http":
+                    return new HttpTest();
                 case "azureagentheartbeat":
                     return new AzureAgentHeartbeatTest();
                 case "fileagentheartbeat":

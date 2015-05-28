@@ -131,6 +131,7 @@
     <Compile Include="HostTestRunnerCore.cs" />
     <Compile Include="Tests\AzureAgentHeartbeatTest.cs" />
     <Compile Include="Tests\FileAgentHeartbeatTest.cs" />
+    <Compile Include="Tests\HttpTest.cs" />
     <Compile Include="WebServer\BusybodyWebApp.cs" />
     <Compile Include="WebServer\BusybodyWebServer.cs" />
     <Compile Include="Events\BusybodyEvent.cs" />

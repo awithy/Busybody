@@ -20,6 +20,7 @@ Features:
 
 - Periodically ping test any number of hosts
 - Ping test configurable by number of pings, number of failures, and timeout period
+- Http test
 - JSON based configuration
 - Azure and file heartbeat channels
 - Windows heartbeat agent
