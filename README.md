@@ -14,8 +14,6 @@ The Busybody service is written in C# .NET 4.5.2, and uses Angular for it's web 
 
 ## Capabilities ##
 
-Features:
-
 - Periodically ping test any number of hosts
 - Ping test configurable by number of pings, number of failures, and timeout period
 - Http test
@@ -64,10 +62,12 @@ Specify configuration file path: `-c:C:\SomeDirectory\MyConfiguration.cfg`
 **Available**
 
 * Ping
+* HTTP OK (with optional search string)
+* Windows agent heartbeat via Azure
 
 **To-Do**
 
-* HTTP/HTTPS
+* HTTPS
 * Windows host memory/disk
 * Linux host memory/disk
 * SSH
