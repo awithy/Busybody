@@ -8,6 +8,7 @@ namespace Busybody
 {
     public class Host
     {
+        public static readonly Logger _log = new Logger(typeof(Host));
         public string Id { get; private set; }
         public string Name { get; set; }
         public HostState State { get; set; }
@@ -41,6 +42,7 @@ namespace Busybody
 
             if (newState != State)
             {
+                _log.TraceFormat("Handling test result for {0}.  New state:{1}.", Name, newState);
                 State = newState;
                 var hostStateEvent = new HostStateEvent(Name, State, IsInitialState);
                 AppContext.Instance.EventBus.Publish("All", hostStateEvent);
@@ -54,6 +56,7 @@ namespace Busybody
 
     public class HostTest
     {
+        public static readonly Logger _log = new Logger(typeof(HostTest));
         public string Name { get; set; }
         public int NumberOfFailures { get; set; }
         public int AllowableFailures { get; set; }
@@ -70,11 +73,13 @@ namespace Busybody
         {
             if (@event.TestResult)
             {
+                _log.TraceFormat("Handling successful test result for {0}", Name);
                 NumberOfFailures = 0;
                 State = HostTestState.Pass;
             }
             else
             {
+                _log.TraceFormat("Number of failures {0}", NumberOfFailures);
                 NumberOfFailures++;
                 if (NumberOfFailures > AllowableFailures)
                     State = HostTestState.Fail;
