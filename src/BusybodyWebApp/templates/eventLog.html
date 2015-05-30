@@ -8,7 +8,7 @@
     <th>Message</th>
 </tr>
 <tr ng-repeat="event in events | orderBy:'Timestamp':reverseSort" ng-class="{'danger':event.IsDanger}">
-    <td>{{event.Timestamp | fromNow}}</td>
+    <td title="{{event.Timestamp | longDateTime}}">{{event.Timestamp | fromNow}}</td>
     <td>{{event.EventType}}</td>
     <td>{{event.EventMessage}}</td>
 </tr>

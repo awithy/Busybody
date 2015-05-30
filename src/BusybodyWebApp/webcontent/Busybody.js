@@ -81,6 +81,12 @@ app.filter('fromNow', function() {
   }
 });
 
+app.filter('longDateTime', function() {
+  return function(date) {
+    return moment(date).format('ddd HH:mm:ss');
+  }
+});
+
 app.controller('viewsController', function($rootScope, $scope, $location, $routeParams) {
     $scope.showView = function(pathUrl) {
          console.debug('showView:' + pathUrl);

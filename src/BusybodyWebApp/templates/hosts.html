@@ -20,8 +20,8 @@
         <td><a href="#/hosts/{{host.Id}}">{{host.Name}}</a></td>
         <td>{{host.Location}}</td>
         <td>{{host.State}}</td>
-        <td>{{host.LastStateChange | fromNow}}</td>
-        <td>{{host.LastUpdate | fromNow}}</td>
+        <td title="{{host.LastStateChange | longDateTime }}">{{host.LastStateChange | fromNow}}</td>
+        <td title="{{host.LastUpdate | longDateTime }}">{{host.LastUpdate | fromNow}}</td>
     </tr>
 </table>
 </div>

@@ -12,8 +12,8 @@
             <li><span>Group: {{host.Group}}</span></li>
             <li><span>Location: {{host.Location}}</span></li>
             <li><span>State: {{host.State}}</span></li>
-            <li><span>Last update: {{host.LastUpdate | fromNow}}</span></li>
-            <li><span>Last state change: {{host.LastStateChange | fromNow}}</span></li>
+            <li><span title="{{host.LastUpdate | longDateTime}}">Last update: {{host.LastUpdate | fromNow}}</span></li>
+            <li><span title="{{host.LastStateChange | longDateTime}}">Last state change: {{host.LastStateChange | fromNow}}</span></li>
         </ul>
     </div>
 </div>
@@ -33,7 +33,7 @@
                 <ul>
                     <li><span>Test name: {{test.Name}}</span></li>
                     <li><span>Test status: {{test.State}}</span></li>
-                    <li><span>Last test: {{test.LastTest | fromNow}}</span></li>
+                    <li><span title="{{test.LastTest | longDateTime}}">Last test: {{test.LastTest | fromNow}}</span></li>
                 </ul>
         </div>
         </div>
