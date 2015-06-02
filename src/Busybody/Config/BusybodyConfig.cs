@@ -9,6 +9,7 @@ namespace Busybody.Config
 {
     public class BusybodyConfig
     {
+        public string ConfigPathOverride { get; set; }
         public string SystemId { get; set; }
         public int PollingInterval { get; set; }
         public string DataDirectory { get; set; }
@@ -36,6 +37,8 @@ namespace Busybody.Config
         {
             var configText = File.ReadAllText(filePath);
             var config = JsonConvert.DeserializeObject<BusybodyConfig>(configText);
+            if (!String.IsNullOrEmpty(config.ConfigPathOverride) && File.Exists(config.ConfigPathOverride))
+                return ReadFromFile(config.ConfigPathOverride);
             _SetDefaults(config);
             return config;
         }
