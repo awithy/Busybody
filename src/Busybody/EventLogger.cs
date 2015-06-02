@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Busybody.Events;
+using BusybodyShared;
 
 namespace Busybody
 {

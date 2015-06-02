@@ -95,6 +95,7 @@
     <Compile Include="Given_alert_config_and_host_state_changed.cs" />
     <Compile Include="Helpers\BusybodyAgentTestContext.cs" />
     <Compile Include="Helpers\FakeAgentChannel.cs" />
+    <Compile Include="TestMe.cs" />
     <Compile Include="When_getting_config_report.cs" />
     <Compile Include="When_getting_events_from_event_log.cs" />
     <Compile Include="When_getting_hosts_report.cs" />

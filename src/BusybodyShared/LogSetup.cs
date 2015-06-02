@@ -91,7 +91,7 @@ namespace BusybodyShared
 
         static LogSetup()
         {
-            _layout = new PatternLayout("[%d{HH:mm:ss}][%level][%logger][%thread] %message%newline");
+            _layout = new PatternLayout("[%d{yyyyMMdd HH:mm:ss}][%level][%logger][%thread] %message%newline");
         }
 
         public static void Setup(string logsDirectory, bool verboseLogging)

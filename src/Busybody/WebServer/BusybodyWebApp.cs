@@ -1,5 +1,6 @@
 using System;
 using System.Web.Http;
+using BusybodyShared;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.FileSystems;

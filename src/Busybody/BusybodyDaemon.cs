@@ -1,6 +1,7 @@
 ﻿using System;
 using Busybody.Events;
 using Busybody.WebServer;
+using BusybodyShared;
 
 namespace Busybody
 {
