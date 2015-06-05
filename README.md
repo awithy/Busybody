@@ -192,6 +192,8 @@ Notes:
 
 ![Event Log Screenshot](https://github.com/awithy/Busybody/blob/master/screenshots/eventLog.png)
 
+![Context Menu Screenshot](https://github.com/awithy/Busybody/blob/master/screenshots/ContextMenu.png)
+
 ## License ##
 
 Apache 2.0 - See LICENSE.txt

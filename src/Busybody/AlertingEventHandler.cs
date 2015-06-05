@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Busybody.Events;
 using Busybody.Utility;
+using BusybodyShared;
 
 namespace Busybody
 {

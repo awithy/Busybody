@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Busybody.Events;
+using BusybodyShared;
 
 namespace Busybody.Utility
 {

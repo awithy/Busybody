@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using Busybody.Events;
+using BusybodyShared;
 
 namespace Busybody
 {

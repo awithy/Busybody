@@ -1,5 +1,6 @@
 using Busybody.Config;
 using Busybody.Tests;
+using BusybodyShared;
 
 namespace Busybody
 {

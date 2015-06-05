@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using Busybody.Config;
+using BusybodyShared;
 
 namespace Busybody.Utility
 {

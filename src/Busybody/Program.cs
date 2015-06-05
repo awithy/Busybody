@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Busybody.Config;
+using BusybodyShared;
 using Topshelf;
 
 namespace Busybody
