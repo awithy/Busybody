@@ -4,7 +4,15 @@ using System.Threading.Tasks;
 
 namespace Busybody.Utility
 {
-    public abstract class RoleServiceBase
+    public interface IRoleService
+    {
+        string Name { get; }
+        TimeSpan Period { get; }
+        void Start();
+        void Stop();
+    }
+
+    public abstract class RoleServiceBase : IRoleService
     {
         readonly Logger _log = new Logger(typeof(RoleServiceBase));
         readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();

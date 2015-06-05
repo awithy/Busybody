@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Busybody.Events;
+using Busybody.Utility;
 using Busybody.WebServer;
 
 namespace Busybody
@@ -7,11 +9,8 @@ namespace Busybody
     public class BusybodyDaemon
     {
         readonly Logger _log = new Logger(typeof(BusybodyDaemon));
-        readonly HostTestRunnerRoleService _hostTestRunnerRoleService = new HostTestRunnerRoleService();
-        readonly EventProcessorRoleService _eventProcessorRoleService = new EventProcessorRoleService();
-        readonly SystemMonitorRoleService _systemMonitorRoleService = new SystemMonitorRoleService();
-        readonly AzureStatusRoleService _azureStatusRoleService = new AzureStatusRoleService();
         readonly BusybodyWebServer _busybodyWebServer = new BusybodyWebServer();
+        List<IRoleService> _roleServices;
 
         public void Start()
         {
@@ -20,10 +19,17 @@ namespace Busybody
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (EventLogger));
             AppContext.Instance.EventBus.RegisterHandler("All", typeof (EventLogRepository));
 
-            _systemMonitorRoleService.Start();
-            _hostTestRunnerRoleService.Start();
-            _azureStatusRoleService.Start();
-            _eventProcessorRoleService.Start();
+            _roleServices = new List<IRoleService>
+            {
+                new HostTestRunnerRoleService(),
+                new EventProcessorRoleService(),
+                new SystemMonitorRoleService(),
+                new AzureStatusRoleService(),
+            };
+
+            foreach (var roleService in _roleServices)
+                roleService.Start();
+
             _busybodyWebServer.Start();
 
             AppContext.Instance.EventBus.Publish("All", new BusybodyStartedEvent(DateTime.UtcNow));
@@ -35,10 +41,9 @@ namespace Busybody
             _log.Info("Stopping");
 
             _busybodyWebServer.Stop();
-            _hostTestRunnerRoleService.Stop();
-            _eventProcessorRoleService.Stop();
-            _systemMonitorRoleService.Stop();
-            _azureStatusRoleService.Stop();
+
+            foreach (var roleService in _roleServices)
+                roleService.Stop();
 
             _log.Info("Stopped");
         }
