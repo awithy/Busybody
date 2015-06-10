@@ -14,5 +14,11 @@
     "public/vendor",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "angular": "~1.4.0",
+    "angular-routing": "~0.1.2",
+    "jquery": "~2.1.4",
+    "toastr": "~2.1.1"
+  }
 }
