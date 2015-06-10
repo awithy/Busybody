@@ -1,2 +1,2 @@
-angular.module('busybodyApp', ['ngRoute']);
+angular.module('app', ['ngRoute']);
 

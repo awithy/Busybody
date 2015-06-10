@@ -1,4 +1,4 @@
-<div class="navbar navbar-default" role="navigation">
+<div ng-controller="mvNavbarCtrl" class="navbar navbar-default" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -12,13 +12,13 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li ng-class="{active: page=='hosts'}"><a class="nav" href="#/hosts" ng-click="showView('#/hosts')">Hosts</a></li>
-                <li ng-class="{active: page=='eventLog'"><a href="#/eventLog" ng-click="showView('#/eventLog')">Event Log</a></li>
-                <li ng-class="{active: page=='systemStatus'"><a href="#/systemStatus" ng-click="showView('#/systemStatus')">System Status</a></li>
-                <li ng-class="{active: page=='config'"><a href="#/config" ng-click="showView('#/config')">Config</a></li>
+                <li ng-class="{active: page=='eventLog'}"><a href="#/eventLog" ng-click="showView('#/eventLog')">Event Log</a></li>
+                <li ng-class="{active: page=='systemStatus'}"><a href="#/systemStatus" ng-click="showView('#/systemStatus')">System Status</a></li>
+                <li ng-class="{active: page=='config'}"><a href="#/config" ng-click="showView('#/config')">Config</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right navbar-collapse collapse" ng-controller="timeController">
+            <!--<ul class="nav navbar-nav navbar-right navbar-collapse collapse" ng-controller="timeController">
                 <li><p class="navbar-text">{{now}}</p></li>
-            </ul>
+            </ul>-->
         </div>
     </div>
 </div>
