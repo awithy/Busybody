@@ -1,0 +1,18 @@
+{
+  "name": "busybody",
+  "version": "0.1.0",
+  "homepage": "https://github.com/awithy/Busybody",
+  "authors": [
+    "Adrian Withy"
+  ],
+  "description": "Busybody network monitor",
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/vendor",
+    "test",
+    "tests"
+  ]
+}
