@@ -11,3 +11,4 @@ bin/
 logfile*
 TestResult.xml
 *.swp
+.idea

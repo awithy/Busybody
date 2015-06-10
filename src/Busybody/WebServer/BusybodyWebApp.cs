@@ -19,7 +19,7 @@ namespace Busybody.WebServer
         {
             try
             {
-                app.UseCookieAuthentication(new CookieAuthenticationOptions()
+                /*app.UseCookieAuthentication(new CookieAuthenticationOptions()
                 {
                     LoginPath = new PathString("/login"),
                     AuthenticationMode = AuthenticationMode.Active,
@@ -28,6 +28,7 @@ namespace Busybody.WebServer
                     CookieSecure = CookieSecureOption.SameAsRequest,
                     CookiePath = "/",
                 });
+                 * */
 
                 var config = new HttpConfiguration(); 
                 config.Routes.MapHttpRoute( 
@@ -41,7 +42,7 @@ namespace Busybody.WebServer
 
                 app.UseFileServer(new FileServerOptions()
                 {
-                    RequestPath = new PathString("/webcontent"),
+                    RequestPath = new PathString(""),
                     FileSystem = new PhysicalFileSystem(webContentPath),
                 });
 
