@@ -2,7 +2,6 @@
     <h1>Hosts</h1>
 </div>
 <div>
-
     <div ng-repeat="group in hostGroups.HostGroups" class="panel" ng-class="{'panel-success':group.State==='UP', 'panel-danger':group.State==='DOWN', 'panel-warning':group.State === 'WARN'}">
         <div class="panel panel-heading">
             <h4>{{group.Name}}</h4>
