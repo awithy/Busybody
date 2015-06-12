@@ -15,7 +15,7 @@ namespace BusybodyTests
         [SetUp]
         public void SetUp()
         {
-            _systemStatus = _systemStatusApiController.GetSystemStatus();
+            _systemStatus = SystemStatusController.GetSystemStatus();
         }
 
         [Test]
@@ -28,13 +28,13 @@ namespace BusybodyTests
     public class SystemStatusTests
     {
         protected BusybodyTestContext _testContext;
-        protected SystemStatusApiController _systemStatusApiController;
+        protected SystemStatusController SystemStatusController;
 
         [SetUp]
         public void BaseSetUp()
         {
             _testContext = BusybodyTestContext.Setup();
-            _systemStatusApiController = new SystemStatusApiController();
+            SystemStatusController = new SystemStatusController();
             AppContext.Instance.SystemStatus.UpdateHealth();
         }
     }

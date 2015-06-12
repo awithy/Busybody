@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace Busybody.WebServer
 {
-    public class SystemStatusApiController : ApiController
+    public class SystemStatusController : ApiController
     {
         public SystemStatusModel GetSystemStatus()
         {
