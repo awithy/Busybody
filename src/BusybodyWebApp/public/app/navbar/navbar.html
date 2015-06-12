@@ -10,7 +10,7 @@
             <a class="navbar-brand" href="#/hosts" ng-click="showView('#/hosts')">Busybody</a>
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav" ng-controller="mvNavbarCtrl">
+            <ul class="nav navbar-nav" ng-controller="mvNavbarCtrl" ng-show="identity.isAuthenticated()">
                 <li ng-class="{active: page=='hosts'}"><a class="nav" href="#/hosts" ng-click="showView('#/hosts')">Hosts</a></li>
                 <li ng-class="{active: page=='eventLog'}"><a href="#/eventLog" ng-click="showView('#/eventLog')">Event Log</a></li>
                 <li ng-class="{active: page=='systemStatus'}"><a href="#/systemStatus" ng-click="showView('#/systemStatus')">System Status</a></li>
