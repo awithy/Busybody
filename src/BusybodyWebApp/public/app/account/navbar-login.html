@@ -1,5 +1,5 @@
-<div class="navbar-right">
-    <form ng-controller="mvNavbarLoginCtrl" class="navbar-form">
+<div ng-controller="mvNavbarLoginCtrl" class="navbar-right">
+    <form class="navbar-form" ng-hide="identity.isAuthenticated()">
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Username" ng-model="user.username"/>
         </div>
@@ -8,4 +8,14 @@
         </div>
         <button class="btn btn-primary" ng-click="update(user)">Sign In</button>
     </form>
+    <ul class="nav navbar-nav navbar-right" ng-show="identity.isAuthenticated()">
+        <li class="dropdown">
+            <a class="dropdown-toggle" href="" data-toggle="dropdown">Actions<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="" ng-click="signout()">Sign Out</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
 </div>

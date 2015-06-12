@@ -3,11 +3,13 @@ angular.module('app').controller('mvNavbarLoginCtrl', function($scope, $http, $l
     $scope.user = {};
     $scope.user.username = "";
     $scope.user.password = "";
+    $scope.my = false;
 
     $scope.update = function(user) {
         mvAuth.authenticateUser(user.username, user.password).then(function(success){
             if(success) {
                 mvNotifier.notify('Logged in!')
+                $scope.my=true;
             }
             else {
                 mvNotifier.error('Not logged in');
