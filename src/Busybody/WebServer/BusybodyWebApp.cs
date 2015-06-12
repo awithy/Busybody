@@ -1,5 +1,6 @@
 using System;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using BusybodyShared;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
@@ -30,6 +31,12 @@ namespace Busybody.WebServer
                 });
 
                 var config = new HttpConfiguration(); 
+
+                //config.Routes.MapHttpRoute( 
+                    //name: "Login", 
+                    //routeTemplate: "api/{controller}/{action}/*"
+                    //);
+
                 config.Routes.MapHttpRoute( 
                     name: "DefaultApi", 
                     routeTemplate: "api/{controller}/{id}",

@@ -3,7 +3,6 @@ angular.module('app').controller('mvNavbarLoginCtrl', function($scope, $http, $l
     $scope.user = {};
     $scope.user.username = "";
     $scope.user.password = "";
-    $scope.my = false;
 
     $scope.update = function(user) {
         mvAuth.authenticateUser(user.username, user.password).then(function(success){
@@ -17,13 +16,12 @@ angular.module('app').controller('mvNavbarLoginCtrl', function($scope, $http, $l
         })
     };
 
-    $scope.signout = function() {
-        mvAuth.logoutUser().then(function () {
+    $scope.signOut = function() {
+        mvAuth.signOut().then(function () {
             $scope.username = "";
             $scope.password = "";
             mvNotifier.notify('You have been logged out!');
             $location.path('/');
         })
     }
-
 });
