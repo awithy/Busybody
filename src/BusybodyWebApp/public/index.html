@@ -19,12 +19,16 @@
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div>
+        <div ng-controller="mvIndex">
             <div ng-include src="'app/navbar/navbar.html'"></div>
             <div class="container">
-                <div ng-view></div>
+                <div ng-include ng-hide="identity.isAuthenticated()" src="'app/welcome/welcome.html'"></div>
+                <div ng-view ng-show="identity.isAuthenticated()"></div>
             </div>
         </div>
+        <footer class="container text-center">
+            <p>&copy 2015 Adrian Withy | License: Apache 2.0</p>
+        </footer>
         <script src="vendor/jquery/dist/jquery.min.js"></script>
         <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
         <script src="vendor/modernizr/modernizr.js"></script>
@@ -40,5 +44,7 @@
         <script src="app/account/mvIdentity.js"></script>
         <script src="app/account/mvAuth.js"></script>
         <script src="app/account/mvNavbarLoginCtrl.js"></script>
+        <script src="app/welcome/mvWelcomeCtrl.js"></script>
+        <script src="js/mvIndex.js"></script>
     </body>
 </html>

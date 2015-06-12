@@ -7,6 +7,6 @@ angular.module('app').controller('mvHostsCtrl', function($rootScope, $scope, $ht
                 $scope.hostGroups = response;
             });
     };
-    //$interval(update, 1000);
+    $interval(update, 1000);
     update();
 });
