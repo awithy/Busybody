@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin;
 using Microsoft.Owin.Security;
 
 namespace Busybody.WebServer
@@ -23,8 +24,8 @@ namespace Busybody.WebServer
                 };
                 context.Authentication.SignIn(authenticationProperties,
                     new ClaimsIdentity(new[] {new Claim(ClaimsIdentity.DefaultNameClaimType, loginModel.Username)}, DefaultAuthenticationTypes.ApplicationCookie));
-                context.Response.Headers.Add("Location", new[] {"/"});
-                return Request.CreateResponse(HttpStatusCode.Found);
+                //context.Response.Headers.Add("Location", new[] {"/"});
+                return Request.CreateResponse(HttpStatusCode.OK, new {success = true});
             }
             else
             {

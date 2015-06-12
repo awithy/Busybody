@@ -2,7 +2,7 @@ angular.module('app').controller('mvHostsCtrl', function($rootScope, $scope, $ht
     $scope.orderByField = 'Name';
     $scope.reverseSort = false;
     var update = function () {
-        $http.get("/hosts")
+        $http.get("/api/hosts")
             .success(function(response) {
                 $scope.hostGroups = response;
             });
