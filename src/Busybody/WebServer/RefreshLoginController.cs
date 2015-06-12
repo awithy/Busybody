@@ -2,10 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Web.Http;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
 
 namespace Busybody.WebServer
 {

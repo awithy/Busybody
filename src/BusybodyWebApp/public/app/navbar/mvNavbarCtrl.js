@@ -1,7 +1,7 @@
 angular.module('app').controller('mvNavbarCtrl', function($rootScope, $scope, $location, mvIdentity) {
     $scope.identity = mvIdentity;
     $scope.showView = function(pathUrl) {
-        if(mvIdentity.isAuthenticated()) {
+        if(!mvIdentity.isAuthenticated()) {
             return;
         }
         console.debug('showView:' + pathUrl);
