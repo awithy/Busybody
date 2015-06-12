@@ -25,6 +25,19 @@ angular.module('app').factory('mvAuth', function($http, mvIdentity, $q) {
                 }
             })
             return dfd.promise;
+        },
+        refreshLogin: function() {
+            var dfd = $q.defer();
+            $http.post('/api/refreshLogin', {}).then(function(response){
+                if(response.data.success) {
+                    mvIdentity.currentUser = response.data;
+                    console.log(mvIdentity.isAuthenticated());
+                    dfd.resolve(true);
+                } else {
+                    dfd.resolve(false);
+                }
+            })
+            return dfd.promise;
         }
     }
 });

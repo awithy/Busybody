@@ -32,11 +32,6 @@ namespace Busybody.WebServer
 
                 var config = new HttpConfiguration(); 
 
-                //config.Routes.MapHttpRoute( 
-                    //name: "Login", 
-                    //routeTemplate: "api/{controller}/{action}/*"
-                    //);
-
                 config.Routes.MapHttpRoute( 
                     name: "DefaultApi", 
                     routeTemplate: "api/{controller}/{id}",
