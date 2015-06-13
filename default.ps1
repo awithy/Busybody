@@ -64,10 +64,9 @@ task Package -depends Compile, Clean {
     copy "$solutionBuildDir/*.*" "$buildDir/" -rec
 	copy "$agentBuildDir/*.*" "$buildDir/" -rec
 	copy "$winNotifyApp/*" "$buildDir/" -rec    
-    copy "$srcDir/busybodywebapp" "$buildDir/webroot" -rec
+    copy "$srcDir/busybodywebapp/public" "$buildDir/webroot" -rec
     rm "$buildDir/*.xml"
     rm "$buildDir/*.swp"
     rm "$buildDir/busybody.cfg"
 	rm "$buildDir/webroot/*.swp"
-	rm "$buildDir/webroot/webcontent/*.swp"
 }

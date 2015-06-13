@@ -1,5 +1,6 @@
 using System;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using BusybodyShared;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
@@ -21,7 +22,7 @@ namespace Busybody.WebServer
             {
                 app.UseCookieAuthentication(new CookieAuthenticationOptions()
                 {
-                    LoginPath = new PathString("/login"),
+                    LoginPath = new PathString("/login.html"),
                     AuthenticationMode = AuthenticationMode.Active,
                     AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                     CookieHttpOnly = true,
@@ -30,9 +31,10 @@ namespace Busybody.WebServer
                 });
 
                 var config = new HttpConfiguration(); 
+
                 config.Routes.MapHttpRoute( 
                     name: "DefaultApi", 
-                    routeTemplate: "{controller}/{id}",
+                    routeTemplate: "api/{controller}/{id}",
                     defaults: new { controller="home", id = RouteParameter.Optional } 
                     );
 
@@ -41,7 +43,7 @@ namespace Busybody.WebServer
 
                 app.UseFileServer(new FileServerOptions()
                 {
-                    RequestPath = new PathString("/webcontent"),
+                    RequestPath = new PathString(""),
                     FileSystem = new PhysicalFileSystem(webContentPath),
                 });
 

@@ -1,0 +1,43 @@
+<div class="page-header">
+    <h1><a href="#/hosts">Hosts</a> > {{host.Name}}</h1>
+</div>
+<div class="panel" ng-class="{'panel-success':host.State === 'UP', 'panel-danger':host.State === 'DOWN', 'panel-warning':host.State === 'WARN'}">
+    <div class="panel panel-heading">
+        <h4>Host Summary</h4>
+    </div>
+    <div class="panel panel-body">
+        <ul>
+            <li><span>Nickname: {{host.Name}}</span></li>
+            <li><span>Hostname/IP: {{host.Hostname}}</span></li>
+            <li><span>Group: {{host.Group}}</span></li>
+            <li><span>Location: {{host.Location}}</span></li>
+            <li><span>State: {{host.State}}</span></li>
+            <li><span title="{{host.LastUpdate | longDateTime}}">Last update: {{host.LastUpdate | fromNow}}</span></li>
+            <li><span title="{{host.LastStateChange | longDateTime}}">Last state change: {{host.LastStateChange | fromNow}}</span></li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="panel" ng-class="{'panel-success':host.State==='UP', 'panel-danger':host.State==='DOWN', 'panel-warning':host.State === 'WARN'}">
+    <div class="panel panel-heading">
+        <h4>Host Tests</h4>
+    </div>
+    <div class="panel panel-body">
+        <div ng-repeat="test in host.Tests">
+            <div class="panel" ng-class="{'panel-success': test.State === 'Pass', 'panel-danger': test.State === 'Fail'}">
+                <div class="panel panel-heading">
+                    <strong>{{test.Name}}</strong>
+                </div>
+                <div class="panel panel-body">
+                    <ul>
+                        <li><span>Test name: {{test.Name}}</span></li>
+                        <li><span>Test status: {{test.State}}</span></li>
+                        <li><span title="{{test.LastTest | longDateTime}}">Last test: {{test.LastTest | fromNow}}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -23,18 +23,12 @@ namespace Busybody.WebServer
                 };
                 context.Authentication.SignIn(authenticationProperties,
                     new ClaimsIdentity(new[] {new Claim(ClaimsIdentity.DefaultNameClaimType, loginModel.Username)}, DefaultAuthenticationTypes.ApplicationCookie));
-                context.Response.Headers.Add("Location", new[] {"/"});
-                return Request.CreateResponse(HttpStatusCode.Found);
+                return Request.CreateResponse(HttpStatusCode.OK, new {success = true});
             }
             else
             {
                 return Request.CreateErrorResponse(HttpStatusCode.Unauthorized, new HttpError("Bad username or password"));
             }
-        }
-
-        public HttpResponseMessage GetLogin()
-        {
-            return WebServerHelpers.GetRootPage("login.html");
         }
     }
 }

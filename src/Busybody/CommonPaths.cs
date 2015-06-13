@@ -34,7 +34,7 @@ namespace Busybody
 
         public static string WebContentPath()
         {
-            return Path.Combine(WebRoot(), "webcontent");
+            return WebRoot();
         }
 
         public static string RandomName()

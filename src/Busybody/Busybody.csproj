@@ -162,10 +162,10 @@
     <Compile Include="SharedConstants.cs" />
     <Compile Include="TestFactory.cs" />
     <Compile Include="WebServer\ConfigController.cs" />
-    <Compile Include="WebServer\SystemStatusApiController.cs" />
-    <Compile Include="WebServer\TemplatesController.cs" />
+    <Compile Include="WebServer\LogoutController.cs" />
+    <Compile Include="WebServer\RefreshLoginController.cs" />
+    <Compile Include="WebServer\SystemStatusController.cs" />
     <Compile Include="WebServer\EventLogController.cs" />
-    <Compile Include="WebServer\HomeController.cs" />
     <Compile Include="WebServer\HostModel.cs" />
     <Compile Include="WebServer\HostsController.cs" />
     <Compile Include="WebServer\LoginController.cs" />

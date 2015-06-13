@@ -4,7 +4,7 @@ using System.Web.Http;
 namespace Busybody.WebServer
 {
     [Authorize]
-    public class EventLogApiController : ApiController
+    public class EventLogController : ApiController
     {
         public IEnumerable<EventModel> GetEvents()
         {
