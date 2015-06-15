@@ -164,7 +164,6 @@ Notes:
 ## Ideas ##
 
 - Gulp
-- Bower
 - Web portal UI testing (Jasmine?, Karma?)
 - Weekly e-mailed status reports
 - Local event store with history
