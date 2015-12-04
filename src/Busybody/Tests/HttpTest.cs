@@ -16,11 +16,12 @@ namespace Busybody.Tests
             var parameters = new HttpTestParameters(test.Parameters);
             _log.TraceFormat("Running http test on Host: {0}, Hostname: {1}, {2}", host.Nickname, host.Hostname, parameters.ToLogString());
 
-            var hostUri = new Uri("http://" + host.Hostname);
-            var request = (HttpWebRequest)HttpWebRequest.Create(hostUri);
+            var hostUri = parameters.Uri ?? new Uri("http://" + host.Hostname);
+            var request = (HttpWebRequest)WebRequest.Create(hostUri);
             request.Timeout = parameters.TimeoutMs;
             request.Method = "GET";
             try
+
             {
                 using (var response = (HttpWebResponse) request.GetResponse())
                 {
@@ -68,12 +69,15 @@ namespace Busybody.Tests
         {
             public int TimeoutMs { get; set; }
             public string SearchString { get; set; }
+            public Uri Uri { get; set; }
 
             public HttpTestParameters(Dictionary<string,string> parameters)
             {
                 TimeoutMs = _ParseIntFromDictionary(parameters, "TimeoutMs", 2000);
                 if(parameters.ContainsKey("SearchString"))
                     SearchString = parameters["SearchString"];
+                if(parameters.ContainsKey("Uri"))
+                    Uri = new Uri(parameters["Uri"]);
             }
 
             public string ToLogString()
